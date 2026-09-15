@@ -51,7 +51,7 @@ internal sealed partial class GameRouter
             await ctx.NotifyAsync(MethodId.SyncFightResource,
                 CombatCodec.FightResource(unitId, resourceId, maximum));
             await ctx.NotifyAsync(MethodId.SyncFightResourceFreeState,
-                CombatCodec.FightResourceFreeState(unitId, resourceId, true));
+                CombatCodec.FightResourceFreeState(unitId, resourceId, false));
         }
     }
 

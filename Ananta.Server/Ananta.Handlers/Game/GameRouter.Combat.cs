@@ -38,6 +38,15 @@ internal sealed partial class GameRouter
             return;
         }
 
+        // Prevent rapid re-triggering of the same active or unique skill while the animation is executing
+        if (state.ActiveSkillId == req.SkillId &&
+            (req.SkillId == weapon.ActiveSkill(style) || req.SkillId == weapon.UniqueSkill(style)) &&
+            (Environment.TickCount64 - state.ActiveSkillStartedTicks) < 1200)
+        {
+            ctx.Session.Log.Warn($"[COMBAT] ignore rapid spam of active/unique skill={req.SkillId} elapsed={Environment.TickCount64 - state.ActiveSkillStartedTicks}ms");
+            return;
+        }
+
         state.CombatUseCount++;
         state.RestoreResourcesAfterActiveSkill |=
             req.SkillId == weapon.ActiveSkill(style) ||
@@ -98,7 +107,7 @@ internal sealed partial class GameRouter
         await ctx.NotifyAsync(MethodId.SyncFightResource,
             CombatCodec.FightResource(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, CombatCodec.UltimateResourceMax));
         await ctx.NotifyAsync(MethodId.SyncFightResourceFreeState,
-            CombatCodec.FightResourceFreeState(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, true));
+            CombatCodec.FightResourceFreeState(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, false));
     }
 
     Task OnSkillHit(RpcContext ctx, SceneMethods.SkillHitData hit)
