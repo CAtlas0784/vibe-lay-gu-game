@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Ananta.SDK\Ananta.SDK.csproj" />
+    <ProjectReference Include="..\Ananta.Core\Ananta.Core.csproj" />
+    <ProjectReference Include="..\Ananta.Gameplay\Ananta.Gameplay.csproj" />
+    <ProjectReference Include="..\Ananta.RpcTypes\Ananta.RpcTypes.csproj" />
+  </ItemGroup>
+</Project>

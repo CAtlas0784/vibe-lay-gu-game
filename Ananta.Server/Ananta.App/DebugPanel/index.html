@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Debug Panel — vehicles</title>
+<style>
+  body { font-family: Consolas, monospace; background: #14161a; color: #d7dce2; max-width: 860px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 20px; }
+  h2 { font-size: 15px; color: #8fb8ff; border-bottom: 1px solid #333; padding-bottom: 4px; }
+  .card { background: #1d2026; border: 1px solid #333; border-radius: 8px; padding: 12px 16px; margin: 12px 0; }
+  .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #666; margin-right: 6px; }
+  .dot.on { background: #4caf50; }
+  button { background: #2b6cb0; color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; margin: 4px 4px 4px 0; cursor: pointer; font-family: inherit; }
+  button:hover { background: #3884d6; }
+  button.ghost { background: #3a3f47; }
+  input, select { background: #101215; color: #d7dce2; border: 1px solid #444; border-radius: 6px; padding: 7px 9px; margin: 2px; font-family: inherit; }
+  input[type=number] { width: 110px; }
+  input[type=range] { width: 100%; margin: 10px 0 2px 0; accent-color: #ffb74d; cursor: pointer; }
+  #clock { font-size: 30px; letter-spacing: 2px; color: #ffd88a; }
+  table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+  td, th { border: 1px solid #333; padding: 4px 8px; text-align: left; font-size: 13px; }
+  .muted { color: #888; font-size: 12px; }
+  #log { white-space: pre-wrap; font-size: 12px; max-height: 160px; overflow-y: auto; }
+</style>
+</head>
+<body>
+<h1><span id="dot" class="dot"></span>Vehicle debug</h1>
+
+<div class="card">
+  <h2>Status</h2>
+  <div id="status">connecting…</div>
+  <div class="muted">refreshes every 2 sec</div>
+</div>
+
+<div class="card">
+  <h2>Time of day</h2>
+  <div id="clock">12:00</div>
+  <input id="timeslider" type="range" min="0" max="1439" step="1" value="720" aria-label="Time of day">
+  <div class="muted">00:00 — night &nbsp;·&nbsp; 06:00 — morning &nbsp;·&nbsp; 12:00 — noon &nbsp;·&nbsp; 18:00 — evening &nbsp;·&nbsp; 23:59 — night</div>
+</div>
+
+<div class="card">
+  <h2>Garage (server vehicles)</h2>
+  <div style="margin-bottom:10px;padding:8px;background:#252932;border-radius:6px">
+    <div style="font-weight:bold;margin-bottom:6px;color:#ffb74d">⚡ Quick Spawn Special Vehicles:</div>
+    <button style="background:#8e24aa" onclick="spawnSpecificVehicle(81006020)">🚀 FG Vision Aric (Flying Car) [81006020]</button>
+    <button style="background:#e91e63" onclick="spawnSpecificVehicle(81007104)">🛴 Taffy Monowheel [81007104]</button>
+    <button style="background:#00897b" onclick="spawnSpecificVehicle(81007007)">🚁 Reed Ranger Helicopter [81007007]</button>
+    <button style="background:#f4511e" onclick="spawnSpecificVehicle(81006011)">🏍️ Sunset M125 Superbike [81006011]</button>
+  </div>
+  <div>Category: <select id="fleetcat" onchange="filterFleet()"></select></div>
+  <div style="margin-top:6px">Vehicle: <select id="fleet"></select></div>
+  <div style="margin-top:8px">
+    <button onclick="spawnNear()">1. Spawn selected nearby</button>
+    <button onclick="enterLast()">2. Seat into latest</button>
+  </div>
+  <div style="margin-top:8px">
+    <button class="ghost" onclick="resync()">Verified (39)</button>
+    <button class="ghost" onclick="unlockAll()">SyncAllUnlockedVehicles (all 150)</button>
+  </div>
+  <div class="muted">By default only the 39 verified vehicles load into the game. All 150 (incl. broken/unverified) — only via SyncAllUnlockedVehicles.</div>
+  <div style="margin-top:8px">
+    Custom ID: <input id="rawId" type="number" style="width:130px" placeholder="81007068">
+    <button class="ghost" onclick="spawnRaw()">Spawn by ID</button>
+  </div>
+  <div class="muted">Custom ID — for testing excluded/broken ones (Broken Model, Undrivable): the server lets it through with a warning, the client has the final say.</div>
+  <div class="muted">Pushes SyncAllUnlockedVehicles — the vehicle list in the phone/garage updates without relogging.</div>
+</div>
+
+<div class="card">
+  <h2>Summoned vehicles</h2>
+  <div id="summoned">—</div>
+</div>
+
+<div class="card">
+  <h2>Scene ("raid") switch</h2>
+  <div style="margin-bottom:8px">
+    Preset: 
+    <select id="scenepreset" onchange="onPresetChange()" style="min-width:380px">
+      <option value="longqi">Longqi Village (raid 23300999) (raid 23300999)</option>
+      <option value="longqi_tea">Longqi Village — Tea Field (Scenic)</option>
+      <option value="longqi_temple">Longqi Village — Hushi Zen Temple</option>
+      <option value="longqi_wukang">Longqi Village — Wukang Mansion</option>
+      <option value="maincity">Main City (WorldMap_Release) (raid 23300888)</option>
+      <option value="airport">Main City — Airport Terminal (raid 23300888)</option>
+    </select>
+    <button style="background:#2e7d32;margin-left:8px" onclick="switchToPreset()">Switch to preset</button>
+  </div>
+  <div style="margin-bottom:8px">
+    Raid <input id="s_raid" type="number" style="width:130px" value="23300999">
+    Instance <input id="s_instance" type="number" style="width:130px" value="20001223">
+    Universe <input id="s_universe" type="number" style="width:130px" value="76000888">
+  </div>
+  <div>
+    X <input id="s_x" type="number" step="0.5" style="width:90px" value="-4719.8">
+    Y <input id="s_y" type="number" step="0.5" style="width:90px" value="168.5">
+    Z <input id="s_z" type="number" step="0.5" style="width:90px" value="-2844.7">
+    Facing <input id="s_f" type="number" step="1" style="width:80px" value="0">
+    <button onclick="switchSceneCustom()" style="margin-left:8px">Switch scene</button>
+  </div>
+  <div class="muted" style="margin-top:6px">Switches world region and initiates client-side scene load. Preset or custom coordinates can be specified.</div>
+</div>
+
+<div class="card">
+  <h2>Player teleport</h2>
+  <div>
+    X <input id="tx" type="number" step="0.5" value="0">
+    Y <input id="ty" type="number" step="0.5" value="0">
+    Z <input id="tz" type="number" step="0.5" value="0">
+    Facing <input id="tf" type="number" step="1" value="0">
+  </div>
+  <div style="margin-top:8px">
+    <button onclick="teleport()">Teleport</button>
+    <button class="ghost" onclick="fillCurrent()">Use current</button>
+    <button class="ghost" onclick="fillSpawn()">Spawn point</button>
+  </div>
+</div>
+
+<div class="card" style="border-color:#e53935">
+  <h2 style="color:#ff8a80">Emergency Unstuck & Black Screen Recovery</h2>
+  <div>
+    <button style="background:#d32f2f" onclick="unstuckBlackScreen()">Fix / Recover Black Screen</button>
+    <button style="background:#f57c00" onclick="rollback10s()">Rollback Position (10s Ago)</button>
+  </div>
+  <div class="muted" style="margin-top:6px">Immediately forces client transition reset, restores user input, and rolls back coordinates to before the glitch.</div>
+</div>
+
+<div class="card">
+  <h2>Combat & Monster Spawner</h2>
+  <div style="margin-bottom:6px">
+    Monster:
+    <select id="enemypreset" onchange="onEnemyPresetChange()">
+      <option value="40900579">Melee Combatant (Verified) [40900579]</option>
+      <option value="40950138">Tactical Ranged Soldier (Verified) [40950138]</option>
+      <option value="100101">Street Thug (Melee) [100101]</option>
+      <option value="100102">Street Thug (Ranged Pistol) [100102]</option>
+      <option value="100201">Elite Enforcer (Katana) [100201]</option>
+      <option value="100301">Heavy Shield Brawler [100301]</option>
+      <option value="200101">Chaos Mutant Boss [200101]</option>
+      <option value="200201">Armored Mech Boss [200201]</option>
+      <option value="custom">Custom ID...</option>
+    </select>
+    ID: <input id="enemyId" type="number" style="width:100px" value="40900579">
+  </div>
+  <div>
+    Camp:
+    <select id="enemyCamp">
+      <option value="2">Enemy (Hostile)</option>
+      <option value="0">Neutral</option>
+      <option value="1">Ally / Friendly</option>
+    </select>
+    Count: <input id="enemyCount" type="number" style="width:70px" value="1" min="1" max="10">
+    <button style="background:#e53935;margin-left:8px" onclick="spawnEnemy()">Spawn Opponent</button>
+  </div>
+  <div class="muted" style="margin-top:6px">Spawns enemies near the player for live combat testing. Use with active weapon & combat sandbox.</div>
+</div>
+
+<div class="card">
+  <h2>Cutscene & Video Player</h2>
+  <div style="margin-bottom:6px">
+    Cutscene / Video:
+    <select id="cutscenepreset" onchange="onCutscenePresetChange()">
+      <option value="24100064">Gacha 3D Box Opening [24100064]</option>
+      <option value="24100001">Prologue Story Intro [24100001]</option>
+      <option value="24100002">Xinqi Main City Arrival [24100002]</option>
+      <option value="24100010">Metro Transit Cutscene [24100010]</option>
+      <option value="24100020">Boss Appearance Timeline [24100020]</option>
+      <option value="custom">Custom ID / Timeline...</option>
+    </select>
+    ID: <input id="cutsceneId" type="text" style="width:140px" value="24100064">
+  </div>
+  <div>
+    <button style="background:#7b1fa2" onclick="playCutscene()">Play Cutscene / Video</button>
+    <button class="ghost" onclick="unstuckBlackScreen()">Skip / Stop Video</button>
+  </div>
+  <div class="muted" style="margin-top:6px">Directly triggers in-game video playback or timeline cutscene on the client.</div>
+</div>
+
+<div class="card">
+  <h2>Panel log</h2>
+  <div id="log"></div>
+</div>
+
+<script>
+let lastStatus = null;
+let fleetData = [];
+const catNames = { sport: 'Sport / Luxury / Unique', regular: 'Regular Cars', suv: 'SUV / Pickups', van: 'Vans / Bus', truck: 'Trucks / Heavy Duty', moto: 'Motorcycles / Scooters', water: 'Watercraft', air: 'Aircraft / Flying Car', special: 'Special / Test / Props' };
+let timeDragging = false;
+function fmtClock(totalMin) {
+  const h = Math.floor(totalMin / 60) % 24;
+  const m = totalMin % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+}
+function sliderMinutes() { return parseInt(document.getElementById('timeslider').value || '720', 10); }
+async function pushTime() {
+  const total = sliderMinutes();
+  const body = {
+    hour: Math.floor(total / 60) % 24,
+    minute: total % 60,
+    fix: true,
+    transition: 5
+  };
+  const r = await api('/api/time/set', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('time: ' + JSON.stringify(r));
+}
+function syncTimeUI(s) {
+  const slider = document.getElementById('timeslider');
+  const clock = document.getElementById('clock');
+  if (!s.online) {
+    slider.disabled = true;
+    return;
+  }
+  slider.disabled = false;
+  if (typeof s.hour === 'number' && typeof s.minute === 'number' && s.hasTime && !timeDragging) {
+    slider.value = s.hour * 60 + s.minute;
+    clock.textContent = fmtClock(s.hour * 60 + s.minute);
+  } else if (!timeDragging) {
+    clock.textContent = fmtClock(sliderMinutes());
+  }
+}
+function log(t) {
+  const el = document.getElementById('log');
+  el.textContent = new Date().toLocaleTimeString() + ' ' + t + '\n' + el.textContent;
+}
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  return await r.json();
+}
+async function refresh() {
+  try {
+    const s = await api('/api/status');
+    lastStatus = s;
+    document.getElementById('dot').className = 'dot' + (s.online ? ' on' : '');
+    if (!s.online) {
+      document.getElementById('status').textContent = 'client not in game (no live session)';
+      document.getElementById('summoned').textContent = '—';
+      syncTimeUI(s);
+      return;
+    }
+    const p = s.player;
+    const w = s.world || { raidId: '—', instanceId: '—' };
+    document.getElementById('status').innerHTML =
+      `pid=${s.pid} ready=${s.ready} unit=${s.activeUnit} raid=${w.raidId} instance=${w.instanceId}<br>` +
+      `pos=(${p.x.toFixed(1)}, ${p.y.toFixed(1)}, ${p.z.toFixed(1)}) yaw=${p.yaw.toFixed(1)} fix=${p.hasFix}<br>` +
+      `fleet=${s.fleetCount} summoned=${s.summoned.length}` +
+      (s.inVehicle ? `<br>in vehicle: entity=${s.inVehicle} seat=${s.inSeat} <button onclick="vehicleExit()">Exit</button>` : '');
+    document.getElementById('summoned').innerHTML = s.summoned.length
+      ? '<table><tr><th>entityId</th><th>configId</th><th>coordinates</th><th></th></tr>' +
+        s.summoned.map(v => `<tr><td>${v.entityId}</td><td>${v.configId}</td>` +
+          `<td>${v.hasFix ? `${v.x.toFixed(1)}, ${v.y.toFixed(1)}, ${v.z.toFixed(1)}` : '—'}</td>` +
+          `<td><button onclick="vehicleEnter(${v.entityId})">Enter</button> ` +
+          `<button onclick="vehicleToMe(${v.entityId})">To me</button> ` +
+          `<button onclick="vehicleGoto(${v.entityId})">To it</button> ` +
+          `<button class="ghost" onclick="vehicleRemove(${v.entityId})">Remove</button></td></tr>`).join('') + '</table>'
+      : 'empty — click "Spawn selected vehicle nearby" above';
+    syncTimeUI(s);
+  } catch (e) { log('status error: ' + e); }
+}
+async function loadFleet() {
+  try {
+    fleetData = await api('/api/fleet');
+    const cats = [...new Set(fleetData.map(v => v.cat))];
+    document.getElementById('fleetcat').innerHTML =
+      cats.map(c => `<option value="${c}">${catNames[c] || c}</option>`).join('');
+    filterFleet();
+  } catch (e) { log('fleet error: ' + e); }
+}
+function filterFleet() {
+  const c = document.getElementById('fleetcat').value;
+  const list = fleetData.filter(v => v.cat === c);
+  document.getElementById('fleet').innerHTML =
+    list.map(v => `<option value="${v.id}">${v.id} — ${v.name}</option>`).join('');
+}
+async function enterLast() {
+  const r = await api('/api/vehicle/enter', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+  log('enter: ' + JSON.stringify(r));
+  refresh();
+}
+async function resync() {
+  const r = await api('/api/garage/resync', { method: 'POST' });
+  log('resync verified: ' + JSON.stringify(r));
+}
+async function unlockAll() {
+  const r = await api('/api/garage/unlock-all', { method: 'POST' });
+  log('unlock-all: ' + JSON.stringify(r));
+}
+async function spawnSpecificVehicle(id) {
+  const r = await api('/api/vehicle/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ configId: id, distance: 6 }) });
+  log('spawn ' + id + ': ' + JSON.stringify(r));
+  refresh();
+}
+async function spawnNear() {
+  const sel = document.getElementById('fleet');
+  const body = { configId: parseInt(sel.value || '0', 10), distance: 6 };
+  const r = await api('/api/vehicle/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('spawn: ' + JSON.stringify(r));
+  refresh();
+}
+async function spawnRaw() {
+  const id = parseInt(document.getElementById('rawId').value || '0', 10);
+  if (!id) { log('spawnRaw: enter an ID'); return; }
+  const r = await api('/api/vehicle/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ configId: id, distance: 6 }) });
+  log('spawnRaw: ' + JSON.stringify(r));
+  refresh();
+}
+async function vehicleEnter(entityId) {
+  const r = await api('/api/vehicle/enter', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ entityId }) });
+  log('enter: ' + JSON.stringify(r));
+  refresh();
+}
+async function vehicleExit() {
+  const r = await api('/api/vehicle/exit', { method: 'POST' });
+  log('exit: ' + JSON.stringify(r));
+  refresh();
+}
+async function vehicleToMe(entityId) {
+  const r = await api('/api/vehicle/to-me', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ entityId }) });
+  log('to-me: ' + JSON.stringify(r));
+}
+async function vehicleGoto(entityId) {
+  const r = await api('/api/vehicle/goto', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ entityId }) });
+  log('goto: ' + JSON.stringify(r));
+}
+async function vehicleRemove(entityId) {
+  const r = await api('/api/vehicle/remove', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ entityId }) });
+  log('remove: ' + JSON.stringify(r));
+  refresh();
+}
+async function teleport() {
+  const body = {
+    x: parseFloat(document.getElementById('tx').value),
+    y: parseFloat(document.getElementById('ty').value),
+    z: parseFloat(document.getElementById('tz').value),
+    facing: parseFloat(document.getElementById('tf').value)
+  };
+  const r = await api('/api/player/teleport', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('teleport: ' + JSON.stringify(r));
+}
+function fillCurrent() {
+  if (!lastStatus || !lastStatus.online) return;
+  const p = lastStatus.player;
+  document.getElementById('tx').value = p.x.toFixed(1);
+  document.getElementById('ty').value = p.y.toFixed(1);
+  document.getElementById('tz').value = p.z.toFixed(1);
+  document.getElementById('tf').value = p.yaw.toFixed(1);
+}
+function fillSpawn() {
+  if (!lastStatus || !lastStatus.online || !lastStatus.spawn) return;
+  document.getElementById('tx').value = lastStatus.spawn.x;
+  document.getElementById('ty').value = lastStatus.spawn.y;
+  document.getElementById('tz').value = lastStatus.spawn.z;
+}
+const scenePresets = {
+  longqi: { raid: 23300999, instance: 20001223, universe: 76000888, x: -4719.8, y: 168.5, z: -2844.7, facing: 0 },
+  longqi_tea: { raid: 23300999, instance: 20001223, universe: 76000888, x: -4818.4, y: 192.3, z: -2690.1, facing: 117 },
+  longqi_temple: { raid: 23300999, instance: 20001223, universe: 76000888, x: -4306.0, y: 156.8, z: -3240.8, facing: 133 },
+  longqi_wukang: { raid: 23300999, instance: 20001223, universe: 76000888, x: 158.7, y: 18.0, z: 1057.2, facing: -48.8 },
+  maincity: { raid: 23300888, instance: 20001222, universe: 76000888, x: 3142.67, y: 0, z: 2522.78, facing: 0 },
+  airport: { raid: 23300888, instance: 20001222, universe: 76000888, x: -4468.3, y: -6.15, z: -2597.5, facing: 85.5 }
+};
+function onPresetChange() {
+  const sel = document.getElementById('scenepreset').value;
+  const p = scenePresets[sel];
+  if (!p) return;
+  document.getElementById('s_raid').value = p.raid;
+  document.getElementById('s_instance').value = p.instance;
+  document.getElementById('s_universe').value = p.universe;
+  document.getElementById('s_x').value = p.x;
+  document.getElementById('s_y').value = p.y;
+  document.getElementById('s_z').value = p.z;
+  document.getElementById('s_f').value = p.facing;
+}
+async function switchToPreset() {
+  onPresetChange();
+  await switchSceneCustom();
+}
+async function switchSceneCustom() {
+  const body = {
+    raidId: parseInt(document.getElementById('s_raid').value || '23300999', 10),
+    instanceId: parseInt(document.getElementById('s_instance').value || '20001223', 10),
+    universeId: parseInt(document.getElementById('s_universe').value || '76000888', 10),
+    x: parseFloat(document.getElementById('s_x').value || '0'),
+    y: parseFloat(document.getElementById('s_y').value || '0'),
+    z: parseFloat(document.getElementById('s_z').value || '0'),
+    facing: parseFloat(document.getElementById('s_f').value || '0')
+  };
+  const r = await api('/api/world/switch-scene', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('switch scene: ' + JSON.stringify(r));
+  refresh();
+}
+
+async function unstuckBlackScreen() {
+  const r = await api('/api/unstuck/blackscreen', { method: 'POST' });
+  log('unstuck black screen: ' + JSON.stringify(r));
+  refresh();
+}
+
+async function rollback10s() {
+  const r = await api('/api/player/rollback-10s', { method: 'POST' });
+  log('rollback 10s: ' + JSON.stringify(r));
+  refresh();
+}
+
+function onEnemyPresetChange() {
+  const sel = document.getElementById('enemypreset').value;
+  if (sel !== 'custom') {
+    document.getElementById('enemyId').value = sel;
+  }
+}
+
+async function spawnEnemy() {
+  const body = {
+    enemyId: parseInt(document.getElementById('enemyId').value || '100101', 10),
+    camp: parseInt(document.getElementById('enemyCamp').value || '2', 10),
+    count: parseInt(document.getElementById('enemyCount').value || '1', 10)
+  };
+  const r = await api('/api/enemy/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('spawn enemy: ' + JSON.stringify(r));
+}
+
+function onCutscenePresetChange() {
+  const sel = document.getElementById('cutscenepreset').value;
+  if (sel !== 'custom') {
+    document.getElementById('cutsceneId').value = sel;
+  }
+}
+
+async function playCutscene() {
+  const body = {
+    id: document.getElementById('cutsceneId').value || '24100064'
+  };
+  const r = await api('/api/cutscene/play', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('play cutscene: ' + JSON.stringify(r));
+}
+
+loadFleet();
+refresh();
+setInterval(refresh, 2000);
+document.getElementById('timeslider').addEventListener('input', e => {
+  timeDragging = true;
+  document.getElementById('clock').textContent = fmtClock(parseInt(e.target.value || '720', 10));
+});
+document.getElementById('timeslider').addEventListener('change', async () => {
+  timeDragging = false;
+  await pushTime();
+  refresh();
+});
+</script>
+</body>
+</html>

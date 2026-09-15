@@ -1,0 +1,287 @@
+{
+  "client": {
+    "version": 4229938,
+    "artifactVersion": "4221361",
+    "serverId": 801,
+    "aid": 5944,
+    "rpcMd5": "6905aaa990351dc60321008d8db9e8ed",
+    "noMoreHotfixPatchError": 20903
+  },
+  "network": {
+    "bindHost": "0.0.0.0",
+    "advertisedHost": "127.0.0.1",
+    "loginPorts": [
+      5200,
+      5201
+    ],
+    "gamePort": 5202,
+    "proxy": {
+      "httpsPort": 443,
+      "httpPort": 80,
+      "loginListPort": 5801,
+      "loginTcpPort": 5803,
+      "gameTcpPort": 5804,
+      "sceneSubPort": 8013,
+      "updateHost": "l50.update.netease.com",
+      "certificatePassphrase": "ananta-local-proxy"
+    }
+  },
+  "player": {
+    "pid": 67,
+    "initialUnitId": 100000000000,
+    "initialSpiritTemplateId": 15020967,
+    "accountId": "aibgr4rznwj5r6zg",
+    "userName": "aibgr4rznwj5r6zg@netease.win.163.com",
+    "displayName": "Horoyoi-san ඞ",
+    "loginToken": "luz&@0v~h99xe82z",
+    "gameToken": "luz&@0v~h99xe82z",
+    "loginUniverseId": 0,
+    "shareToken": "Ananta-local-share-token",
+    "fpPassToken": "Ananta-local-fp-pass-token",
+    "skey": "Ananta-local-skey-666"
+  },
+  "ui": {
+    "uidLabel": {
+      "enabled": true,
+      "text": "นี่คือเวอร์ชั่น DEV ที่ไม่ได้รับคุณภาพจากเกม Ananta GAY"
+    },
+    "removeStockConfidentialLabel": true,
+    "cutscenePanel": {
+      "enabled": false,
+      "host": "127.0.0.1",
+      "port": 17666
+    }
+  },
+  "world": {
+    "raidId": 23300888,
+    "sceneInstanceId": 20001222,
+    "universeId": 76000888,
+    "spawn": {
+      "x": 3142.669922,
+      "y": 0.0,
+      "z": 2522.780029
+    },
+    "facing": 0.0,
+    "entryOpeningEnabled": false,
+    "content": {
+      "enabled": false,
+      "scene": "WorldMap_Release",
+      "productionScenes": [
+        "WorldMap_Release"
+      ],
+      "sceneItems": {
+        "enabled": true,
+        "radiusCells": 3,
+        "unloadRadiusCells": 6,
+        "loadBudgetCells": 49,
+        "retainVisitedCells": true,
+        "loadAllSectors": true,
+        "excludeTestItems": false
+      },
+      "gadgets": {
+        "enabled": true,
+        "radiusCells": 3,
+        "unloadRadiusCells": 6,
+        "loadBudgetCells": 49,
+        "retainVisitedCells": true,
+        "loadAllSectors": true
+      },
+      "dynamicGo": {
+        "enabled": true,
+        "seedAttempts": 12,
+        "activateAllKnown": true,
+        "excludeTestPlaceholders": true
+      }
+    }
+  },
+  "content": {
+    "roster": {
+      "templateIdMin": 15020967,
+      "templateIdMaxExclusive": 15022000,
+      "excludedTemplateIds": [
+        15021042
+      ],
+      "genericPlaceholderIconId": 28000032,
+      "unitIdBase": 100000000000,
+      "defaultUrbanJob": 100
+    },
+    "excludedUnlockSystems": [
+      7
+    ],
+    "includePhoneBottomApps": true
+  },
+  "gameplay": {
+    "switchAnimations": {
+      "switchType": 2,
+      "commonTimelinePrefix": "SwitchChar_common",
+      "avoidImmediateRepeat": true
+    },
+    "combat": {
+      "maxHp": 1000.0,
+      "attack": 150.0,
+      "defense": 100.0,
+      "moveSpeedMultiplier": 1.0,
+      "fightStyleTypeId": 39020305,
+      "fightStyleId": 39000013,
+      "defaultUrbanAbilities": [
+        85,
+        82,
+        92,
+        72,
+        80,
+        68
+      ],
+      "weapon": {
+        "templateId": 98003185,
+        "instanceId": 200001
+      },
+      "resource": {
+        "id": 3,
+        "max": 150.0
+      },
+      "skills": {
+        "common": 51942166,
+        "pressCommon": 51942100,
+        "heavyCommon": 51942154,
+        "dodge": 51935207,
+        "dodgeAttack": 51942118,
+        "grappleAttack": 51942108,
+        "active": 51942173,
+        "unique": 51942194
+      },
+      "charges": [
+        {
+          "skill": "common",
+          "current": 3,
+          "max": 3,
+          "period": 1.0
+        },
+        {
+          "skill": "active",
+          "current": 1,
+          "max": 1,
+          "period": 1.0
+        },
+        {
+          "skill": "unique",
+          "current": 1,
+          "max": 1,
+          "period": 25.0
+        }
+      ],
+      "panelDamage": 100.0,
+      "panelDefenseDeduct": 50.0
+    },
+    "webTraversal": {
+      "maleProtagonistId": 15020967,
+      "femaleProtagonistId": 15020968,
+      "persistentGrappleBuffId": 52853760,
+      "sharedBuffIds": [
+        52607001,
+        52606154,
+        52606102,
+        52606124,
+        52853760,
+        52601457,
+        52601458,
+        52601459,
+        52800600,
+        52959514,
+        52959516,
+        52606105,
+        52605817
+      ],
+      "maleExtraBuffIds": [
+        52601451,
+        52601452,
+        52601453,
+        52601454
+      ],
+      "femaleExtraBuffIds": [
+        52601001,
+        52601002,
+        52601003,
+        52601004
+      ],
+      "forbidStateIds": [
+        10322,
+        10344,
+        10345
+      ],
+      "grappleRearmDelayMs": 120
+    },
+    "vehicles": {
+      "enabled": true,
+      "fleetIds": [
+        81000007,
+        81001001,
+        81001002,
+        81001003,
+        81001006,
+        81001007,
+        81001008,
+        81001009,
+        81001010,
+        81001011,
+        81001012,
+        81001013,
+        81001015,
+        81001016,
+        81001017,
+        81001018,
+        81001019,
+        81001020,
+        81002001,
+        81002006,
+        81002007,
+        81002008,
+        81002009,
+        81003001,
+        81003002,
+        81003003,
+        81003004,
+        81003005,
+        81003006,
+        81003008,
+        81003013,
+        81003016,
+        81003022,
+        81005002,
+        81005003,
+        81005004,
+        81005005,
+        81005006,
+        81005007,
+        81006001,
+        81006020
+      ],
+      "desiredApproachMeters": 32.0,
+      "minimumApproachMeters": 24.0,
+      "searchRadiusMeters": 80.0,
+      "zoneStorageDataHandle": -1044702623
+    }
+  },
+  "logging": {
+    "directory": "logs",
+    "console": {
+      "enabled": true
+    },
+    "packets": {
+      "enabled": true,
+      "includeHex": true,
+      "includeDecoded": true,
+      "maxBodyBytes": 262144
+    }
+  },
+  "paths": {
+    "clientConfigs": "Ananta.Server/ClientData/4229938/Configs",
+    "runtimeFastpatch": ".runtime/fastpatch",
+    "zoneGraphLanes": "Ananta.Server/Ananta.App/data/zonegraph_lanes.csv",
+    "worldData": "Ananta.Server/ClientData/4229938/World/GadgetSpawn"
+  },
+  "debug": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 5809
+  }
+}

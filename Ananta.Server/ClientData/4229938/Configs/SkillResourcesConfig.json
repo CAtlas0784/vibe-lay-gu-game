@@ -1,0 +1,554 @@
+{
+  "_class": "SkillResourcesConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 34,
+  "records": [
+    {
+      "Id": 1,
+      "ResName": "念动充能",
+      "ResNote": "念动技能会消耗充能",
+      "IsEnabled": false,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 3,
+      "Interval": 5,
+      "IsTeamResource": true,
+      "IsUseInFight": true,
+      "Recovery": {
+        "Value": 1,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 2,
+      "ResName": "男主能量槽",
+      "ResNote": "男主能量槽，大于50%附魔火",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 3,
+      "ResName": "大招能量（所有大招能量）",
+      "ResNote": "消耗能量处决怪物",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 150,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 4,
+      "ResName": "赛车手职业时缓次数",
+      "ResNote": "",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 1,
+      "DefaultValue": 1,
+      "Interval": 30,
+      "IsTeamResource": true,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 1,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 5,
+      "ResName": "大招能量（暂时不用）",
+      "ResNote": "消耗能量处决怪物",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 150,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 6,
+      "ResName": "巡卫官电击枪麻痹条",
+      "ResNote": "巡卫官缉捕系统用",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": true,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 7,
+      "ResName": "莱卡娅枪斗术大招计数器",
+      "ResNote": "莱卡娅枪斗术大招计数器",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 10,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 8,
+      "ResName": "太极拳阳",
+      "ResNote": "太极拳资源条1",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 100,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 9,
+      "ResName": "太极拳过阳",
+      "ResNote": "太极拳资源条2",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 10,
+      "ResName": "太极拳阴",
+      "ResNote": "太极拳资源条3",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 11,
+      "ResName": "太极拳过阴",
+      "ResNote": "太极拳资源条4",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 12,
+      "ResName": "咏春连击数",
+      "ResNote": "咏春资源条",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 1000,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 13,
+      "ResName": "精力条",
+      "ResNote": "用于重击消耗",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 100,
+      "Interval": 1,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 4,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 14,
+      "ResName": "太极剑阳",
+      "ResNote": "太极剑资源条1",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 300,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 15,
+      "ResName": "太极剑阴",
+      "ResNote": "太极剑资源条2",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 300,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 16,
+      "ResName": "太极剑充能计数",
+      "ResNote": "太极剑资源条3",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 300,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 17,
+      "ResName": "空手道决意能量槽",
+      "ResNote": "残心积攒，重击消耗",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 50,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 18,
+      "ResName": "形意拳-虎-能量槽",
+      "ResNote": "形意拳-虎-能量槽",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 19,
+      "ResName": "形意拳水槽（已废弃）",
+      "ResNote": "",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 20,
+      "ResName": "形意拳-熊-能量槽",
+      "ResNote": "形意拳-熊-能量槽",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 21,
+      "ResName": "形意拳水槽（已废弃）",
+      "ResNote": "",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 22,
+      "ResName": "形意拳-鹤-能量槽",
+      "ResNote": "形意拳-鹤-能量槽",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 23,
+      "ResName": "截拳道流势能量槽",
+      "ResNote": "用于释放截击技",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 24,
+      "ResName": "形意拳-虎（选中态）",
+      "ResNote": "形意拳-虎（选中态）",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 25,
+      "ResName": "形意拳水槽选中（已废弃）",
+      "ResNote": "",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 26,
+      "ResName": "形意拳-熊（选中态）",
+      "ResNote": "形意拳-熊（选中态）",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 27,
+      "ResName": "形意拳火槽选中（已废弃）",
+      "ResNote": "",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 28,
+      "ResName": "形意拳-鹤（选中态）",
+      "ResNote": "形意拳-鹤（选中态）",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 3,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 29,
+      "ResName": "太极剑虚能",
+      "ResNote": "太极剑资源条4",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 300,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 30,
+      "ResName": "醉拳层数",
+      "ResNote": "酒叠层",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 10,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 31,
+      "ResName": "戚家刀-气刃点数",
+      "ResNote": "",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": -2,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 32,
+      "ResName": "八极拳大招点数",
+      "ResNote": "八极拳大招点数",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 5,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 33,
+      "ResName": "莱卡娅枪斗术专注能量槽",
+      "ResNote": "莱卡娅枪斗术专注能量槽",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 100,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    },
+    {
+      "Id": 34,
+      "ResName": "太极拳_听劲",
+      "ResNote": "太极拳阴状态专用",
+      "IsEnabled": true,
+      "Min": 0,
+      "Max": 90,
+      "DefaultValue": 0,
+      "Interval": 0,
+      "IsTeamResource": false,
+      "IsUseInFight": false,
+      "Recovery": {
+        "Value": 0,
+        "IsPercentage": false
+      }
+    }
+  ],
+  "_dumpedCount": 34,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

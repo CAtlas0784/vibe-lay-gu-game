@@ -1,0 +1,85 @@
+{
+  "_class": "SkillJumpGroupConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 11,
+  "records": [
+    {
+      "Id": 1,
+      "SkillJumpIds": [
+        97012026,
+        97012035,
+        97012037,
+        97012038,
+        97012039,
+        97012042,
+        97012036,
+        97012045
+      ]
+    },
+    {
+      "Id": 2,
+      "SkillJumpIds": [
+        97012012,
+        97012013,
+        97012036,
+        97012045
+      ]
+    },
+    {
+      "Id": 3,
+      "SkillJumpIds": []
+    },
+    {
+      "Id": 4,
+      "SkillJumpIds": [
+        97012044,
+        97012043,
+        97012046
+      ]
+    },
+    {
+      "Id": 5,
+      "SkillJumpIds": [
+        97012044,
+        97012043,
+        97012046
+      ]
+    },
+    {
+      "Id": 6,
+      "SkillJumpIds": [
+        97012040,
+        97012041
+      ]
+    },
+    {
+      "Id": 7,
+      "SkillJumpIds": [
+        97012040,
+        97012041
+      ]
+    },
+    {
+      "Id": 8,
+      "SkillJumpIds": [
+        97012040,
+        97012041
+      ]
+    },
+    {
+      "Id": 9,
+      "SkillJumpIds": []
+    },
+    {
+      "Id": 10,
+      "SkillJumpIds": []
+    },
+    {
+      "Id": 11,
+      "SkillJumpIds": []
+    }
+  ],
+  "_dumpedCount": 11,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

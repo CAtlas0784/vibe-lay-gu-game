@@ -1,0 +1,54 @@
+{
+  "_class": "SkillJumpGenericConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 11,
+  "records": [
+    {
+      "Id": 1,
+      "SkillJumpGroupId": 1
+    },
+    {
+      "Id": 2,
+      "SkillJumpGroupId": 2
+    },
+    {
+      "Id": 3,
+      "SkillJumpGroupId": 3
+    },
+    {
+      "Id": 4,
+      "SkillJumpGroupId": 4
+    },
+    {
+      "Id": 5,
+      "SkillJumpGroupId": 5
+    },
+    {
+      "Id": 6,
+      "SkillJumpGroupId": 6
+    },
+    {
+      "Id": 7,
+      "SkillJumpGroupId": 7
+    },
+    {
+      "Id": 8,
+      "SkillJumpGroupId": 8
+    },
+    {
+      "Id": 9,
+      "SkillJumpGroupId": 9
+    },
+    {
+      "Id": 10,
+      "SkillJumpGroupId": 10
+    },
+    {
+      "Id": 11,
+      "SkillJumpGroupId": 11
+    }
+  ],
+  "_dumpedCount": 11,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

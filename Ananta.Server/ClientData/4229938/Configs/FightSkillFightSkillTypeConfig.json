@@ -1,0 +1,182 @@
+{
+  "_class": "FightSkillFightSkillTypeConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 17,
+  "records": [
+    {
+      "Id": 39020004,
+      "Name": "手铐利爪",
+      "Type": 3,
+      "DefaultFightSkill": 39000003,
+      "ImageId": 28009220,
+      "SpiritId": [
+        15021021
+      ],
+      "__IDX__Name": 4294967295,
+      "__RAW__Name": "手铐利爪"
+    },
+    {
+      "Id": 39020005,
+      "Name": "徒手",
+      "Type": 1,
+      "DefaultFightSkill": 39000005,
+      "ImageId": 28009240,
+      "SpiritId": [],
+      "__IDX__Name": 170546,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020301,
+      "Name": "单手中型",
+      "Type": 1,
+      "DefaultFightSkill": 39000701,
+      "ImageId": 28009220,
+      "SpiritId": [],
+      "__IDX__Name": 129094,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020302,
+      "Name": "Two-handed Long Weapon",
+      "Type": 1,
+      "DefaultFightSkill": 39000702,
+      "ImageId": 28009224,
+      "SpiritId": [],
+      "__IDX__Name": 129095,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020303,
+      "Name": "Two-handed Heavy Weapon",
+      "Type": 1,
+      "DefaultFightSkill": 39000703,
+      "ImageId": 28009225,
+      "SpiritId": [],
+      "__IDX__Name": 129096,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020304,
+      "Name": "One-handed Short Weapon",
+      "Type": 1,
+      "DefaultFightSkill": 39000720,
+      "ImageId": 28009222,
+      "SpiritId": [],
+      "__IDX__Name": 129097,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020305,
+      "Name": "Fist Weapon",
+      "Type": 0,
+      "DefaultFightSkill": 39000002,
+      "ImageId": 28009240,
+      "SpiritId": [],
+      "__IDX__Name": 129098,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020306,
+      "Name": "双手利器",
+      "Type": 0,
+      "DefaultFightSkill": 39000715,
+      "ImageId": 0,
+      "SpiritId": [],
+      "__IDX__Name": 170547,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020504,
+      "Name": "手雷",
+      "Type": 2,
+      "DefaultFightSkill": 39000804,
+      "ImageId": 28000846,
+      "SpiritId": [],
+      "__IDX__Name": 170548,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020505,
+      "Name": "步枪",
+      "Type": 2,
+      "DefaultFightSkill": 39000805,
+      "ImageId": 28000849,
+      "SpiritId": [],
+      "__IDX__Name": 170549,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020506,
+      "Name": "Sniper Rifle",
+      "Type": 2,
+      "DefaultFightSkill": 39000806,
+      "ImageId": 28000851,
+      "SpiritId": [],
+      "__IDX__Name": 146170,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020507,
+      "Name": "Rocket Launcher",
+      "Type": 2,
+      "DefaultFightSkill": 39000807,
+      "ImageId": 28000848,
+      "SpiritId": [],
+      "__IDX__Name": 146171,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020508,
+      "Name": "Heavy Cannon",
+      "Type": 2,
+      "DefaultFightSkill": 39000808,
+      "ImageId": 28000842,
+      "SpiritId": [],
+      "__IDX__Name": 146172,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020509,
+      "Name": "霰弹枪",
+      "Type": 2,
+      "DefaultFightSkill": 39000813,
+      "ImageId": 0,
+      "SpiritId": [],
+      "__IDX__Name": 170550,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020510,
+      "Name": "轻机枪",
+      "Type": 2,
+      "DefaultFightSkill": 39000814,
+      "ImageId": 0,
+      "SpiritId": [],
+      "__IDX__Name": 170551,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020511,
+      "Name": "手枪",
+      "Type": 2,
+      "DefaultFightSkill": 39000811,
+      "ImageId": 28000910,
+      "SpiritId": [],
+      "__IDX__Name": 170552,
+      "__RAW__Name": ""
+    },
+    {
+      "Id": 39020512,
+      "Name": "榴弹炮",
+      "Type": 2,
+      "DefaultFightSkill": 39000815,
+      "ImageId": 0,
+      "SpiritId": [],
+      "__IDX__Name": 170553,
+      "__RAW__Name": ""
+    }
+  ],
+  "_dumpedCount": 17,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

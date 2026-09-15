@@ -1,0 +1,25 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Logs
+logs/
+**/logs/
+*.log
+
+# Runtime generated cache / temp
+.runtime/
+*.tmp
+
+# IDE / Editor artifacts
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+Thumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/

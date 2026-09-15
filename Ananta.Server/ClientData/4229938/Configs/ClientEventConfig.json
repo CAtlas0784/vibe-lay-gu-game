@@ -1,0 +1,360 @@
+{
+  "_class": "ClientEventConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 58,
+  "records": [
+    {
+      "Id": 97020001,
+      "abbreviation": "点按左键",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020002,
+      "abbreviation": "长按左键",
+      "CancelEventList": [
+        97020003
+      ],
+      "Priority": 5
+    },
+    {
+      "Id": 97020003,
+      "abbreviation": "左键长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020004,
+      "abbreviation": "点按跳跃",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020005,
+      "abbreviation": "长按跳跃",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020006,
+      "abbreviation": "跳跃长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020007,
+      "abbreviation": "点按shift",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020008,
+      "abbreviation": "长按shift",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020009,
+      "abbreviation": "shift长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020010,
+      "abbreviation": "点按R",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020011,
+      "abbreviation": "长按R",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020012,
+      "abbreviation": "R长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020013,
+      "abbreviation": "点按念力",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020014,
+      "abbreviation": "长按念力",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020015,
+      "abbreviation": "念力长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020016,
+      "abbreviation": "落地",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020017,
+      "abbreviation": "左键点按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020018,
+      "abbreviation": "技能技能自然",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020019,
+      "abbreviation": "念力点按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020020,
+      "abbreviation": "R点按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020021,
+      "abbreviation": "点按E",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020022,
+      "abbreviation": "长按E",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020023,
+      "abbreviation": "E长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020024,
+      "abbreviation": "E点按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020025,
+      "abbreviation": "技能命中",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020026,
+      "abbreviation": "技能state开始",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020027,
+      "abbreviation": "技能state结算到敌人",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020028,
+      "abbreviation": "技能state没有结算到敌人",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020029,
+      "abbreviation": "技能QTE成功",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020030,
+      "abbreviation": "技能QTE失败",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020031,
+      "abbreviation": "切换角色前",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020032,
+      "abbreviation": "点按右键",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020033,
+      "abbreviation": "长按右键",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020034,
+      "abbreviation": "右键长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020035,
+      "abbreviation": "右键点按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020036,
+      "abbreviation": "长按念力连招事件",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020037,
+      "abbreviation": "前面触发了悬崖事件",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020038,
+      "abbreviation": "前面触发了墙壁事件",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020039,
+      "abbreviation": "结算到了大体型怪物",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020040,
+      "abbreviation": "技能编辑器配置触发事件",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020041,
+      "abbreviation": "到达机关地形杀交互点",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020042,
+      "abbreviation": "每次击中敌人",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020043,
+      "abbreviation": "技能状态中受伤",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020044,
+      "abbreviation": "shift按钮抬起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020045,
+      "abbreviation": "NoSkillTime状态结束",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020046,
+      "abbreviation": "buff释放技能",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020047,
+      "abbreviation": "枪托攻击点按",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020048,
+      "abbreviation": "枪托攻击长按",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020049,
+      "abbreviation": "枪托攻击长按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020050,
+      "abbreviation": "枪托攻击点按弹起",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020051,
+      "abbreviation": "敌人被加上了虚弱状态",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020052,
+      "abbreviation": "已经被命中，即将进行结算",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020053,
+      "abbreviation": "手持物模式切换",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020054,
+      "abbreviation": "每次击中载具",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020055,
+      "abbreviation": "左摇杆移动",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020056,
+      "abbreviation": "左摇杆长按移动",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020057,
+      "abbreviation": "左摇杆移动停止",
+      "CancelEventList": [],
+      "Priority": 5
+    },
+    {
+      "Id": 97020058,
+      "abbreviation": "前面触发了不规则物体事件",
+      "CancelEventList": [],
+      "Priority": 5
+    }
+  ],
+  "_dumpedCount": 58,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}
