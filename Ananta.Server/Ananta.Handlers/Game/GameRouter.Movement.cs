@@ -66,6 +66,21 @@ internal sealed partial class GameRouter
         var unitId = state.ActiveSpiritUnitId != 0 ? state.ActiveSpiritUnitId : Profile.InitialUnitId;
         var templateId = state.ActiveSpiritTemplateId != 0 ? state.ActiveSpiritTemplateId : Profile.InitialSpiritTemplateId;
 
+        if (!state.CombatProfilePublished)
+        {
+            var weapon = CombatCodec.Weapon(templateId, state.ActiveWeaponInstanceId)
+                ?? CombatCodec.DefaultWeapon(templateId);
+            var style = ResolveWeaponStyle(state, weapon);
+            state.ActiveWeaponInstanceId = weapon.InstanceId;
+            state.ActiveFightStyleId = style.Id;
+            state.LastWeaponBySpirit[templateId] = weapon.InstanceId;
+
+            await PublishWeaponSnapshot(ctx, unitId, templateId, weapon.InstanceId);
+            await ctx.NotifyAsync(MethodId.SyncSpiritSwitchWeaponAction,
+                CombatCodec.SpiritSwitchWeapon(unitId, weapon.InstanceId));
+            await PublishSelectedWeaponProfile(ctx, unitId, templateId, weapon, style);
+        }
+
         if (!state.AllBuildBuffsPublished)
         {
             await PublishSafeRuntimeBuffSnapshot4229938(ctx, unitId, templateId, "first-gameplay-movement");
@@ -78,6 +93,6 @@ internal sealed partial class GameRouter
         await ctx.NotifyAsync(MethodId.SyncGamePause, WorldCodec.GamePause(false));
         state.MovementCapabilityPublished = true;
         state.FreeRoamReleased = true;
-        ctx.Session.Log.Info($"[GAMEPLAY-V7] first-movement post-load-buffs unit={unitId} template={templateId} actorPresentation=client-owned safeBuffs=true pause=false catalogBulk=false");
+        ctx.Session.Log.Info($"[GAMEPLAY-V7] first-movement post-load-buffs unit={unitId} template={templateId} combatProfile=true safeBuffs=true pause=false catalogBulk=false");
     }
 }

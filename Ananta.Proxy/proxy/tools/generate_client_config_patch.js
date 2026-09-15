@@ -193,6 +193,30 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
+`        if CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security then\n` +
+`            local sec = CS.L50.Script.LX6.Security\n` +
+`            if sec.DavinciReport then\n` +
+`                sec.DavinciReport.Send = function() end\n` +
+`                sec.DavinciReport.Report = function() end\n` +
+`            end\n` +
+`            if sec.DavinciMgr then\n` +
+`                sec.DavinciMgr.CheckTimeScale = function() end\n` +
+`                sec.DavinciMgr.ReportTimeScale = function() end\n` +
+`                sec.DavinciMgr.CheckSpeed = function() end\n` +
+`            end\n` +
+`        end\n` +
+`        if CS and CS.LX6 and CS.LX6.Security then\n` +
+`            local sec = CS.LX6.Security\n` +
+`            if sec.DavinciReport then\n` +
+`                sec.DavinciReport.Send = function() end\n` +
+`                sec.DavinciReport.Report = function() end\n` +
+`            end\n` +
+`            if sec.DavinciMgr then\n` +
+`                sec.DavinciMgr.CheckTimeScale = function() end\n` +
+`                sec.DavinciMgr.ReportTimeScale = function() end\n` +
+`                sec.DavinciMgr.CheckSpeed = function() end\n` +
+`            end\n` +
+`        end\n` +
 `        if DavinciReport then\n` +
 `            DavinciReport.Send = function() end\n` +
 `            DavinciReport.Report = function() end\n` +
@@ -221,87 +245,102 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `    end)\n` +
 `end\n\n` +
-`local function HookMasterNotice()\n` +
-`    if MasterToClientImpl and not MasterToClientImpl._cmdHooked then\n` +
-`        MasterToClientImpl._cmdHooked = true\n` +
-`        local oldSyncNotice = MasterToClientImpl.SyncNotice\n` +
-`        MasterToClientImpl.SyncNotice = function(...)\n` +
-`            local allArgs = {...}\n` +
-`            local content = nil\n` +
-`            for i = 1, #allArgs do\n` +
-`                if type(allArgs[i]) == "string" then\n` +
-`                    content = allArgs[i]\n` +
-`                    break\n` +
-`                end\n` +
+`local function ProcessDebugCommand(cmd)\n` +
+`    if not cmd or type(cmd) ~= "string" then return end\n` +
+`    if cmd == "UNSTUCK_BLACKSCREEN" then\n` +
+`        pcall(function()\n` +
+`            if gBlackScreenManager then gBlackScreenManager:ClearTransition(nil, true) end\n` +
+`            if gVideoManager then gVideoManager:CloseBlackScreen() end\n` +
+`            if gPanelManager and gPanelId and gPanelId.S_VIDEO_PLAYER_PANEL then\n` +
+`                gPanelManager:CloseWindow(gPanelId.S_VIDEO_PLAYER_PANEL)\n` +
 `            end\n` +
-`            if content and string.sub(content, 1, 4) == "CMD:" then\n` +
-`                local cmd = string.sub(content, 5)\n` +
-`                if cmd == "UNSTUCK_BLACKSCREEN" then\n` +
-`                    pcall(function()\n` +
-`                        if gBlackScreenManager then\n` +
-`                            gBlackScreenManager:ClearTransition(nil, true)\n` +
-`                        end\n` +
-`                        if gVideoManager then\n` +
-`                            gVideoManager:CloseBlackScreen()\n` +
-`                        end\n` +
-`                        if gPanelManager and gPanelId and gPanelId.S_VIDEO_PLAYER_PANEL then\n` +
-`                            gPanelManager:CloseWindow(gPanelId.S_VIDEO_PLAYER_PANEL)\n` +
-`                        end\n` +
-`                        if LX6 and LX6.GUI and LX6.GUI.GuiMgr and gPanelId and gPanelId.COMMON_BLACK_TRANSITION then\n` +
-`                            LX6.GUI.GuiMgr.Instance:SetShowScenePanel(false, gPanelId.COMMON_BLACK_TRANSITION)\n` +
-`                            gPanelManager:RemoveVisibleMode(LX6.Manager.VisibleControlType.CommonBlack)\n` +
-`                            LX6.Manager.GameInputManager.SetEnableInput(gPanelId.COMMON_BLACK_TRANSITION)\n` +
-`                        end\n` +
-`                    end)\n` +
-`                    return\n` +
-`                elseif string.sub(cmd, 1, 14) == "PLAY_CUTSCENE:" then\n` +
-`                    local arg = string.sub(cmd, 15)\n` +
-`                    local numId = tonumber(arg)\n` +
-`                    pcall(function()\n` +
-`                        if numId and gPanelManager and gPanelId and gPanelId.S_VIDEO_PLAYER_PANEL then\n` +
-`                            gPanelManager:OpenWindow(gPanelId.S_VIDEO_PLAYER_PANEL, { videoId = numId })\n` +
-`                        elseif gTimelineManager and gTimelineManager.Timeline_LoadAndPlay then\n` +
-`                            gTimelineManager:Timeline_LoadAndPlay(arg, nil)\n` +
-`                        elseif gVideoManager and gVideoManager.PlayVideo then\n` +
-`                            gVideoManager:PlayVideo(numId or arg)\n` +
-`                        end\n` +
-`                    end)\n` +
-`                    return\n` +
-`                elseif string.sub(cmd, 1, 12) == "SPAWN_ENEMY:" then\n` +
-`                    local p1, p2, p3 = string.match(string.sub(cmd, 13), "([^:]+):?([^:]*):?([^:]*)")\n` +
-`                    local enemyId = tonumber(p1) or 40900579\n` +
-`                    local camp = tonumber(p2) or 2\n` +
-`                    local count = tonumber(p3) or 1\n` +
-`                    pcall(function()\n` +
-`                        if gCS and gCS.GmUtils and gCS.GmUtils.AddEnemyWithCamp then\n` +
-`                            gCS.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
-`                        elseif gCS and gCS.GmUtils and gCS.GmUtils.AddEnemy then\n` +
-`                            gCS.GmUtils.AddEnemy(enemyId)\n` +
-`                        elseif gCS and gCS.LuaUtils and gCS.LuaUtils.AddEnemy then\n` +
-`                            gCS.LuaUtils.AddEnemy(enemyId, 1, camp, count)\n` +
-`                        elseif CS and CS.LX6 and CS.LX6.GmUtils and CS.LX6.GmUtils.AddEnemyWithCamp then\n` +
-`                            CS.LX6.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
-`                        end\n` +
-`                    end)\n` +
-`                    return\n` +
-`                end\n` +
+`            if LX6 and LX6.GUI and LX6.GUI.GuiMgr and gPanelId and gPanelId.COMMON_BLACK_TRANSITION then\n` +
+`                LX6.GUI.GuiMgr.Instance:SetShowScenePanel(false, gPanelId.COMMON_BLACK_TRANSITION)\n` +
+`                gPanelManager:RemoveVisibleMode(LX6.Manager.VisibleControlType.CommonBlack)\n` +
+`                LX6.Manager.GameInputManager.SetEnableInput(gPanelId.COMMON_BLACK_TRANSITION)\n` +
+`            end\n` +
+`        end)\n` +
+`    elseif string.sub(cmd, 1, 14) == "PLAY_CUTSCENE:" then\n` +
+`        local arg = string.sub(cmd, 15)\n` +
+`        local numId = tonumber(arg)\n` +
+`        pcall(function()\n` +
+`            if numId and gPanelManager and gPanelId and gPanelId.S_VIDEO_PLAYER_PANEL then\n` +
+`                gPanelManager:OpenWindow(gPanelId.S_VIDEO_PLAYER_PANEL, { videoId = numId })\n` +
+`            elseif gTimelineManager and gTimelineManager.Timeline_LoadAndPlay then\n` +
+`                gTimelineManager:Timeline_LoadAndPlay(arg, nil)\n` +
+`            elseif gVideoManager and gVideoManager.PlayVideo then\n` +
+`                gVideoManager:PlayVideo(numId or arg)\n` +
+`            end\n` +
+`        end)\n` +
+`    elseif string.sub(cmd, 1, 12) == "SPAWN_ENEMY:" then\n` +
+`        local p1, p2, p3 = string.match(string.sub(cmd, 13), "([^:]+):?([^:]*):?([^:]*)")\n` +
+`        local enemyId = tonumber(p1) or 40900579\n` +
+`        local camp = tonumber(p2) or 2\n` +
+`        local count = tonumber(p3) or 1\n` +
+`        pcall(function()\n` +
+`            if gCS and gCS.LuaUtils and gCS.LuaUtils.AddEnemy then\n` +
+`                gCS.LuaUtils.AddEnemy(enemyId, 1, camp, count)\n` +
+`            elseif gCS and gCS.GmUtils and gCS.GmUtils.AddEnemyWithCamp then\n` +
+`                gCS.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
+`            elseif gCS and gCS.GmUtils and gCS.GmUtils.AddEnemy then\n` +
+`                gCS.GmUtils.AddEnemy(enemyId)\n` +
+`            elseif CS and CS.LX6 and CS.LX6.GmUtils and CS.LX6.GmUtils.AddEnemyWithCamp then\n` +
+`                CS.LX6.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
+`            end\n` +
+`        end)\n` +
+`    end\n` +
+`end\n\n` +
+`local function HookNoticeTable(tbl)\n` +
+`    if not tbl or type(tbl) ~= "table" or tbl._cmdHooked then return end\n` +
+`    tbl._cmdHooked = true\n` +
+`    local oldSync = tbl.SyncNotice\n` +
+`    tbl.SyncNotice = function(...)\n` +
+`        local allArgs = {...}\n` +
+`        for i = 1, #allArgs do\n` +
+`            if type(allArgs[i]) == "string" and string.sub(allArgs[i], 1, 4) == "CMD:" then\n` +
+`                ProcessDebugCommand(string.sub(allArgs[i], 5))\n` +
 `                return\n` +
 `            end\n` +
-`            if oldSyncNotice then\n` +
-`                return oldSyncNotice(...)\n` +
+`        end\n` +
+`        if oldSync then return oldSync(...) end\n` +
+`    end\n` +
+`end\n\n` +
+`local function HookDisplayMessageMgr()\n` +
+`    if gDisplayMessageMgr and not gDisplayMessageMgr._cmdHooked then\n` +
+`        gDisplayMessageMgr._cmdHooked = true\n` +
+`        local oldShow = gDisplayMessageMgr.ShowMessageContent\n` +
+`        gDisplayMessageMgr.ShowMessageContent = function(self, content, ...)\n` +
+`            if type(content) == "string" and string.sub(content, 1, 4) == "CMD:" then\n` +
+`                ProcessDebugCommand(string.sub(content, 5))\n` +
+`                return\n` +
 `            end\n` +
+`            return oldShow(self, content, ...)\n` +
 `        end\n` +
 `    end\n` +
+`end\n\n` +
+`local function HookAllNotices()\n` +
+`    pcall(function()\n` +
+`        if package and package.loaded then\n` +
+`            HookNoticeTable(package.loaded["LX6/Service/MasterToClientImpl"])\n` +
+`            HookNoticeTable(package.loaded["LX6/Service/GameToClientImpl"])\n` +
+`        end\n` +
+`        if MasterToClientImpl then HookNoticeTable(MasterToClientImpl) end\n` +
+`        if GameToClientImpl then HookNoticeTable(GameToClientImpl) end\n` +
+`        HookDisplayMessageMgr()\n` +
+`    end)\n` +
 `end\n\n` +
 `local oldRequire = require\n` +
 `require = function(mod)\n` +
 `    local res = oldRequire(mod)\n` +
 `    pcall(ApplyAllGlobalHooks)\n` +
-`    pcall(HookMasterNotice)\n` +
+`    if mod == "LX6/Service/MasterToClientImpl" or mod == "LX6/Service/GameToClientImpl" then\n` +
+`        if type(res) == "table" then HookNoticeTable(res) end\n` +
+`    end\n` +
+`    pcall(HookAllNotices)\n` +
 `    return res\n` +
 `end\n\n` +
 `pcall(ApplyAllGlobalHooks)\n` +
-`pcall(HookMasterNotice)\n`;
+`pcall(HookAllNotices)\n`;
   const switchBytes = to_luastring(switchSource);
   const switchStatus = lauxlib.luaL_loadbuffer(L, switchBytes, switchBytes.length, to_luastring(switchFileName));
   if (switchStatus !== lua.LUA_OK) throw new Error("generated ClientGameSwitch.lua failed Lua syntax validation");
@@ -318,3 +357,14 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
     "No gameplay Lua overrides are included.\n",
     "utf8",
   );
+
+  const { execSync } = require("child_process");
+  const publicZip = path.join(__dirname, "..", "public", `fastpatch_${clientVersion}.zip`);
+  try {
+    const pyCmd = `python -c "import zipfile, os; z = zipfile.ZipFile(r'${publicZip.replace(/\\/g, "\\\\")}', 'w', zipfile.ZIP_DEFLATED); [z.write(os.path.join(r'${fastPatchRoot.replace(/\\/g, "\\\\")}', f), f) for f in os.listdir(r'${fastPatchRoot.replace(/\\/g, "\\\\")}') if os.path.isfile(os.path.join(r'${fastPatchRoot.replace(/\\/g, "\\\\")}', f))]; z.close()"`;
+    execSync(pyCmd);
+    console.log(`Successfully generated and packed: ${publicZip}`);
+  } catch (err) {
+    console.warn(`Warning: Could not automatically create zip via python: ${err.message}`);
+  }
+

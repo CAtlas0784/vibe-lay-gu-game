@@ -66,4 +66,11 @@ internal sealed partial class GameRouter
     {
         conn.Log.Info("[SECURITY] DavinciCode notify absorbed");
     }
+
+    [Handler(MethodId.GmDaVinciCode, HandlerPacketKind.Invoke)]
+    private static Task GmDaVinciCode(Connection conn, UxRpcMessage msg)
+    {
+        conn.Log.Info("[SECURITY] GmDaVinciCode invoke absorbed");
+        return conn.ReturnEmptyOkAsync(msg);
+    }
 }

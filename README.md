@@ -10,18 +10,20 @@
 
 | ฟีเจอร์ / ระบบ | สถานะ | รายละเอียดการทำงาน |
 | :--- | :---: | :--- |
+| **Combat & Skill System (ระบบต่อสู้และสกิล)** | 🟢 ใช้งานได้สมบูรณ์ | ผูก Weapon Profile, Basic Attack Combo, Heavy Attack, Active Skill, Dodge, Unique Ultimate Skill และ Fight Resources (SP/Energy) ให้กับตัวละครทุกตัว (ทั้ง MC ชาย/หญิง และตัวละครทั้งหมด) ทันทีเมื่อเข้าเกมหรือสลับตัวละคร พร้อมประมวลผล Skill RPC และ Damage Hit Notification ในเซิร์ฟเวอร์ |
 | **Authentication & MPay Bypass** | 🟢 ใช้งานได้สมบูรณ์ | บายพาสล็อกอินผ่าน MPay JavaScript Bridge ใน `NtUniSdkBase.dll` อัตโนมัติ ไม่ต้องกรอกรหัสผ่าน |
 | **HTTPS Gateway & Multi-Domain Proxy** | 🟢 ใช้งานได้สมบูรณ์ | จำลอง SSL SNI บนพอร์ต 443/80 หลอกระบบอัปเดต และบีบ Contract MD5 7-column ไม่ให้ขึ้นปิดปรับปรุง |
 | **World Entry (V7 4-Step Handoff)** | 🟢 ใช้งานได้สมบูรณ์ | ส่งลำดับ `SyncLogicAgentEnter` -> `SyncManagedLogicAgent` -> `SyncRaidBattleUnitSpirit` -> `SyncPlayerCurrentSpirit` -> `SyncSceneLoadCompleted` เข้าสู่เมืองได้ 100% |
-| **Character Switching (สลับตัวละคร)** | 🟢 ใช้งานได้สมบูรณ์ | สลับตัวละครได้ในฉากเดียวกัน พิกัดต่อเนื่อง และส่ง `isAgentSwitch: true` ทำให้มุมกล้อง Cinemachine ติดตามตัวละครใหม่ถูกต้อง ไม่หลุดลอย |
-| **Traversal & Parkour (สลิง/ปีนป่าย)** | 🟢 ใช้งานได้สมบูรณ์ | ปลดล็อกบัฟเคลื่อนไหวใยแมงมุม (FeiSuo / Grapple Hook / Wall Rush / Dive Damage) ให้กับทุกตัวละคร |
-| **Anti-Cheat Suppression** | 🟢 ใช้งานได้สมบูรณ์ | ดักปิด `DavinciReport` และ `DavinciMgr.CheckTimeScale` พร้อมดูดซับ `DavinciCode` ฝั่งเซิร์ฟเวอร์ หมดปัญหาสลิงเกี่ยวแล้ว Connection Lost |
+| **Character Switching (สลับตัวละคร)** | 🟢 ใช้งานได้สมบูรณ์ | สลับตัวละครได้ในฉากเดียวกัน พิกัดต่อเนื่อง และส่ง `isAgentSwitch: true` ทำให้มุมกล้อง Cinemachine ติดตามตัวละครใหม่ถูกต้อง ไม่หลุดลอย พร้อมรีไอน์เชียลไลซ์สกิลของตัวละครใหม่ทันที |
+| **Traversal & Parkour (สลิง/เกี่ยวต่อสู้/ปีนป่าย)** | 🟢 ใช้งานได้สมบูรณ์ | ปลดล็อกบัฟเคลื่อนไหวใยแมงมุม (FeiSuo / Grapple Hook / Wall Rush / Dive Damage) ให้กับทุกตัวละคร รองรับการใช้สลิงเกี่ยวต่อสู้โดยไม่หลุดจากการเชื่อมต่อ |
+| **Anti-Cheat Suppression** | 🟢 ใช้งานได้สมบูรณ์ | ดักปิด `DavinciReport`, `DavinciMgr.CheckTimeScale` (แก้บัค Connection Lost เวลาสลิงเกี่ยวหรือเกิด Slow Motion) และดูดซับ `GmDaVinciCode` ฝั่งเซิร์ฟเวอร์ |
+| **Camera & Cinemachine Handling** | 🟢 ใช้งานได้สมบูรณ์ | จัดการทรานซิชันมุมกล้อง Cinemachine ระหว่างการเคลื่อนไหว สลับตัวละคร และโหมดอิสระ ปิดการ Force Debug Photo ที่เคยกวนระบบกล้องเกมหลัก |
 | **RAM Warmup OOM Prevention** | 🟢 ใช้งานได้สมบูรณ์ | ปิดการสั่งคอมไพล์ 11,384 PSO Shaders รวดเดียว ลดเวลาโหลดจาก 40 วิเหลือ 0.01 วิ และไม่กินแรม 16-19GB จนเกมแครช |
 | **Retail Game Switches & All-Map Unlock** | 🟢 ใช้งานได้สมบูรณ์ | ปลดล็อกตู้เสื้อผ้า (Closet), กาชา (Gacha), ห้าง (Mall), โทรศัพท์ (Phone), แผนที่เปิดหมด หมอกควัน (Fog) ถูกเคลียร์ |
 | **Web Debug Panel (`:5809/debug`)** | 🟢 ใช้งานได้สมบูรณ์ | แดชบอร์ดเว็บสำหรับวาร์ปตามพิกัด (Teleport), ปรับเวลาสภาพอากาศ, เสกมอนเตอร์, และเปิดหน้าต่างวิดีโอ |
-| **Safe Fastpatch Loader** | 🟢 ใช้งานได้สมบูรณ์ | ตัวสร้าง `fastpatch_4229938.zip` อัตโนมัติ ทุกคำสั่งถูกครอบด้วย `pcall` หมดปัญหาเกมค้างหน้า Initialize Client |
-| **Monster Spawning (เสกมอนเตอร์)** | 🟡 กำลังพัฒนา / มีข้อจำกัด | เสกได้ผ่าน GM Console (`Alt+F1`) และ Debug Panel (`CMD:SPAWN_ENEMY`) แต่ขึ้นอยู่กับว่า Chunk ที่ยืนอยู่มี NavMesh โหลดพร้อมหรือไม่ |
-| **Cutscene & Video Player** | 🟡 กำลังพัฒนา / มีข้อจำกัด | คำสั่ง `CMD:PLAY_CUTSCENE` สั่งเปิดหน้าต่าง `S_VIDEO_PLAYER_PANEL` และ Timeline ได้ถูกต้อง แต่ Cutscene ID บางตัวอาจไม่มีไฟล์วิดีโอใน Client Leak |
+| **Safe Fastpatch Loader** | 🟢 ใช้งานได้สมบูรณ์ | ตัวสร้าง `fastpatch_4229938.zip` อัตโนมัติ ทุกคำสั่งถูกครอบด้วย `pcall` ป้องกันข้อความคำสั่งรั่วขึ้นหน้าจอ และหมดปัญหาเกมค้างหน้า Initialize Client |
+| **Monster Spawning (เสกมอนเตอร์)** | 🟡 กำลังพัฒนา / ใช้งานได้ | เสกได้ผ่าน GM Console (`Alt+F1`) และ Debug Panel (`CMD:SPAWN_ENEMY`) ส่งคำสั่งเข้า `gCS.LuaUtils.AddEnemy` โดยตรงไม่ขึ้นเป็นตัวหนังสือบนจอ แต่การเกิดจะขึ้นอยู่กับ NavMesh ใน Chunk นั้นๆ |
+| **Cutscene & Video Player** | 🟡 กำลังพัฒนา / ใช้งานได้ | คำสั่ง `CMD:PLAY_CUTSCENE` สั่งเปิดหน้าต่าง `S_VIDEO_PLAYER_PANEL` และ Timeline ได้ถูกต้อง ไม่ขึ้นเป็นตัวหนังสือบนจอ แต่ Cutscene ID บางตัวอาจไม่มีไฟล์วิดีโอใน Client Leak |
 | **Taffy Monowheel (塔菲摩托)** | 🟡 กำลังพัฒนา / มีข้อจำกัด | ลงทะเบียน RPC การขับขี่พื้นฐาน (`AskTaffyMotoEnterRush`, `AskGetOffMotor`, `OnTafeiMotorColliding`) ไว้แล้ว แต่ระบบฟิสิกส์การชนยังไม่สมบูรณ์เท่าตัวเอก |
 | **Gacha System (ตู้สุ่มตัวละคร)** | 🟡 กำลังพัฒนา / มีข้อจำกัด | หน้าร้านค้าเปิดตู้ได้และบายพาสวันหมดอายุ CBT แล้ว แต่ผลการสุ่มยังเป็นการให้ไอเทมแบบสุ่มตายตัว (ยังไม่มี Database เรทกาชาแบบเต็มระบบ) |
 | **Phone Customization (ตกแต่งมือถือ)** | 🟡 กำลังพัฒนา / มีข้อจำกัด | ปลดล็อกไอเทมเคสมือถือ วอลเปเปอร์ จี้ห้อย (`1..200`) ในหน่วยความจำ แต่ยังไม่บันทึกความเปลี่ยนแปลงข้าม Session แบบถาวร |

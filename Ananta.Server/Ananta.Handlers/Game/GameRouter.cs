@@ -98,6 +98,7 @@ internal sealed partial class GameRouter
         MethodId.GmAddEnemyByPlayer,
         MethodId.GmTeleportXYZ,
         MethodId.DavinciCode,
+        MethodId.GmDaVinciCode,
 
         // Time of day: client-driven UI (accept + remember) + debug-panel slider push.
         MethodId.AskPassingTime,

@@ -85,8 +85,9 @@ internal sealed partial class GameRouter
             CombatCodec.SpiritLastUsedWeapon(templateId, weapon.InstanceId));
         await ctx.NotifyAsync(MethodId.SyncSpiritSwitchWeaponAction,
             CombatCodec.SpiritSwitchWeapon(unitId, weapon.InstanceId));
+        await PublishSelectedWeaponProfile(ctx, unitId, templateId, weapon, style);
 
-        ctx.Session.Log.Info($"[ACTOR-MIN] presentation unit={unitId} template={templateId} weapon={weapon.TemplateId}/{weapon.InstanceId} style={style.Id} reason={reason} combatModules=false skills=false");
+        ctx.Session.Log.Info($"[ACTOR-MIN] presentation unit={unitId} template={templateId} weapon={weapon.TemplateId}/{weapon.InstanceId} style={style.Id} reason={reason} combatModules=true skills=true");
     }
 
     async Task PublishWeaponSnapshot(
@@ -175,11 +176,12 @@ internal sealed partial class GameRouter
 
         // Keep the opening/loading barrier on the proven small traversal capability set.
         // Never activate the entire BuffConfig as one player snapshot: it contains NPC/timeline actions.
+        var targetUnitId = state.ActiveSpiritUnitId != 0 ? state.ActiveSpiritUnitId : Profile.InitialUnitId;
         var firstInstanceId = state.NextBuffInstanceId;
         await ctx.NotifyAsync(MethodId.SyncUnitBuffList,
-            WorldCodec.UnitBuffList(Profile.InitialUnitId, WebTraversal.InitialCapabilityBuffIds, firstInstanceId));
+            WorldCodec.UnitBuffList(targetUnitId, WebTraversal.InitialCapabilityBuffIds, firstInstanceId));
         state.NextBuffInstanceId += (uint)WebTraversal.InitialCapabilityBuffIds.Count;
-        ctx.Session.Log.Info($"[CAPABILITY] initial unit={Profile.InitialUnitId} count={WebTraversal.InitialCapabilityBuffIds.Count} loadingSafe=true allBuffsDeferred=true");
+        ctx.Session.Log.Info($"[CAPABILITY] initial unit={targetUnitId} count={WebTraversal.InitialCapabilityBuffIds.Count} loadingSafe=true allBuffsDeferred=true");
     }
 
 }
