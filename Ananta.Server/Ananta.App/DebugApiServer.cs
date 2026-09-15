@@ -128,6 +128,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await SpawnEnemyAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/cutscene/play")
                 await WriteJsonAsync(ctx, await PlayCutsceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/timeline/play")
+                await WriteJsonAsync(ctx, await PlayTimelineAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else
                 await WriteJsonAsync(ctx, new { ok = false, error = "unknown route" }, token, 404);
         }
@@ -1002,6 +1004,32 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
 
         session.Log.Info($"[DEBUG-API] play cutscene/video id={cutsceneId}");
         return new { ok = true, id = cutsceneId };
+    }
+
+    private async Task<object> PlayTimelineAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        string timeline = "SwitchChar_tafei_01";
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("name", out var pn)) timeline = pn.GetString() ?? pn.GetRawText();
+            else if (root.TryGetProperty("id", out var pi)) timeline = pi.GetString() ?? pi.GetRawText();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var cmd = $"CMD:PLAY_TIMELINE:{timeline}";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info($"[DEBUG-API] play realtime timeline={timeline}");
+        return new { ok = true, timeline };
     }
 
     private static async Task<string> ReadBodyAsync(HttpListenerRequest request, CancellationToken token)

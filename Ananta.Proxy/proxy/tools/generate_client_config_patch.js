@@ -260,6 +260,19 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                LX6.Manager.GameInputManager.SetEnableInput(gPanelId.COMMON_BLACK_TRANSITION)\n` +
 `            end\n` +
 `        end)\n` +
+`    elseif string.sub(cmd, 1, 14) == "PLAY_TIMELINE:" then\n` +
+`        local arg = string.sub(cmd, 15)\n` +
+`        pcall(function()\n` +
+`            if gTimelineManager and gTimelineManager.Timeline_LoadAndPlay then\n` +
+`                gTimelineManager:Timeline_LoadAndPlay(arg, nil)\n` +
+`            elseif gTimelineManager and gTimelineManager.PlayTimeline then\n` +
+`                gTimelineManager:PlayTimeline(arg)\n` +
+`            elseif gDramaManager and gDramaManager.PlayTimeline then\n` +
+`                gDramaManager:PlayTimeline(arg)\n` +
+`            elseif gCS and gCS.LuaUtils and gCS.LuaUtils.PlayTimeline then\n` +
+`                gCS.LuaUtils.PlayTimeline(arg)\n` +
+`            end\n` +
+`        end)\n` +
 `    elseif string.sub(cmd, 1, 14) == "PLAY_CUTSCENE:" then\n` +
 `        local arg = string.sub(cmd, 15)\n` +
 `        local numId = tonumber(arg)\n` +

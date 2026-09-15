@@ -156,25 +156,57 @@
   <div class="muted" style="margin-top:6px">Spawns enemies near the player for live combat testing. Use with active weapon & combat sandbox.</div>
 </div>
 
-<div class="card">
-  <h2>Cutscene & Video Player</h2>
-  <div style="margin-bottom:6px">
-    Cutscene / Video:
-    <select id="cutscenepreset" onchange="onCutscenePresetChange()">
-      <option value="24100064">Gacha 3D Box Opening [24100064]</option>
-      <option value="24100001">Prologue Story Intro [24100001]</option>
-      <option value="24100002">Xinqi Main City Arrival [24100002]</option>
-      <option value="24100010">Metro Transit Cutscene [24100010]</option>
-      <option value="24100020">Boss Appearance Timeline [24100020]</option>
-      <option value="custom">Custom ID / Timeline...</option>
+<div class="card" style="border-color:#4caf50">
+  <h2 style="color:#81c784">🎬 Realtime 3D Cutscenes & Timelines (In-Engine 3D)</h2>
+  <div style="margin-bottom:8px">
+    Preset:
+    <select id="timelinepreset" onchange="onTimelinePresetChange()" style="min-width:380px">
+      <option value="SwitchChar_tafei_01">🐰 Taffy 3D Entrance (คัทซีนเปิดตัว Taffy ถือค้อนกระโดดลงมา)</option>
+      <option value="SwitchChar_nanzhujue_03">🗡️ Male MC 3D Entrance (คัทซีนเปิดตัวเอกชาย)</option>
+      <option value="SwitchChar_saimo_05">⚡ Seymour 3D Showcase (คัทซีนเปิดตัว Seymour)</option>
+      <option value="SwitchChar_character_13">🌸 Rin 3D Entrance (คัทซีนเปิดตัว Rin)</option>
+      <option value="SwitchChar_character_19">🎸 Bansy 3D Entrance (คัทซีนเปิดตัว Bansy)</option>
+      <option value="SwitchChar_character_20">🐺 Garm 3D Entrance (คัทซีนเปิดตัว Garm)</option>
+      <option value="SwitchChar_character_22">🎯 Aileen 3D Showcase (คัทซีนเปิดตัว Aileen)</option>
+      <option value="SwitchChar_common_12_SA1">💥 Ground Slam Action (คัทซีนกระโดดกระแทกพื้น)</option>
+      <option value="SwitchChar_common_20a_SA1">🪂 High Altitude Combat Drop A (ดิ่งพสุธาสู่สนามรบ A)</option>
+      <option value="SwitchChar_common_20b_SA1">🪂 High Altitude Combat Drop B (ดิ่งพสุธาสู่สนามรบ B)</option>
+      <option value="SwitchChar_common_24">🤸 Acrobatic Flip Entrance (คัทซีนตีลังกาลงสู่พื้น)</option>
+      <option value="SwitchChar_common_25_SA1">🌪️ Heavy Impact Shockwave (คัทซีนกระแทกพื้นคลื่นพลัง)</option>
+      <option value="TL_SEYM_010_Q010_S01">📜 Seymour Story Quest Scene 1 (คัทซีนเควสต์เนื้อเรื่อง Seymour)</option>
+      <option value="TL_NewMilk">🥛 Milk Delivery Mission (คัทซีนภารกิจส่งนม)</option>
+      <option value="custom">Custom Timeline Name...</option>
     </select>
-    ID: <input id="cutsceneId" type="text" style="width:140px" value="24100064">
+  </div>
+  <div style="margin-bottom:8px">
+    Name / Path: <input id="timelineName" type="text" style="width:280px" value="SwitchChar_tafei_01">
+    <button style="background:#2e7d32;margin-left:8px" onclick="playTimeline()">▶️ Play 3D Timeline (Realtime)</button>
+    <button class="ghost" onclick="unstuckBlackScreen()">⏹️ Stop / Reset</button>
+  </div>
+  <div class="muted">💡 เรนเดอร์โมเดล 3D และมุมกล้อง Cinemachine สดๆ ใน Engine ไม่ต้องพึ่งพาไฟล์วิดีโอ หมดปัญหาไฟล์วิดีโอหาย</div>
+</div>
+
+<div class="card">
+  <h2>🎞️ Video Player Cutscenes (Prerendered Video)</h2>
+  <div style="margin-bottom:6px">
+    Video Preset:
+    <select id="cutscenepreset" onchange="onCutscenePresetChange()" style="min-width:320px">
+      <option value="24100064">🎁 Gacha 3D Box Opening (เปิดกล่องกาชา 3D) [24100064]</option>
+      <option value="24100001">📖 Prologue Story Intro (คัทซีนเปิดเรื่อง) [24100001]</option>
+      <option value="24100002">🏙️ Xinqi Main City Arrival (เดินทางเข้าเมืองซินฉี) [24100002]</option>
+      <option value="24100010">🚇 Metro Transit Cutscene (ขึ้นรถไฟใต้ดิน) [24100010]</option>
+      <option value="24100020">👹 Boss Appearance (บอสเปิดตัว) [24100020]</option>
+      <option value="24107001">👤 Character Dossier 01 [24107001]</option>
+      <option value="24107003">🐰 Taffy Animated Dossier [24107003]</option>
+      <option value="custom">Custom Video ID...</option>
+    </select>
+    ID: <input id="cutsceneId" type="text" style="width:120px" value="24100064">
   </div>
   <div>
-    <button style="background:#7b1fa2" onclick="playCutscene()">Play Cutscene / Video</button>
-    <button class="ghost" onclick="unstuckBlackScreen()">Skip / Stop Video</button>
+    <button style="background:#7b1fa2" onclick="playCutscene()">▶️ Play Video</button>
+    <button class="ghost" onclick="unstuckBlackScreen()">⏹️ Skip / Close</button>
   </div>
-  <div class="muted" style="margin-top:6px">Directly triggers in-game video playback or timeline cutscene on the client.</div>
+  <div class="muted" style="margin-top:6px">เล่นไฟล์วิดีโอผ่าน S_VIDEO_PLAYER_PANEL (หากคลิปไม่มีในตัวเกมอาจขึ้นจอดำ)</div>
 </div>
 
 <div class="card">
@@ -417,6 +449,21 @@ async function spawnEnemy() {
   };
   const r = await api('/api/enemy/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   log('spawn enemy: ' + JSON.stringify(r));
+}
+
+function onTimelinePresetChange() {
+  const sel = document.getElementById('timelinepreset').value;
+  if (sel !== 'custom') {
+    document.getElementById('timelineName').value = sel;
+  }
+}
+
+async function playTimeline() {
+  const body = {
+    name: document.getElementById('timelineName').value || 'SwitchChar_tafei_01'
+  };
+  const r = await api('/api/timeline/play', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('play timeline: ' + JSON.stringify(r));
 }
 
 function onCutscenePresetChange() {
