@@ -117,6 +117,14 @@
   </div>
 </div>
 
+<div class="card" style="border-color:#ab47bc">
+  <h2 style="color:#ce93d8">👗 Outfit / Appearance (สลับชุด / ซ่อนเสื้อผ้า)</h2>
+  <div>
+    <button style="background:#8e24aa;color:white" onclick="toggleClothes()">Toggle Clothes / ซ่อน-แสดงชุด</button>
+  </div>
+  <div class="muted" style="margin-top:6px">สลับการแสดงผลเสื้อผ้า (SkinnedMeshRenderer) ของตัวละครที่กำลังเล่นอยู่ โดยยังคงแสดงโมเดลบอดี้เดิมไว้</div>
+</div>
+
 <div class="card" style="border-color:#e53935">
   <h2 style="color:#ff8a80">Emergency Unstuck & Black Screen Recovery</h2>
   <div>
@@ -146,9 +154,9 @@
   <div>
     Camp:
     <select id="enemyCamp">
-      <option value="2">Enemy (Hostile)</option>
-      <option value="0">Neutral</option>
-      <option value="1">Ally / Friendly</option>
+      <option value="0">Enemy / Hostile (0)</option>
+      <option value="1">Ally / Friendly (1)</option>
+      <option value="2">Neutral (2)</option>
     </select>
     Count: <input id="enemyCount" type="number" style="width:70px" value="1" min="1" max="10">
     <button style="background:#e53935;margin-left:8px" onclick="spawnEnemy()">Spawn Opponent</button>
@@ -412,6 +420,11 @@ async function rollback10s() {
   refresh();
 }
 
+async function toggleClothes() {
+  const r = await api('/api/player/toggle-clothes', { method: 'POST' });
+  log('toggle clothes: ' + JSON.stringify(r));
+}
+
 function onEnemyPresetChange() {
   const sel = document.getElementById('enemypreset').value;
   if (sel !== 'custom') {
@@ -421,8 +434,8 @@ function onEnemyPresetChange() {
 
 async function spawnEnemy() {
   const body = {
-    enemyId: parseInt(document.getElementById('enemyId').value || '100101', 10),
-    camp: parseInt(document.getElementById('enemyCamp').value || '2', 10),
+    enemyId: parseInt(document.getElementById('enemyId').value || '40900579', 10),
+    camp: parseInt(document.getElementById('enemyCamp').value || '0', 10),
     count: parseInt(document.getElementById('enemyCount').value || '1', 10)
   };
   const r = await api('/api/enemy/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });

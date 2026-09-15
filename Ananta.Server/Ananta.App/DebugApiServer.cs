@@ -124,6 +124,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await UnstuckBlackScreenAsync(token), token);
             else if (method == "POST" && path == "/api/player/rollback-10s")
                 await WriteJsonAsync(ctx, await RollbackPositionAsync(token), token);
+            else if (method == "POST" && path == "/api/player/toggle-clothes")
+                await WriteJsonAsync(ctx, await ToggleClothesAsync(token), token);
             else if (method == "POST" && path == "/api/enemy/spawn")
                 await WriteJsonAsync(ctx, await SpawnEnemyAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/cutscene/play")
@@ -1030,6 +1032,19 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
 
         session.Log.Info($"[DEBUG-API] play realtime timeline={timeline}");
         return new { ok = true, timeline };
+    }
+
+    private async Task<object> ToggleClothesAsync(CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        var cmd = "CMD:TOGGLE_CLOTHES";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info("[DEBUG-API] toggle clothes dispatched");
+        return new { ok = true };
     }
 
     private static async Task<string> ReadBodyAsync(HttpListenerRequest request, CancellationToken token)
