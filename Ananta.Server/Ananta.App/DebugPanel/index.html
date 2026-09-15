@@ -186,28 +186,6 @@
   <div class="muted">💡 เรนเดอร์โมเดล 3D และมุมกล้อง Cinemachine สดๆ ใน Engine ไม่ต้องพึ่งพาไฟล์วิดีโอ หมดปัญหาไฟล์วิดีโอหาย</div>
 </div>
 
-<div class="card">
-  <h2>🎞️ Video Player Cutscenes (Prerendered Video)</h2>
-  <div style="margin-bottom:6px">
-    Video Preset:
-    <select id="cutscenepreset" onchange="onCutscenePresetChange()" style="min-width:320px">
-      <option value="24100064">🎁 Gacha 3D Box Opening (เปิดกล่องกาชา 3D) [24100064]</option>
-      <option value="24100001">📖 Prologue Story Intro (คัทซีนเปิดเรื่อง) [24100001]</option>
-      <option value="24100002">🏙️ Xinqi Main City Arrival (เดินทางเข้าเมืองซินฉี) [24100002]</option>
-      <option value="24100010">🚇 Metro Transit Cutscene (ขึ้นรถไฟใต้ดิน) [24100010]</option>
-      <option value="24100020">👹 Boss Appearance (บอสเปิดตัว) [24100020]</option>
-      <option value="24107001">👤 Character Dossier 01 [24107001]</option>
-      <option value="24107003">🐰 Taffy Animated Dossier [24107003]</option>
-      <option value="custom">Custom Video ID...</option>
-    </select>
-    ID: <input id="cutsceneId" type="text" style="width:120px" value="24100064">
-  </div>
-  <div>
-    <button style="background:#7b1fa2" onclick="playCutscene()">▶️ Play Video</button>
-    <button class="ghost" onclick="unstuckBlackScreen()">⏹️ Skip / Close</button>
-  </div>
-  <div class="muted" style="margin-top:6px">เล่นไฟล์วิดีโอผ่าน S_VIDEO_PLAYER_PANEL (หากคลิปไม่มีในตัวเกมอาจขึ้นจอดำ)</div>
-</div>
 
 <div class="card">
   <h2>Panel log</h2>
@@ -466,20 +444,6 @@ async function playTimeline() {
   log('play timeline: ' + JSON.stringify(r));
 }
 
-function onCutscenePresetChange() {
-  const sel = document.getElementById('cutscenepreset').value;
-  if (sel !== 'custom') {
-    document.getElementById('cutsceneId').value = sel;
-  }
-}
-
-async function playCutscene() {
-  const body = {
-    id: document.getElementById('cutsceneId').value || '24100064'
-  };
-  const r = await api('/api/cutscene/play', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  log('play cutscene: ' + JSON.stringify(r));
-}
 
 loadFleet();
 refresh();

@@ -10,6 +10,8 @@ logs/
 # Runtime generated cache / temp
 .runtime/
 *.tmp
+crash_uploads/
+**/crash_uploads/
 
 # IDE / Editor artifacts
 .vs/
