@@ -1,5 +1,7 @@
 # Ananta (Project Mugen) CBT 4229938 Private Server & Proxy Engine
 
+> ฐานโค้ดนี้ได้รับการพัฒนาต่อยอด (Forked) มาจากผลงานของ **[Horoyoi-san (ngp/Ananta-DEV5)](https://github.com/horoyoi-san/ngp/tree/Ananta-DEV5)**
+
 เซิร์ฟเวอร์ส่วนตัว (Private Server) และระบบ HTTPS/SNI Proxy สำหรับเกม **Ananta (Project Mugen / 代号：无限大)** ไคลเอนต์เวอร์ชัน **CBT 4229938** ที่พัฒนาด้วยสถาปัตยกรรม C# .NET 8 (UX-RPC Binary Protocol) ร่วมกับ Node.js Proxy เพื่อจำลองการเชื่อมต่อและเล่นเกมในโหมด Sandbox / Free-Roam ได้อย่างสมบูรณ์
 
 ---
