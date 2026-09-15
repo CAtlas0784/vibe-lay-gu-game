@@ -73,6 +73,8 @@ internal sealed partial class GameRouter
         MethodId.AskGetUnlockedVehicles,
         MethodId.SyncStoryCoreClientInfo,
         MethodId.AskClaimVehicleSeat,
+        MethodId.AskReleaseVehicleSeat,
+        MethodId.AskChangeCanMoveToDriveSeat,
         MethodId.AskPlayerStartEnterOrExitVehicle,
         MethodId.AskPlayerFinishEnterOrExitVehicle,
         MethodId.AskVehicleMove,

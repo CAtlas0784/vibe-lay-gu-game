@@ -298,6 +298,14 @@ internal sealed class AskClaimVehicleSeatArgs
     public List<byte> SeatIndices = [];
 }
 
+/// <summary>Client -> server AskReleaseVehicleSeat(vehicleEntityId, seatIndex). Inline.</summary>
+[UxContract(Inline = true)]
+internal sealed class AskReleaseVehicleSeatArgs
+{
+    public ulong VehicleEntityId;
+    public byte SeatIndex;
+}
+
 /// <summary>Client -> GameScene AskVehicleStartAutonomousDriving(bool hasvalidtargetposition, UXVector3 targetposition).</summary>
 [UxContract(Inline = true)]
 internal sealed class AskVehicleStartAutonomousDrivingArgs
