@@ -125,6 +125,14 @@ internal sealed partial class GameRouter
         MethodId.AskClaimGachaMilestone,
         MethodId.AskChaosMasterGacha,
 
+        // Shop and Marketplace.
+        MethodId.AskNpcShopCommodityInfo,
+        MethodId.AskReadCommodities,
+        MethodId.AskBuyCommodity,
+        MethodId.AskBuyCommodities,
+        MethodId.AskBuyCommodityToBag,
+        MethodId.AskBuyCommoditiesToBag,
+
         // Activities.
         MethodId.AskActivityCancelRedPoint,
 
