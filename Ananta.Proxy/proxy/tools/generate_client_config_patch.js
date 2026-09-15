@@ -191,6 +191,68 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                gMapSystem.fogMap.IsUnlocked = function(self, sceneId, x, z) return true end\n` +
 `            end\n` +
 `        end\n` +
+`        if LX6 and LX6.Gps and LX6.Gps.MapFogDataMgr then\n` +
+`            LX6.Gps.MapFogDataMgr.IsInFog = function(sceneId, x, z) return false end\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(101, true) end)\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(102, true) end)\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(103, true) end)\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(1001, true) end)\n` +
+`        end\n` +
+`        if C_MapView_Fog then\n` +
+`            C_MapView_Fog.InFog = function(self, instanceId) return false end\n` +
+`            C_MapView_Fog.SetFogEnable = function(self, enable) end\n` +
+`        end\n` +
+`        if L50 and L50.Gm and L50.Gm.AutoQaFunctions then\n` +
+`            L50.Gm.AutoQaFunctions.GetMapClickToTeleport = function() return true end\n` +
+`        end\n` +
+`        if gCS and gCS.LuaUtils then\n` +
+`            gCS.LuaUtils.IsNotUseGM = false\n` +
+`        end\n` +
+`        local mapStore = GroupName2Class and GroupName2Class.NewMapPanelStore or C_NewMapPanelStore\n` +
+`        if mapStore and not mapStore._teleportHooked then\n` +
+`            mapStore._teleportHooked = true\n` +
+`            local origOnMainClick = mapStore.OnMainClick\n` +
+`            mapStore.OnMainClick = function(self, evtData)\n` +
+`                local isAlt = false\n` +
+`                pcall(function()\n` +
+`                    if UnityEngine and UnityEngine.Input and UnityEngine.KeyCode then\n` +
+`                        isAlt = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftAlt) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightAlt)\n` +
+`                    end\n` +
+`                end)\n` +
+`                if isAlt or (evtData and evtData.button == 1) or (L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.GetMapClickToTeleport()) then\n` +
+`                    local uiPos = self:GetPointerUIPos()\n` +
+`                    local texPos = self:TransformUIToTex(uiPos)\n` +
+`                    local areaId, worldPos = self:TryTransformTexToWorld(texPos)\n` +
+`                    if worldPos and L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.TeleportToPos then\n` +
+`                        L50.Gm.AutoQaFunctions.TeleportToPos(worldPos.x, worldPos.z)\n` +
+`                        pcall(function() gMainPhoneUtils.CloseMainPhonePanel(true) end)\n` +
+`                        pcall(function() self:OnBtnClose() end)\n` +
+`                        return\n` +
+`                    end\n` +
+`                end\n` +
+`                if origOnMainClick then return origOnMainClick(self, evtData) end\n` +
+`            end\n` +
+`        end\n` +
+`        if C_InteractionManager then\n` +
+`            local origCheck = C_InteractionManager.CheckUnitPcBtnShow\n` +
+`            C_InteractionManager.CheckUnitPcBtnShow = function(self, pid)\n` +
+`                if gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pid == pid then\n` +
+`                    return false\n` +
+`                end\n` +
+`                if origCheck then return origCheck(self, pid) end\n` +
+`                return false\n` +
+`            end\n` +
+`        end\n` +
+`        if gInteractionManager then\n` +
+`            local origCheckG = gInteractionManager.CheckUnitPcBtnShow\n` +
+`            gInteractionManager.CheckUnitPcBtnShow = function(self, pid)\n` +
+`                if gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pid == pid then\n` +
+`                    return false\n` +
+`                end\n` +
+`                if origCheckG then return origCheckG(self, pid) end\n` +
+`                return false\n` +
+`            end\n` +
+`        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
 `        if CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security then\n` +
