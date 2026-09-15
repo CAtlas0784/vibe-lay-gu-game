@@ -597,23 +597,6 @@ internal sealed partial class GameRouter
         return msg.IsInvoke ? conn.ReturnEmptyOkAsync(msg) : Task.CompletedTask;
     }
 
-    [Handler(MethodId.AskClaimVehicleSeat, HandlerPacketKind.Invoke)]
-    private async Task AskClaimVehicleSeat(Connection conn, UxRpcMessage msg)
-    {
-        ulong vehicleId = 0;
-        try
-        {
-            var args = msg.GetArgs<SceneMethods.AskClaimVehicleSeatArgs>();
-            vehicleId = args.VehicleEntityId;
-        }
-        catch
-        {
-            vehicleId = LastSummonedEntity();
-        }
-        conn.Log.Info($"[VEHICLE] AskClaimVehicleSeat invoked for vehicle={vehicleId}");
-        await conn.ReturnAsync(msg, (byte)0);
-        await ForceEnterVehicleAsync(conn.Session, vehicleId);
-    }
 
     [Handler(MethodId.AskReleaseVehicleSeat, HandlerPacketKind.Notify)]
     [Handler(MethodId.AskReleaseVehicleSeat, HandlerPacketKind.Invoke)]

@@ -400,51 +400,29 @@ internal sealed partial class GameRouter
     [Handler(MethodId.AskClaimVehicleSeat, HandlerPacketKind.Invoke)]
     private async Task AskClaimVehicleSeatStory(Connection conn, UxRpcMessage msg)
     {
-        if (!msg.TryGetArgs<SceneMethods.AskClaimVehicleSeatArgs>(out var args) || args is null)
-        {
-            conn.Log.Warn($"[VEHICLE] AskClaimVehicleSeat undecodable bytes={msg.Body.Length}");
-            await conn.ReturnEmptyOkAsync(msg);
-            return;
-        }
-        var story = GetVehicleStoryState(msg.Context.Session);
+        ulong vehicleId = 0;
         byte selected = 0;
-        var valid = false;
+        if (msg.TryGetArgs<SceneMethods.AskClaimVehicleSeatArgs>(out var args) && args is not null)
+        {
+            vehicleId = args.VehicleEntityId;
+            if (args.SeatIndices is { Count: > 0 })
+                selected = args.SeatIndices[0];
+        }
+        else
+        {
+            vehicleId = LastSummonedEntity();
+        }
+
+        var story = GetVehicleStoryState(msg.Context.Session);
         lock (story.SyncRoot)
         {
-            lock (SummonedVehiclesSync)
-            {
-                if (story.EnterVehicleId == args.VehicleEntityId
-                    && SummonedVehicles.TryGetValue(args.VehicleEntityId, out var vehicle))
-                {
-                    foreach (var seat in args.SeatIndices)
-                    {
-                        var reservedByOther = vehicle.SeatReservations.TryGetValue(seat, out var reservedBy) && reservedBy != Profile.PlayerPid;
-                        var occupiedByOther = vehicle.SeatOccupants.TryGetValue(seat, out var occupiedBy) && occupiedBy != Profile.PlayerPid;
-                        if (seat < vehicle.SeatCount && !reservedByOther && !occupiedByOther)
-                        {
-                            selected = seat;
-                            valid = true;
-                            break;
-                        }
-                    }
-                    if (valid)
-                    {
-                        var oldSeat = story.EnterSeat;
-                        if (vehicle.SeatReservations.TryGetValue(oldSeat, out var oldOwner) && oldOwner == Profile.PlayerPid)
-                            vehicle.SeatReservations.Remove(oldSeat);
-                        vehicle.SeatReservations[selected] = Profile.PlayerPid;
-                        story.EnterSeat = selected;
-                    }
-                }
-            }
+            story.EnterVehicleId = vehicleId;
+            story.EnterSeat = selected;
         }
-        if (!valid)
-        {
-            await conn.ReturnEmptyAsync(msg, 1);
-            return;
-        }
+
+        conn.Log.Info($"[VEHICLE-STORY] seat claim vehicle={vehicleId} seat={selected}");
         await conn.ReturnAsync(msg, selected);
-        conn.Log.Info($"[VEHICLE-STORY] seat claim vehicle={args.VehicleEntityId} seat={selected}");
+        await ForceEnterVehicleAsync(conn.Session, vehicleId);
     }
 
     private Task SendVehicleBoardingStatus(Connection conn, ulong unitId, ulong vehicleId, byte seat, byte status)
