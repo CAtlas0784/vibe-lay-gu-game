@@ -253,6 +253,44 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                return false\n` +
 `            end\n` +
 `        end\n` +
+`        if gBuyHouseUtils then\n` +
+`            gBuyHouseUtils.CheckHasBuyTheHouse = function(houseId) return true end\n` +
+`            gBuyHouseUtils.CheckBuyHouseMoneyEnough = function(houseId) return true end\n` +
+`        end\n` +
+`        if C_PlayerItemManager then\n` +
+`            local origGet = C_PlayerItemManager.GetPackItemNum\n` +
+`            C_PlayerItemManager.GetPackItemNum = function(self, id)\n` +
+`                local val = origGet and origGet(self, id) or 0\n` +
+`                return val > 99999 and val or 99999\n` +
+`            end\n` +
+`        end\n` +
+`        if gPlayerItemManager then\n` +
+`            local origGetG = gPlayerItemManager.GetPackItemNum\n` +
+`            gPlayerItemManager.GetPackItemNum = function(self, id)\n` +
+`                local val = origGetG and origGetG(self, id) or 0\n` +
+`                return val > 99999 and val or 99999\n` +
+`            end\n` +
+`        end\n` +
+`        local photoStore = GroupName2Class and GroupName2Class.PhotoPanelStore or C_PhotoPanelStore\n` +
+`        if photoStore and not photoStore._selfieHooked then\n` +
+`            photoStore._selfieHooked = true\n` +
+`            local origSetMode = photoStore.SetCurrentPhotoMode\n` +
+`            photoStore.SetCurrentPhotoMode = function(self)\n` +
+`                if origSetMode then origSetMode(self) end\n` +
+`                if self.photoMode == 1 then\n` +
+`                    pcall(function()\n` +
+`                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = true end\n` +
+`                        if gCS and gCS.CameraDataMgr and gCS.CameraDataMgr.cinemachineManager then\n` +
+`                            gCS.CameraDataMgr.cinemachineManager:SwitchSelfiePhotoMode(true, 0.2)\n` +
+`                        end\n` +
+`                    end)\n` +
+`                else\n` +
+`                    pcall(function()\n` +
+`                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = false end\n` +
+`                    end)\n` +
+`                end\n` +
+`            end\n` +
+`        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
 `        if CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security then\n` +
@@ -350,7 +388,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `    elseif string.sub(cmd, 1, 12) == "SPAWN_ENEMY:" then\n` +
 `        local p1, p2, p3 = string.match(string.sub(cmd, 13), "([^:]+):?([^:]*):?([^:]*)")\n` +
 `        local enemyId = tonumber(p1) or 40900579\n` +
-`        local camp = tonumber(p2) or 2\n` +
+`        local camp = tonumber(p2) or 0\n` +
+`        if camp == 2 then camp = 0 end\n` +
 `        local count = tonumber(p3) or 1\n` +
 `        pcall(function()\n` +
 `            if gCS and gCS.LuaUtils and gCS.LuaUtils.AddEnemy then\n` +
@@ -359,8 +398,30 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                gCS.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
 `            elseif gCS and gCS.GmUtils and gCS.GmUtils.AddEnemy then\n` +
 `                gCS.GmUtils.AddEnemy(enemyId)\n` +
-`            elseif CS and CS.LX6 and CS.LX6.GmUtils and CS.LX6.GmUtils.AddEnemyWithCamp then\n` +
-`                CS.LX6.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
+`            end\n` +
+`            if gClientToGameSceneGMDelegate then\n` +
+`                pcall(function() gClientToGameSceneGMDelegate:GmAddEnemyByPlayer(enemyId, camp) end)\n` +
+`            end\n` +
+`        end)\n` +
+`    elseif cmd == "TOGGLE_CLOTHES" then\n` +
+`        pcall(function()\n` +
+`            local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`            if not unit or not unit.PlayerObj then return end\n` +
+`            _G._clothesHidden = not _G._clothesHidden\n` +
+`            local smrs = unit.PlayerObj:GetComponentsInChildren(typeof(UnityEngine.SkinnedMeshRenderer), true)\n` +
+`            if smrs then\n` +
+`                for i = 0, smrs.Length - 1 do\n` +
+`                    local smr = smrs[i]\n` +
+`                    local n = string.lower(smr.name)\n` +
+`                    if string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or\n` +
+`                       string.find(n, "pant") or string.find(n, "dress") or string.find(n, "top") or\n` +
+`                       string.find(n, "bottom") or string.find(n, "jacket") or string.find(n, "yifu") or\n` +
+`                       string.find(n, "kuzi") or string.find(n, "qun") then\n` +
+`                        smr.enabled = not _G._clothesHidden\n` +
+`                    else\n` +
+`                        smr.enabled = true\n` +
+`                    end\n` +
+`                end\n` +
 `            end\n` +
 `        end)\n` +
 `    end\n` +
