@@ -371,6 +371,27 @@ internal sealed partial class GameRouter
     }
 
     [Handler(MethodId.AskPlayerStartEnterOrExitVehicle, HandlerPacketKind.Notify)]
+    private async Task AskPlayerStartEnterOrExitVehicle(Connection conn, UxRpcMessage msg)
+    {
+        try
+        {
+            var drive = msg.GetArgs<SceneMethods.PlayerVehicleDriveStateInfo>();
+            conn.Log.Info($"[VEHICLE] AskPlayerStartEnterOrExitVehicle vehicle={drive.VehicleEntityId} enter={drive.EnterOrLeave} seat={drive.SeatIndex}");
+            if (drive.EnterOrLeave)
+            {
+                await ForceEnterVehicleAsync(conn.Session, drive.VehicleEntityId);
+            }
+            else
+            {
+                await ForceExitVehicleAsync(conn.Session);
+            }
+        }
+        catch (Exception ex)
+        {
+            conn.Log.Warn($"[VEHICLE] AskPlayerStartEnterOrExitVehicle failed: {ex.Message}");
+        }
+    }
+
     [Handler(MethodId.AskPlayerFinishEnterOrExitVehicle, HandlerPacketKind.Notify)]
     [Handler(MethodId.AskVehicleStartMove, HandlerPacketKind.Notify)]
     [Handler(MethodId.AskVehicleStopMove, HandlerPacketKind.Notify)]

@@ -243,6 +243,7 @@ internal sealed partial class GameRouter
         { VehicleInstanceId = vehicleId, ControllerPid = pid });
         await SendVehicleBoardingStatus(conn, unitId, vehicleId, seat, 2);
         conn.Log.Info($"[VEHICLE-STORY] enter begin vehicle={vehicleId} seat={seat} unit={unitId} status=2 lazy={lazyRegistered}");
+        await ForceEnterVehicleAsync(conn.Session, vehicleId);
     }
 
     private async Task AdvanceVehicleEnter(Connection conn, VehicleStoryState story, int phase)
