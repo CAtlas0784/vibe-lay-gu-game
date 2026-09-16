@@ -129,37 +129,39 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        local curFrame = UnityEngine.Time and UnityEngine.Time.frameCount or -1\n` +
 `        if curFrame == _lastHotkeyFrame then return end\n` +
 `        _lastHotkeyFrame = curFrame\n\n` +
+`        local UnityInput = (CS and CS.UnityEngine and CS.UnityEngine.Input) or (UnityEngine and UnityEngine.Input)\n` +
+`        local UnityKeyCode = (CS and CS.UnityEngine and CS.UnityEngine.KeyCode) or (UnityEngine and UnityEngine.KeyCode) or KeyCode\n` +
 `        local f8 = false\n` +
 `        local f7 = false\n` +
 `        local isShift = false\n` +
-`        pcall(function()\n` +
-`            f8 = UnityEngine.Input.GetKeyDown("f8")\n` +
-`            f7 = UnityEngine.Input.GetKeyDown("f7")\n` +
-`            isShift = UnityEngine.Input.GetKey("left shift") or UnityEngine.Input.GetKey("right shift")\n` +
-`        end)\n` +
-`        if not f8 and UnityEngine.KeyCode then\n` +
-`            pcall(function() f8 = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8) end)\n` +
-`        end\n` +
-`        if not f7 and UnityEngine.KeyCode then\n` +
-`            pcall(function() f7 = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F7) end)\n` +
-`        end\n` +
-`        if not isShift and UnityEngine.KeyCode then\n` +
-`            pcall(function() isShift = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftShift) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightShift) end)\n` +
-`        end\n` +
-`        if not f8 and KeyCode then\n` +
-`            pcall(function() f8 = UnityEngine.Input.GetKeyDown(KeyCode.F8) end)\n` +
-`        end\n` +
-`        if not f7 and KeyCode then\n` +
-`            pcall(function() f7 = UnityEngine.Input.GetKeyDown(KeyCode.F7) end)\n` +
-`        end\n` +
-`        if not f8 then\n` +
-`            pcall(function() f8 = UnityEngine.Input.GetKeyDown(289) end)\n` +
-`        end\n` +
-`        if not f7 then\n` +
-`            pcall(function() f7 = UnityEngine.Input.GetKeyDown(288) end)\n` +
-`        end\n` +
-`        if not isShift then\n` +
-`            pcall(function() isShift = UnityEngine.Input.GetKey(304) or UnityEngine.Input.GetKey(303) end)\n` +
+`        if UnityInput then\n` +
+`            if UnityKeyCode and UnityKeyCode.F8 then\n` +
+`                pcall(function() f8 = UnityInput.GetKeyDown(UnityKeyCode.F8) end)\n` +
+`            end\n` +
+`            if UnityKeyCode and UnityKeyCode.F7 then\n` +
+`                pcall(function() f7 = UnityInput.GetKeyDown(UnityKeyCode.F7) end)\n` +
+`            end\n` +
+`            if not f8 then\n` +
+`                pcall(function() f8 = UnityInput.GetKeyDown(289) end)\n` +
+`            end\n` +
+`            if not f7 then\n` +
+`                pcall(function() f7 = UnityInput.GetKeyDown(288) end)\n` +
+`            end\n` +
+`            if not f8 then\n` +
+`                pcall(function() f8 = UnityInput.GetKeyDown("f8") end)\n` +
+`            end\n` +
+`            if not f7 then\n` +
+`                pcall(function() f7 = UnityInput.GetKeyDown("f7") end)\n` +
+`            end\n` +
+`            if UnityKeyCode and UnityKeyCode.LeftShift then\n` +
+`                pcall(function() isShift = UnityInput.GetKey(UnityKeyCode.LeftShift) or UnityInput.GetKey(UnityKeyCode.RightShift) end)\n` +
+`            end\n` +
+`            if not isShift then\n` +
+`                pcall(function() isShift = UnityInput.GetKey(304) or UnityInput.GetKey(303) end)\n` +
+`            end\n` +
+`            if not isShift then\n` +
+`                pcall(function() isShift = UnityInput.GetKey("left shift") or UnityInput.GetKey("right shift") end)\n` +
+`            end\n` +
 `        end\n\n` +
 `        if f8 then\n` +
 `            if ProcessDebugCommand then ProcessDebugCommand("TOGGLE_CLOTHES") end\n` +
@@ -171,6 +173,30 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                if ProcessDebugCommand then ProcessDebugCommand("SPAWN_ENEMY") end\n` +
 `            end\n` +
 `        end\n` +
+`        pcall(function()\n` +
+`            local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`            if myUnit then\n` +
+`                local hasMove = UnityEngine.Input.GetKey(119) or UnityEngine.Input.GetKey(97) or UnityEngine.Input.GetKey(115) or UnityEngine.Input.GetKey(100)\n` +
+`                if hasMove then\n` +
+`                    if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.LockMoveDirModule then\n` +
+`                        CS.LX6.Units.Module.LockMoveDirModule.ClearLockMoveDir(myUnit)\n` +
+`                    end\n` +
+`                end\n` +
+`                if gCS and gCS.PaoKuManager and gCS.PaoKuManager.ParkourStateLua == 25 then\n` +
+`                    gCS.PaoKuManager.enableAccSpeed = true\n` +
+`                    if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.MotoModule then\n` +
+`                        local motoMod = myUnit:GetModule(typeof(CS.LX6.Units.Module.MotoModule))\n` +
+`                        if motoMod then\n` +
+`                            motoMod.acceleratorValue = 1.0\n` +
+`                            local isShiftKey = UnityEngine.Input.GetKey(304) or UnityEngine.Input.GetKey(303)\n` +
+`                            if isShiftKey then\n` +
+`                                motoMod.isMotoRush = true\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end\n` +
+`            end\n` +
+`        end)\n` +
 `    end)\n` +
 `end\n\n` +
 `-- Bypass CBT date expiration for Gacha pools and unlock all map/systems\n` +
@@ -339,6 +365,85 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                if oldHudUpdate then return oldHudUpdate(self) end\n` +
 `            end\n` +
 `        end\n` +
+`        local hintStore = GroupName2Class and GroupName2Class.HintInfosHudStore or C_HintInfosHudStore\n` +
+`        if hintStore and not hintStore._filterPlayerFHooked then\n` +
+`            hintStore._filterPlayerFHooked = true\n` +
+`            local origRefreshPc = hintStore.RefreshPcBtnShow\n` +
+`            hintStore.RefreshPcBtnShow = function(self, force)\n` +
+`                pcall(function()\n` +
+`                    local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                    local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
+`                    if myUnit and btnMgr and btnMgr.usefulList then\n` +
+`                        local myPid = myUnit.Pid\n` +
+`                        local i = 0\n` +
+`                        while i < btnMgr.usefulList.Count do\n` +
+`                            local item = btnMgr.usefulList[i]\n` +
+`                            if item and (item.pid == myPid or item.targetPid == myPid or (item.target and item.target == myUnit.PlayerObj)) then\n` +
+`                                btnMgr.usefulList:RemoveAt(i)\n` +
+`                            else\n` +
+`                                i = i + 1\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`                if origRefreshPc then return origRefreshPc(self, force) end\n` +
+`            end\n` +
+`        end\n` +
+`        local switchMgr = gSwitchSpiritManager or (GroupName2Class and GroupName2Class.SwitchSpiritManager)\n` +
+`        if switchMgr and not switchMgr._fixSwapHooked then\n` +
+`            switchMgr._fixSwapHooked = true\n` +
+`            local origBeforeSet = switchMgr.BeforeSetChangeUnit\n` +
+`            switchMgr.BeforeSetChangeUnit = function(self, spiritUnitPid, noClearold)\n` +
+`                local oldUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                local res = origBeforeSet and origBeforeSet(self, spiritUnitPid, noClearold)\n` +
+`                pcall(function()\n` +
+`                    local newUnit = gCS and gCS.SceneDataMgr and gCS.SceneDataMgr.GetUnit(spiritUnitPid)\n` +
+`                    if newUnit then\n` +
+`                        if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.LockMoveDirModule then\n` +
+`                            CS.LX6.Units.Module.LockMoveDirModule.ClearLockMoveDir(newUnit)\n` +
+`                        end\n` +
+`                        if newUnit.RootMotionLockMoveAndRotate then\n` +
+`                            pcall(function() newUnit.RootMotionLockMoveAndRotate:ClearAll() end)\n` +
+`                            pcall(function() newUnit.RootMotionLockMoveAndRotate:ClearLockExtraRotation() end)\n` +
+`                        end\n` +
+`                        if newUnit.State then\n` +
+`                            newUnit.State.nowInteractiveAction = 0\n` +
+`                            newUnit.State.isFree = true\n` +
+`                        end\n` +
+`                        if gCS and gCS.BattleManager and gCS.BattleManager.RefreshAllSkills then\n` +
+`                            gCS.BattleManager.RefreshAllSkills(false, false)\n` +
+`                        end\n` +
+`                        local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
+`                        if btnMgr then\n` +
+`                            pcall(function() btnMgr:RemoveBtnByType(newUnit.Pid, 1) end)\n` +
+`                            pcall(function() btnMgr:RemoveBtnByType(newUnit.Pid, 2) end)\n` +
+`                        end\n` +
+`                    end\n` +
+`                    if oldUnit and oldUnit.Pid ~= spiritUnitPid then\n` +
+`                        local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
+`                        if btnMgr and CS and CS.LX6 and CS.LX6.Interact then\n` +
+`                            pcall(function()\n` +
+`                                btnMgr:RemoveBtnByType(oldUnit.Pid, 1)\n` +
+`                                local btnInfo = CS.LX6.Interact.UnitBtnInfo and CS.LX6.Interact.UnitBtnInfo.New()\n` +
+`                                if btnInfo then\n` +
+`                                    btnInfo.pid = oldUnit.Pid\n` +
+`                                    btnInfo.target = oldUnit.PlayerObj\n` +
+`                                    btnInfo.text = "Switch Character"\n` +
+`                                    btnInfo.isAvailable = true\n` +
+`                                    btnInfo.DoClick = function()\n` +
+`                                        if gSwitchSpiritManager then\n` +
+`                                            gSwitchSpiritManager:BeforeSetChangeUnit(oldUnit.Pid, false)\n` +
+`                                        end\n` +
+`                                    end\n` +
+`                                    btnMgr:AddBtn(btnInfo)\n` +
+`                                end\n` +
+`                            end)\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`                return res\n` +
+`            end\n` +
+`        end\n` +
 `        if gBuyHouseUtils then\n` +
 `            gBuyHouseUtils.CheckHasBuyTheHouse = function(houseId) return true end\n` +
 `            gBuyHouseUtils.CheckBuyHouseMoneyEnough = function(houseId) return true end\n` +
@@ -364,7 +469,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                    pcall(function()\n` +
 `                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = true end\n` +
 `                        if gCS and gCS.CameraDataMgr and gCS.CameraDataMgr.cinemachineManager then\n` +
-`                            gCS.CameraDataMgr.cinemachineManager:SwitchSelfiePhotoMode(true, 0.2)\n` +
+`                            gCS.CameraDataMgr.cinemachineManager:SwitchSelfiePhotoMode(false, 0.2)\n` +
 `                            gCS.CameraDataMgr.cinemachineManager:SetFov(68, 0, 0, false)\n` +
 `                        end\n` +
 `                    end)\n` +
@@ -641,24 +746,63 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
 `            if not unit or not unit.PlayerObj then return end\n` +
 `            _G._clothesHidden = not _G._clothesHidden\n` +
+`            local fs = nil\n` +
+`            pcall(function()\n` +
+`                if CS and CS.LX6 and CS.LX6.Share and CS.LX6.Share.FashionSlot then\n` +
+`                    fs = unit.PlayerObj:GetComponentInChildren(typeof(CS.LX6.Share.FashionSlot))\n` +
+`                end\n` +
+`            end)\n` +
+`            if not fs then\n` +
+`                pcall(function()\n` +
+`                    fs = unit.FashionSlot or (unit.ModelSlot and unit.ModelSlot.FashionSlot)\n` +
+`                end)\n` +
+`            end\n` +
+`            if fs then\n` +
+`                pcall(function()\n` +
+`                    local clothes = { fs.Cloth, fs.Bottom, fs.Gloves, fs.Shoes, fs.Sleeve, fs.Dress, fs.Bag, fs.Hood, fs.Belt, fs.Necklace }\n` +
+`                    for _, r in ipairs(clothes) do\n` +
+`                        if r then r.enabled = not _G._clothesHidden end\n` +
+`                    end\n` +
+`                    if fs.SpProps then\n` +
+`                        for i = 0, fs.SpProps.Count - 1 do\n` +
+`                            local r = fs.SpProps[i]\n` +
+`                            if r then r.enabled = not _G._clothesHidden end\n` +
+`                        end\n` +
+`                    end\n` +
+`                    if fs.allFashionRendererList then\n` +
+`                        for i = 0, fs.allFashionRendererList.Count - 1 do\n` +
+`                            local r = fs.allFashionRendererList[i]\n` +
+`                            if r then r.enabled = not _G._clothesHidden end\n` +
+`                        end\n` +
+`                    end\n` +
+`                    local keep = { fs.Face, fs.Hair, fs.Tail, fs.Hair01, fs.Hair02, fs.Ear }\n` +
+`                    for _, r in ipairs(keep) do\n` +
+`                        if r then r.enabled = true end\n` +
+`                    end\n` +
+`                end)\n` +
+`            end\n` +
 `            local smrs = unit.PlayerObj:GetComponentsInChildren(typeof(UnityEngine.SkinnedMeshRenderer), true)\n` +
 `            if smrs then\n` +
 `                for i = 0, smrs.Length - 1 do\n` +
 `                    local smr = smrs[i]\n` +
-`                    local n = string.lower(smr.name)\n` +
-`                    local isBaseBody = string.find(n, "body") or string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "skin") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian")\n` +
-`                    local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "top") or string.find(n, "bottom") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "shoe") or string.find(n, "sock") or string.find(n, "hat") or string.find(n, "wa") or string.find(n, "xie") or string.find(n, "under") or string.find(n, "suit") or string.find(n, "acc")\n` +
-`                    if isClothing and not (string.find(n, "body") and not string.find(n, "cloth")) then\n` +
-`                        smr.enabled = not _G._clothesHidden\n` +
-`                    elseif isBaseBody then\n` +
-`                        smr.enabled = true\n` +
-`                    else\n` +
-`                        smr.enabled = not _G._clothesHidden\n` +
+`                    if smr then\n` +
+`                        local n = string.lower(smr.name)\n` +
+`                        local isBaseBody = string.find(n, "body") or string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "skin") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian") or string.find(n, "arm") or string.find(n, "hand") or string.find(n, "leg") or string.find(n, "foot") or string.find(n, "feet") or string.find(n, "shou") or string.find(n, "bi") or string.find(n, "tui") or string.find(n, "limb") or string.find(n, "torso") or string.find(n, "base") or string.find(n, "flesh") or string.find(n, "mouth") or string.find(n, "brow") or string.find(n, "ear") or string.find(n, "nose") or string.find(n, "tooth") or string.find(n, "teeth") or string.find(n, "tongue")\n` +
+`                        local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "top") or string.find(n, "bottom") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "shoe") or string.find(n, "sock") or string.find(n, "hat") or string.find(n, "wa") or string.find(n, "xie") or string.find(n, "under") or string.find(n, "suit") or string.find(n, "acc") or string.find(n, "hood") or string.find(n, "belt") or string.find(n, "sleeve") or string.find(n, "glove") or string.find(n, "bag") or string.find(n, "prop") or string.find(n, "fashion")\n` +
+`                        if isBaseBody and not (isClothing and not string.find(n, "body") and not string.find(n, "arm") and not string.find(n, "hand") and not string.find(n, "leg")) then\n` +
+`                            smr.enabled = true\n` +
+`                        elseif isClothing then\n` +
+`                            smr.enabled = not _G._clothesHidden\n` +
+`                        else\n` +
+`                            if not _G._clothesHidden then\n` +
+`                                smr.enabled = true\n` +
+`                            end\n` +
+`                        end\n` +
 `                    end\n` +
 `                end\n` +
 `            end\n` +
 `            pcall(function()\n` +
-`                local tip = _G._clothesHidden and "Outfit Hidden (Base Body)" or "Outfit Shown"\n` +
+`                local tip = _G._clothesHidden and "Outfit Hidden (Base Body Only)" or "Outfit Shown"\n` +
 `                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
 `                    gDisplayMessageMgr:ShowMessageContent(tip)\n` +
 `                end\n` +
@@ -666,6 +810,45 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                    gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
 `                end\n` +
 `            end)\n` +
+`        end)\n` +
+`    elseif string.sub(cmd, 1, 8) == "SET_FOG:" then\n` +
+`        local arg = string.sub(cmd, 9)\n` +
+`        local density = tonumber(arg) or 0\n` +
+`        pcall(function()\n` +
+`            if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
+`                if density > 0 then\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalExpFogDensity(density)\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalSkyFogDensity(density)\n` +
+`                else\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalExpFogDensity()\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalSkyFogDensity()\n` +
+`                end\n` +
+`            end\n` +
+`            local tip = density > 0 and ("Fog Set: " .. tostring(density)) or "Fog Cleared"\n` +
+`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`            end\n` +
+`        end)\n` +
+`    elseif string.sub(cmd, 1, 12) == "SET_WEATHER:" then\n` +
+`        local arg = string.sub(cmd, 13)\n` +
+`        local wId = tonumber(arg) or 1\n` +
+`        pcall(function()\n` +
+`            if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
+`                CS.CTT3.Weather.WeatherBridge.SetWeather(wId, 2.0)\n` +
+`            end\n` +
+`            if gCS and gCS.WeatherManager and gCS.WeatherManager.SetWeather then\n` +
+`                gCS.WeatherManager:SetWeather(wId)\n` +
+`            end\n` +
+`            local tip = "Weather Set: " .. tostring(wId)\n` +
+`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`            end\n` +
 `        end)\n` +
 `    end\n` +
 `end\n\n` +

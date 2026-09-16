@@ -120,6 +120,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await TimeSetAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/weather/set")
                 await WriteJsonAsync(ctx, await WeatherSetAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/weather/fog")
+                await WriteJsonAsync(ctx, await WeatherFogAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/world/switch-scene")
                 await WriteJsonAsync(ctx, await SwitchSceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/unstuck/blackscreen")
@@ -900,6 +902,32 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         await GameRouter.PushSessionWeatherAsync(session);
         session.Log.Info($"[DEBUG-API] weather set id={weatherId} transition={transition}s");
         return new { ok = true, weatherId, transition };
+    }
+
+    private async Task<object> WeatherFogAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        float density = 0.08f;
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("density", out var pd))
+                density = pd.GetSingle();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var cmd = $"CMD:SET_FOG:{density.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info($"[DEBUG-API] fog set density={density}");
+        return new { ok = true, density };
     }
 
     private async Task<object> UnstuckBlackScreenAsync(CancellationToken token)

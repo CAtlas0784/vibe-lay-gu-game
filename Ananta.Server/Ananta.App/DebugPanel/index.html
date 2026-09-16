@@ -37,25 +37,37 @@
   <div id="clock">12:00</div>
   <input id="timeslider" type="range" min="0" max="1439" step="1" value="720" aria-label="Time of day">
   <div class="muted">00:00 — night &nbsp;·&nbsp; 06:00 — morning &nbsp;·&nbsp; 12:00 — noon &nbsp;·&nbsp; 18:00 — evening &nbsp;·&nbsp; 23:59 — night</div>
+  <div style="margin-top:8px">
+    <button class="ghost" onclick="setTimePreset(6, 0)">🌅 Morning (06:00)</button>
+    <button class="ghost" onclick="setTimePreset(12, 0)">☀️ Noon (12:00)</button>
+    <button class="ghost" onclick="setTimePreset(18, 30)">🌇 Evening (18:30)</button>
+    <button class="ghost" onclick="setTimePreset(22, 0)">🌙 Night (22:00)</button>
+    <button class="ghost" onclick="setTimePreset(0, 0)">🌌 Midnight (00:00)</button>
+  </div>
 </div>
 
 <div class="card">
   <h2>Weather / Atmosphere (สภาพอากาศ)</h2>
   <div>
-    <button style="background:#fbc02d;color:#222;font-weight:bold" onclick="setWeather(1)">☀️ Sunny (แดดออก)</button>
-    <button style="background:#78909c" onclick="setWeather(2)">⛅ Cloudy (มีเมฆมาก)</button>
-    <button style="background:#1976d2" onclick="setWeather(3)">🌧️ Rain (ฝนตก)</button>
-    <button style="background:#512da8" onclick="setWeather(4)">⛈️ Storm (พายุฝนฟ้าคะนอง)</button>
-    <button style="background:#757575" onclick="setWeather(5)">🌫️ Fog (หมอกลงจัด)</button>
-    <button style="background:#455a64" onclick="setWeather(6)">🌥️ Overcast (มืดครึ้ม)</button>
-    <button style="background:#303f9f" onclick="setWeather(7)">🌙 Night / Snow (หิมะ/กลางคืน)</button>
+    <button style="background:#fbc02d;color:#222;font-weight:bold" onclick="setWeather(1)">☀️ Sunny (แดดออก) [1]</button>
+    <button style="background:#78909c" onclick="setWeather(2)">⛅ Cloudy (มีเมฆมาก) [2]</button>
+    <button style="background:#1976d2" onclick="setWeather(3)">🌧️ Rain (ฝนตก) [3]</button>
+    <button style="background:#512da8" onclick="setWeather(4)">⛈️ Storm (พายุฝนฟ้าคะนอง) [4]</button>
+    <button style="background:#00897b" onclick="setWeather(5)">🌤️ Afterrain (หลังฝนตก / ใสเคลียร์) [5]</button>
+  </div>
+  <div style="margin-top:10px;padding:8px;background:#252932;border-radius:6px">
+    <div style="font-weight:bold;margin-bottom:6px;color:#80deea">🌫️ Volumetric Exponential Fog (หมอกหนา / ทัศนวิสัย):</div>
+    <button style="background:#00695c" onclick="setFog(0.08)">🌫️ Thick Fog (เปิดหมอกหนาจัด 0.08)</button>
+    <button style="background:#00838f" onclick="setFog(0.02)">🌁 Light Fog (หมอกบาง 0.02)</button>
+    <button class="ghost" onclick="setFog(0)">☀️ Clear Fog (ปิดหมอก)</button>
+    <div class="muted" style="margin-top:4px">ปรับความหนาแน่นหมอกแบบเรียลไทม์ผ่าน WeatherBridge.EnableExternalExpFogDensity</div>
   </div>
   <div style="margin-top:8px">
-    Custom Weather ID: <input id="customWeatherId" type="number" style="width:90px" value="1">
+    Custom Weather ID: <input id="customWeatherId" type="number" style="width:90px" value="1" min="1" max="5">
     Transition (sec): <input id="weatherTransition" type="number" style="width:70px" value="5">
     <button class="ghost" onclick="setCustomWeather()">Apply Custom Weather</button>
   </div>
-  <div class="muted" style="margin-top:6px">ซิงค์สภาพอากาศของโลกและบรรยากาศ client ทันที</div>
+  <div class="muted" style="margin-top:6px">ซิงค์สภาพอากาศของโลก (WeatherConfig 1..5) และบรรยากาศ client ทันที</div>
 </div>
 
 <div class="card">
@@ -444,11 +456,29 @@ async function toggleClothes() {
   log('toggle clothes: ' + JSON.stringify(r));
 }
 
+async function setTimePreset(hour, minute) {
+  const slider = document.getElementById('timeslider');
+  if (slider) {
+    slider.value = hour * 60 + minute;
+    const clock = document.getElementById('clock');
+    if (clock) clock.textContent = fmtClock(hour * 60 + minute);
+  }
+  const body = { hour, minute, fix: true, transition: 5 };
+  const r = await api('/api/time/set', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('time preset: ' + JSON.stringify(r));
+}
+
 async function setWeather(weatherId) {
   const transition = parseInt(document.getElementById('weatherTransition')?.value || '5', 10);
   const body = { weatherId: parseInt(weatherId, 10), transition };
   const r = await api('/api/weather/set', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   log('set weather: ' + JSON.stringify(r));
+}
+
+async function setFog(density) {
+  const body = { density: parseFloat(density) };
+  const r = await api('/api/weather/fog', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('set fog: ' + JSON.stringify(r));
 }
 
 async function setCustomWeather() {
