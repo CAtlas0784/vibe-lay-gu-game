@@ -134,6 +134,23 @@ internal static class RuntimePayloadFactory
             };
         }
 
+        // Unlock all housing properties
+        var houseIds = new uint[] { 11200000, 1001, 1002, 1003, 1004, 1005, 10001, 10002 };
+        foreach (var hid in houseIds)
+        {
+            root.InfoMinor.housesInfo.HouseInfoList.Add(new Auto.HouseActiveInfo
+            {
+                HouseId = hid,
+                Version = 1,
+                FurnitureIndex = 1,
+                SocialInfo = new Auto.HouseSocialInfo
+                {
+                    PromoImageUrl = string.Empty,
+                    WelcomeText = "Private Server House",
+                }
+            });
+        }
+
         return root;
     }
 
