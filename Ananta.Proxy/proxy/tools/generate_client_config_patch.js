@@ -187,6 +187,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        if gMapSystem then\n` +
 `            gMapSystem.CanShowVehicleNavRoute = function(self) return true end\n` +
 `            gMapSystem.CheckCanShowVehicleNavLine = function(self) return true end\n` +
+`            pcall(function() gMapSystem:GmSwitchFlag("FogMap", false) end)\n` +
+`            pcall(function() gMapSystem:GmSwitchFlag("ShowAllMapArea", true) end)\n` +
 `            if gMapSystem.fogMap then\n` +
 `                gMapSystem.fogMap.IsUnlocked = function(self, sceneId, x, z) return true end\n` +
 `            end\n` +
@@ -211,6 +213,14 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        local mapStore = GroupName2Class and GroupName2Class.NewMapPanelStore or C_NewMapPanelStore\n` +
 `        if mapStore and not mapStore._teleportHooked then\n` +
 `            mapStore._teleportHooked = true\n` +
+`            local origOnShow = mapStore.OnShow\n` +
+`            mapStore.OnShow = function(self, ...)\n` +
+`                pcall(function()\n` +
+`                    if self.fogNode then self.fogNode:SetActive(false) end\n` +
+`                    if self.fogRoot then self.fogRoot:SetActive(false) end\n` +
+`                end)\n` +
+`                if origOnShow then return origOnShow(self, ...) end\n` +
+`            end\n` +
 `            local origOnMainClick = mapStore.OnMainClick\n` +
 `            mapStore.OnMainClick = function(self, evtData)\n` +
 `                local isAlt = false\n` +
@@ -223,8 +233,19 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                    local uiPos = self:GetPointerUIPos()\n` +
 `                    local texPos = self:TransformUIToTex(uiPos)\n` +
 `                    local areaId, worldPos = self:TryTransformTexToWorld(texPos)\n` +
-`                    if worldPos and L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.TeleportToPos then\n` +
-`                        L50.Gm.AutoQaFunctions.TeleportToPos(worldPos.x, worldPos.z)\n` +
+`                    if worldPos then\n` +
+`                        local playerY = 274.6\n` +
+`                        pcall(function()\n` +
+`                            if gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit then\n` +
+`                                local p = gCS.MyPlayerManager.PlayerUnit.Pos\n` +
+`                                if p and p.y > 10 then playerY = p.y end\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        if L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.TeleportXYZ then\n` +
+`                            L50.Gm.AutoQaFunctions.TeleportXYZ(worldPos.x, playerY, worldPos.z)\n` +
+`                        elseif L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.TeleportToPos then\n` +
+`                            L50.Gm.AutoQaFunctions.TeleportToPos(worldPos.x, worldPos.z)\n` +
+`                        end\n` +
 `                        pcall(function() gMainPhoneUtils.CloseMainPhonePanel(true) end)\n` +
 `                        pcall(function() self:OnBtnClose() end)\n` +
 `                        return\n` +
@@ -253,27 +274,39 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                return false\n` +
 `            end\n` +
 `        end\n` +
+`        local hudCtrl = GroupName2Class and GroupName2Class.PlayerHUDCtrl or C_PlayerHUDCtrl\n` +
+`        if hudCtrl and not hudCtrl._hideFHooked then\n` +
+`            hudCtrl._hideFHooked = true\n` +
+`            local oldHudUpdate = hudCtrl.Update\n` +
+`            hudCtrl.Update = function(self)\n` +
+`                if self.unit and self.unit.IsMe then\n` +
+`                    pcall(function()\n` +
+`                        if self.interactBtn then\n` +
+`                            self.interactBtn:SetActive(false)\n` +
+`                        end\n` +
+`                    end)\n` +
+`                end\n` +
+`                if oldHudUpdate then return oldHudUpdate(self) end\n` +
+`            end\n` +
+`        end\n` +
 `        if gBuyHouseUtils then\n` +
 `            gBuyHouseUtils.CheckHasBuyTheHouse = function(houseId) return true end\n` +
 `            gBuyHouseUtils.CheckBuyHouseMoneyEnough = function(houseId) return true end\n` +
 `        end\n` +
 `        if C_PlayerItemManager then\n` +
-`            local origGet = C_PlayerItemManager.GetPackItemNum\n` +
-`            C_PlayerItemManager.GetPackItemNum = function(self, id)\n` +
-`                local val = origGet and origGet(self, id) or 0\n` +
-`                return val > 99999 and val or 99999\n` +
-`            end\n` +
+`            C_PlayerItemManager.GetPackItemNum = function(self, id) return 999999 end\n` +
 `        end\n` +
 `        if gPlayerItemManager then\n` +
-`            local origGetG = gPlayerItemManager.GetPackItemNum\n` +
-`            gPlayerItemManager.GetPackItemNum = function(self, id)\n` +
-`                local val = origGetG and origGetG(self, id) or 0\n` +
-`                return val > 99999 and val or 99999\n` +
-`            end\n` +
+`            gPlayerItemManager.GetPackItemNum = function(self, id) return 999999 end\n` +
 `        end\n` +
 `        local photoStore = GroupName2Class and GroupName2Class.PhotoPanelStore or C_PhotoPanelStore\n` +
 `        if photoStore and not photoStore._selfieHooked then\n` +
 `            photoStore._selfieHooked = true\n` +
+`            local origOnShowPhoto = photoStore.OnShow\n` +
+`            photoStore.OnShow = function(self, ...)\n` +
+`                self.selectedSpirit = self.selectedSpirit or (gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.TemplateId) or 15020967\n` +
+`                if origOnShowPhoto then origOnShowPhoto(self, ...) end\n` +
+`            end\n` +
 `            local origSetMode = photoStore.SetCurrentPhotoMode\n` +
 `            photoStore.SetCurrentPhotoMode = function(self)\n` +
 `                if origSetMode then origSetMode(self) end\n` +
@@ -282,6 +315,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = true end\n` +
 `                        if gCS and gCS.CameraDataMgr and gCS.CameraDataMgr.cinemachineManager then\n` +
 `                            gCS.CameraDataMgr.cinemachineManager:SwitchSelfiePhotoMode(true, 0.2)\n` +
+`                            gCS.CameraDataMgr.cinemachineManager:SetFov(68, 0, 0, false)\n` +
 `                        end\n` +
 `                    end)\n` +
 `                else\n` +
@@ -289,6 +323,41 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = false end\n` +
 `                    end)\n` +
 `                end\n` +
+`            end\n` +
+`            local origOnClosePhoto = photoStore.OnClose\n` +
+`            photoStore.OnClose = function(self, ...)\n` +
+`                pcall(function()\n` +
+`                    local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                    if unit then\n` +
+`                        if gCS.ClimbManager and gCS.ClimbManager.SetLayerActionStateAndCheckTransition then\n` +
+`                            gCS.ClimbManager.SetLayerActionStateAndCheckTransition(unit, false, 42)\n` +
+`                        end\n` +
+`                        if MuGenStates and MuGenStates.Logic and MuGenStates.Logic.ABPVarManager and LTConfig and LTConfig.ABPVarConfig then\n` +
+`                            MuGenStates.Logic.ABPVarManager.SetBool(unit, LTConfig.ABPVarConfig.PhoneSelfie, false)\n` +
+`                        end\n` +
+`                    end\n` +
+`                    if gTakePhotoUtils and gTakePhotoUtils.PlayTakePhotoAction and LTConfig and LTConfig.TakePhotoActionConfig then\n` +
+`                        gTakePhotoUtils.PlayTakePhotoAction(LTConfig.TakePhotoActionConfig.NormalTakePhoto)\n` +
+`                    end\n` +
+`                end)\n` +
+`                if origOnClosePhoto then return origOnClosePhoto(self, ...) end\n` +
+`            end\n` +
+`        end\n` +
+`        if gHudMgr and not gHudMgr._customTickHooked then\n` +
+`            gHudMgr._customTickHooked = true\n` +
+`            local origHudUpdate = gHudMgr.Update\n` +
+`            gHudMgr.Update = function(self, ...)\n` +
+`                if origHudUpdate then origHudUpdate(self, ...) end\n` +
+`                pcall(function()\n` +
+`                    if UnityEngine and UnityEngine.Input and UnityEngine.KeyCode then\n` +
+`                        if UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8) then\n` +
+`                            if ProcessDebugCommand then ProcessDebugCommand("TOGGLE_CLOTHES") end\n` +
+`                        end\n` +
+`                        if UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F7) then\n` +
+`                            if ProcessDebugCommand then ProcessDebugCommand("SPAWN_ENEMY:40900579:0:1") end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
 `            end\n` +
 `        end\n` +
 `    end)\n` +
@@ -402,6 +471,9 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            if gClientToGameSceneGMDelegate then\n` +
 `                pcall(function() gClientToGameSceneGMDelegate:GmAddEnemyByPlayer(enemyId, camp) end)\n` +
 `            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips("Spawned Enemy ID: " .. enemyId)\n` +
+`            end\n` +
 `        end)\n` +
 `    elseif cmd == "TOGGLE_CLOTHES" then\n` +
 `        pcall(function()\n` +
@@ -413,15 +485,19 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                for i = 0, smrs.Length - 1 do\n` +
 `                    local smr = smrs[i]\n` +
 `                    local n = string.lower(smr.name)\n` +
-`                    if string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or\n` +
-`                       string.find(n, "pant") or string.find(n, "dress") or string.find(n, "top") or\n` +
-`                       string.find(n, "bottom") or string.find(n, "jacket") or string.find(n, "yifu") or\n` +
-`                       string.find(n, "kuzi") or string.find(n, "qun") then\n` +
+`                    local isBaseBody = string.find(n, "body") or string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "skin") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian")\n` +
+`                    local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "top") or string.find(n, "bottom") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "shoe") or string.find(n, "sock") or string.find(n, "hat") or string.find(n, "wa") or string.find(n, "xie") or string.find(n, "under") or string.find(n, "suit") or string.find(n, "acc")\n` +
+`                    if isClothing and not (string.find(n, "body") and not string.find(n, "cloth")) then\n` +
 `                        smr.enabled = not _G._clothesHidden\n` +
-`                    else\n` +
+`                    elseif isBaseBody then\n` +
 `                        smr.enabled = true\n` +
+`                    else\n` +
+`                        smr.enabled = not _G._clothesHidden\n` +
 `                    end\n` +
 `                end\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(_G._clothesHidden and "Outfit Hidden (Base Body)" or "Outfit Shown")\n` +
 `            end\n` +
 `        end)\n` +
 `    end\n` +
@@ -430,7 +506,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `    if not tbl or type(tbl) ~= "table" or tbl._cmdHooked then return end\n` +
 `    tbl._cmdHooked = true\n` +
 `    local oldSync = tbl.SyncNotice\n` +
-`    tbl.SyncNotice = function(...)\n` +
+`    local newSync = function(...)\n` +
 `        local allArgs = {...}\n` +
 `        for i = 1, #allArgs do\n` +
 `            if type(allArgs[i]) == "string" and string.sub(allArgs[i], 1, 4) == "CMD:" then\n` +
@@ -440,6 +516,12 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `        if oldSync then return oldSync(...) end\n` +
 `    end\n` +
+`    if tbl._meta and type(tbl._meta) == "table" then\n` +
+`        tbl._meta.SyncNotice = newSync\n` +
+`    end\n` +
+`    tbl.SyncNotice = nil\n` +
+`    tbl.SyncNotice = newSync\n` +
+`    rawset(tbl, "SyncNotice", newSync)\n` +
 `end\n\n` +
 `local function HookDisplayMessageMgr()\n` +
 `    if gDisplayMessageMgr and not gDisplayMessageMgr._cmdHooked then\n` +
