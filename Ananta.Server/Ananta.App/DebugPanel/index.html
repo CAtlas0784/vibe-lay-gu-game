@@ -40,6 +40,25 @@
 </div>
 
 <div class="card">
+  <h2>Weather / Atmosphere (สภาพอากาศ)</h2>
+  <div>
+    <button style="background:#fbc02d;color:#222;font-weight:bold" onclick="setWeather(1)">☀️ Sunny (แดดออก)</button>
+    <button style="background:#78909c" onclick="setWeather(2)">⛅ Cloudy (มีเมฆมาก)</button>
+    <button style="background:#1976d2" onclick="setWeather(3)">🌧️ Rain (ฝนตก)</button>
+    <button style="background:#512da8" onclick="setWeather(4)">⛈️ Storm (พายุฝนฟ้าคะนอง)</button>
+    <button style="background:#757575" onclick="setWeather(5)">🌫️ Fog (หมอกลงจัด)</button>
+    <button style="background:#455a64" onclick="setWeather(6)">🌥️ Overcast (มืดครึ้ม)</button>
+    <button style="background:#303f9f" onclick="setWeather(7)">🌙 Night / Snow (หิมะ/กลางคืน)</button>
+  </div>
+  <div style="margin-top:8px">
+    Custom Weather ID: <input id="customWeatherId" type="number" style="width:90px" value="1">
+    Transition (sec): <input id="weatherTransition" type="number" style="width:70px" value="5">
+    <button class="ghost" onclick="setCustomWeather()">Apply Custom Weather</button>
+  </div>
+  <div class="muted" style="margin-top:6px">ซิงค์สภาพอากาศของโลกและบรรยากาศ client ทันที</div>
+</div>
+
+<div class="card">
   <h2>Garage (server vehicles)</h2>
   <div style="margin-bottom:10px;padding:8px;background:#252932;border-radius:6px">
     <div style="font-weight:bold;margin-bottom:6px;color:#ffb74d">⚡ Quick Spawn Special Vehicles:</div>
@@ -423,6 +442,18 @@ async function rollback10s() {
 async function toggleClothes() {
   const r = await api('/api/player/toggle-clothes', { method: 'POST' });
   log('toggle clothes: ' + JSON.stringify(r));
+}
+
+async function setWeather(weatherId) {
+  const transition = parseInt(document.getElementById('weatherTransition')?.value || '5', 10);
+  const body = { weatherId: parseInt(weatherId, 10), transition };
+  const r = await api('/api/weather/set', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('set weather: ' + JSON.stringify(r));
+}
+
+async function setCustomWeather() {
+  const id = parseInt(document.getElementById('customWeatherId').value || '1', 10);
+  await setWeather(id);
 }
 
 function onEnemyPresetChange() {

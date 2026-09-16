@@ -118,6 +118,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, TimeStatus(), token);
             else if (method == "POST" && path == "/api/time/set")
                 await WriteJsonAsync(ctx, await TimeSetAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/weather/set")
+                await WriteJsonAsync(ctx, await WeatherSetAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/world/switch-scene")
                 await WriteJsonAsync(ctx, await SwitchSceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/unstuck/blackscreen")
@@ -863,6 +865,41 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         await GameRouter.PushSessionTimeAsync(session);
         session.Log.Info($"[DEBUG-API] time set {hour:D2}:{minute:D2} fix={fix} transition={transition}s");
         return new { ok = true, hour, minute, fix };
+    }
+
+    private async Task<object> WeatherSetAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        uint weatherId = 1, transition = 5;
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("weatherId", out var pw))
+                weatherId = pw.GetUInt32();
+            if (root.TryGetProperty("transition", out var pt))
+                transition = pt.GetUInt32();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var state = GameRouter.GetStateIfExists(session);
+        if (state is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+        lock (state.SyncRoot)
+        {
+            state.WeatherId = weatherId;
+            state.WeatherTransitionSeconds = transition;
+            state.HasExplicitWeather = true;
+        }
+        await GameRouter.PushSessionWeatherAsync(session);
+        session.Log.Info($"[DEBUG-API] weather set id={weatherId} transition={transition}s");
+        return new { ok = true, weatherId, transition };
     }
 
     private async Task<object> UnstuckBlackScreenAsync(CancellationToken token)
