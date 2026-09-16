@@ -121,6 +121,58 @@ if (forceSwitches) {
 gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `\n` +
 `gGameSwitch = M\n\n` +
+`local ProcessDebugCommand\n` +
+`local _lastHotkeyFrame = -1\n` +
+`local function CheckCustomHotkeys()\n` +
+`    pcall(function()\n` +
+`        if not UnityEngine or not UnityEngine.Input then return end\n` +
+`        local curFrame = UnityEngine.Time and UnityEngine.Time.frameCount or -1\n` +
+`        if curFrame == _lastHotkeyFrame then return end\n` +
+`        _lastHotkeyFrame = curFrame\n\n` +
+`        local f8 = false\n` +
+`        local f7 = false\n` +
+`        local isShift = false\n` +
+`        pcall(function()\n` +
+`            f8 = UnityEngine.Input.GetKeyDown("f8")\n` +
+`            f7 = UnityEngine.Input.GetKeyDown("f7")\n` +
+`            isShift = UnityEngine.Input.GetKey("left shift") or UnityEngine.Input.GetKey("right shift")\n` +
+`        end)\n` +
+`        if not f8 and UnityEngine.KeyCode then\n` +
+`            pcall(function() f8 = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8) end)\n` +
+`        end\n` +
+`        if not f7 and UnityEngine.KeyCode then\n` +
+`            pcall(function() f7 = UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F7) end)\n` +
+`        end\n` +
+`        if not isShift and UnityEngine.KeyCode then\n` +
+`            pcall(function() isShift = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftShift) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightShift) end)\n` +
+`        end\n` +
+`        if not f8 and KeyCode then\n` +
+`            pcall(function() f8 = UnityEngine.Input.GetKeyDown(KeyCode.F8) end)\n` +
+`        end\n` +
+`        if not f7 and KeyCode then\n` +
+`            pcall(function() f7 = UnityEngine.Input.GetKeyDown(KeyCode.F7) end)\n` +
+`        end\n` +
+`        if not f8 then\n` +
+`            pcall(function() f8 = UnityEngine.Input.GetKeyDown(289) end)\n` +
+`        end\n` +
+`        if not f7 then\n` +
+`            pcall(function() f7 = UnityEngine.Input.GetKeyDown(288) end)\n` +
+`        end\n` +
+`        if not isShift then\n` +
+`            pcall(function() isShift = UnityEngine.Input.GetKey(304) or UnityEngine.Input.GetKey(303) end)\n` +
+`        end\n\n` +
+`        if f8 then\n` +
+`            if ProcessDebugCommand then ProcessDebugCommand("TOGGLE_CLOTHES") end\n` +
+`        end\n` +
+`        if f7 then\n` +
+`            if isShift then\n` +
+`                if ProcessDebugCommand then ProcessDebugCommand("OPEN_MONSTER_PANEL") end\n` +
+`            else\n` +
+`                if ProcessDebugCommand then ProcessDebugCommand("SPAWN_ENEMY") end\n` +
+`            end\n` +
+`        end\n` +
+`    end)\n` +
+`end\n\n` +
 `-- Bypass CBT date expiration for Gacha pools and unlock all map/systems\n` +
 `local function ApplyAllGlobalHooks()\n` +
 `    pcall(function()\n` +
@@ -187,8 +239,6 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        if gMapSystem then\n` +
 `            gMapSystem.CanShowVehicleNavRoute = function(self) return true end\n` +
 `            gMapSystem.CheckCanShowVehicleNavLine = function(self) return true end\n` +
-`            pcall(function() gMapSystem:GmSwitchFlag("FogMap", false) end)\n` +
-`            pcall(function() gMapSystem:GmSwitchFlag("ShowAllMapArea", true) end)\n` +
 `            if gMapSystem.fogMap then\n` +
 `                gMapSystem.fogMap.IsUnlocked = function(self, sceneId, x, z) return true end\n` +
 `            end\n` +
@@ -343,62 +393,142 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                if origOnClosePhoto then return origOnClosePhoto(self, ...) end\n` +
 `            end\n` +
 `        end\n` +
-`        if gHudMgr and not gHudMgr._customTickHooked then\n` +
-`            gHudMgr._customTickHooked = true\n` +
-`            local origHudUpdate = gHudMgr.Update\n` +
-`            gHudMgr.Update = function(self, ...)\n` +
-`                if origHudUpdate then origHudUpdate(self, ...) end\n` +
-`                pcall(function()\n` +
-`                    if UnityEngine and UnityEngine.Input and UnityEngine.KeyCode then\n` +
-`                        if UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8) then\n` +
-`                            if ProcessDebugCommand then ProcessDebugCommand("TOGGLE_CLOTHES") end\n` +
-`                        end\n` +
-`                        if UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F7) then\n` +
-`                            if ProcessDebugCommand then ProcessDebugCommand("SPAWN_ENEMY:40900579:0:1") end\n` +
-`                        end\n` +
-`                    end\n` +
-`                end)\n` +
+`        if gLuaClient and not gLuaClient._hotkeyHooked then\n` +
+`            gLuaClient._hotkeyHooked = true\n` +
+`            local oldClientUpdate = gLuaClient.OnUpdate\n` +
+`            gLuaClient.OnUpdate = function(self, ...)\n` +
+`                if oldClientUpdate then oldClientUpdate(self, ...) end\n` +
+`                if CheckCustomHotkeys then CheckCustomHotkeys() end\n` +
 `            end\n` +
+`        end\n` +
+`        if gLuaClient and gLuaClient.ForceUpdateArray and not gLuaClient._hotkeyForceRegistered then\n` +
+`            gLuaClient._hotkeyForceRegistered = true\n` +
+`            table.insert(gLuaClient.ForceUpdateArray, function()\n` +
+`                if CheckCustomHotkeys then CheckCustomHotkeys() end\n` +
+`            end)\n` +
 `        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
-`        if CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security then\n` +
-`            local sec = CS.L50.Script.LX6.Security\n` +
-`            if sec.DavinciReport then\n` +
-`                sec.DavinciReport.Send = function() end\n` +
-`                sec.DavinciReport.Report = function() end\n` +
+`        local dm = CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security and CS.L50.Script.LX6.Security.DavinciMgr and CS.L50.Script.LX6.Security.DavinciMgr.Instance\n` +
+`        if dm then\n` +
+`            pcall(function()\n` +
+`                local t = dm:GetType()\n` +
+`                local flags = 36\n` +
+`                pcall(function() flags = System.Reflection.BindingFlags.NonPublic:ToInt() + System.Reflection.BindingFlags.Instance:ToInt() end)\n` +
+`                local fDet = t:GetField("_detectors", flags)\n` +
+`                if fDet then\n` +
+`                    local list = fDet:GetValue(dm)\n` +
+`                    if list then list:Clear() end\n` +
+`                end\n` +
+`                local fCol = t:GetField("_collectors", flags)\n` +
+`                if fCol then\n` +
+`                    local list = fCol:GetValue(dm)\n` +
+`                    if list then list:Clear() end\n` +
+`                end\n` +
+`            end)\n` +
+`        end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local nm = (CS and CS.LX6 and CS.LX6.Engine and CS.LX6.Engine.NetworkManager and CS.LX6.Engine.NetworkManager.Instance) or (gCS and gCS.NetworkManager and gCS.NetworkManager.Instance)\n` +
+`        if nm then\n` +
+`            nm.CheckNetwork = false\n` +
+`            if CS and CS.LX6 and CS.LX6.Engine and CS.LX6.Engine.NetworkManager then\n` +
+`                CS.LX6.Engine.NetworkManager.SilentReconnectEnabled = true\n` +
 `            end\n` +
-`            if sec.DavinciMgr then\n` +
-`                sec.DavinciMgr.CheckTimeScale = function() end\n` +
-`                sec.DavinciMgr.ReportTimeScale = function() end\n` +
-`                sec.DavinciMgr.CheckSpeed = function() end\n` +
+`            pcall(function()\n` +
+`                local t = nm:GetType()\n` +
+`                local flags = 36\n` +
+`                pcall(function() flags = System.Reflection.BindingFlags.NonPublic:ToInt() + System.Reflection.BindingFlags.Instance:ToInt() end)\n` +
+`                local fFocus = t:GetField("checkFocusChanged", flags)\n` +
+`                if fFocus then fFocus:SetValue(nm, false) end\n` +
+`                local fPing = t:GetField("checkPingpongTimeOut", flags)\n` +
+`                if fPing then fPing:SetValue(nm, false) end\n` +
+`                local fCheckNet = t:GetField("checkNetwork", flags)\n` +
+`                if fCheckNet then fCheckNet:SetValue(nm, false) end\n` +
+`                if nm.CancelDelayShowReconnectPanel then nm:CancelDelayShowReconnectPanel() end\n` +
+`                if nm.ClearCheckNeedReconnect then nm:ClearCheckNeedReconnect() end\n` +
+`            end)\n` +
+`        end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local lmCS = (CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.LoginManager and CS.LX6.Manager.LoginManager.Instance) or (gCS and gCS.LoginManager and gCS.LoginManager.Instance)\n` +
+`        if lmCS then\n` +
+`            lmCS.CheckLoginConnected = false\n` +
+`            pcall(function()\n` +
+`                if lmCS.ClearReconnectState then lmCS:ClearReconnectState() end\n` +
+`                if lmCS.ClearLoginTimeoutCo then lmCS:ClearLoginTimeoutCo() end\n` +
+`            end)\n` +
+`        end\n` +
+`        local lm = gLoginManager or (GroupName2Class and GroupName2Class.LoginManager) or C_LoginManager\n` +
+`        if lm then\n` +
+`            lm.CheckNetworkState = function() end\n` +
+`            lm.OnUpdate_CheckNet = function() end\n` +
+`            lm.StopReconCo = function() end\n` +
+`            lm.DoKickToLogin = function() end\n` +
+`            lm.KickToLogin = function() end\n` +
+`            lm.RetryServerInfo = function() return true end\n` +
+`        end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local gu = (CS and CS.LX6 and CS.LX6.Utils and CS.LX6.Utils.GuiUtils) or (gCS and gCS.GuiUtils)\n` +
+`        if gu then\n` +
+`            gu.ShowReconnectMessage = function() end\n` +
+`            gu.ShowDisconnectMessage = function() end\n` +
+`            gu.ShowServerDonw = function() end\n` +
+`        end\n` +
+`        if gClientToAvatarDelegate then gClientToAvatarDelegate.DavinciCode = function() end end\n` +
+`        if ClientToAvatarDelegate then ClientToAvatarDelegate.DavinciCode = function() end end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local bombStore = GroupName2Class and GroupName2Class.CommonBombStore or C_CommonBombStore\n` +
+`        if bombStore and not bombStore._reconnectHooked then\n` +
+`            bombStore._reconnectHooked = true\n` +
+`            local oldOnShow = bombStore.OnShow\n` +
+`            bombStore.OnShow = function(self, panelId, data)\n` +
+`                if data then\n` +
+`                    local t1 = tostring(data.tips1Text or "")\n` +
+`                    local t2 = tostring(data.tips2Text or "")\n` +
+`                    local cBtn = tostring(data.confirmBtnText or "")\n` +
+`                    local all = t1 .. " " .. t2 .. " " .. cBtn\n` +
+`                    if string.find(all, "重连") or string.find(all, "Reconnect") or string.find(all, "断开") or string.find(all, "网络") or string.find(all, "Network") or string.find(all, "connect") then\n` +
+`                        pcall(function()\n` +
+`                            if gPanelManager then gPanelManager:Close(panelId or gPanelId.S_COMMON_BOMB_PANEL) end\n` +
+`                            if gDisplayMessageMgr then gDisplayMessageMgr:CloseBomb() end\n` +
+`                        end)\n` +
+`                        return\n` +
+`                    end\n` +
+`                end\n` +
+`                if oldOnShow then return oldOnShow(self, panelId, data) end\n` +
 `            end\n` +
 `        end\n` +
-`        if CS and CS.LX6 and CS.LX6.Security then\n` +
-`            local sec = CS.LX6.Security\n` +
-`            if sec.DavinciReport then\n` +
-`                sec.DavinciReport.Send = function() end\n` +
-`                sec.DavinciReport.Report = function() end\n` +
+`        if gPanelManager and not gPanelManager._bombFilterHooked then\n` +
+`            gPanelManager._bombFilterHooked = true\n` +
+`            local oldCheckShow = gPanelManager.CheckShow\n` +
+`            gPanelManager.CheckShow = function(self, panelId, params, ...)\n` +
+`                if panelId == (gPanelId and gPanelId.S_COMMON_BOMB_PANEL) and params then\n` +
+`                    local t1 = tostring(params.tips1Text or "")\n` +
+`                    local t2 = tostring(params.tips2Text or "")\n` +
+`                    local cBtn = tostring(params.confirmBtnText or "")\n` +
+`                    local all = t1 .. " " .. t2 .. " " .. cBtn\n` +
+`                    if string.find(all, "重连") or string.find(all, "Reconnect") or string.find(all, "断开") or string.find(all, "网络") or string.find(all, "Network") or string.find(all, "connect") then\n` +
+`                        return nil\n` +
+`                    end\n` +
+`                end\n` +
+`                if oldCheckShow then return oldCheckShow(self, panelId, params, ...) end\n` +
 `            end\n` +
-`            if sec.DavinciMgr then\n` +
-`                sec.DavinciMgr.CheckTimeScale = function() end\n` +
-`                sec.DavinciMgr.ReportTimeScale = function() end\n` +
-`                sec.DavinciMgr.CheckSpeed = function() end\n` +
+`        end\n` +
+`        if gDisplayMessageMgr and not gDisplayMessageMgr._bombFilterHooked then\n` +
+`            gDisplayMessageMgr._bombFilterHooked = true\n` +
+`            local oldShowBomb = gDisplayMessageMgr.ShowBomb\n` +
+`            gDisplayMessageMgr.ShowBomb = function(self, params)\n` +
+`                if params and params.tips1Text and type(params.tips1Text) == "string" then\n` +
+`                    local t = params.tips1Text\n` +
+`                    if string.find(t, "重连") or string.find(t, "Reconnect") or string.find(t, "网络连接已断开") or string.find(t, "network") or string.find(t, "Network") then\n` +
+`                        return\n` +
+`                    end\n` +
+`                end\n` +
+`                if oldShowBomb then return oldShowBomb(self, params) end\n` +
 `            end\n` +
-`        end\n` +
-`        if DavinciReport then\n` +
-`            DavinciReport.Send = function() end\n` +
-`            DavinciReport.Report = function() end\n` +
-`        end\n` +
-`        if DavinciMgr then\n` +
-`            DavinciMgr.CheckTimeScale = function() end\n` +
-`            DavinciMgr.ReportTimeScale = function() end\n` +
-`            DavinciMgr.CheckSpeed = function() end\n` +
-`        end\n` +
-`        if gDavinciMgr then\n` +
-`            gDavinciMgr.CheckTimeScale = function() end\n` +
-`            gDavinciMgr.ReportTimeScale = function() end\n` +
-`            gDavinciMgr.CheckSpeed = function() end\n` +
 `        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
@@ -414,7 +544,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `    end)\n` +
 `end\n\n` +
-`local function ProcessDebugCommand(cmd)\n` +
+`ProcessDebugCommand = function(cmd)\n` +
 `    if not cmd or type(cmd) ~= "string" then return end\n` +
 `    if cmd == "UNSTUCK_BLACKSCREEN" then\n` +
 `        pcall(function()\n` +
@@ -454,9 +584,24 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                gVideoManager:PlayVideo(numId or arg)\n` +
 `            end\n` +
 `        end)\n` +
-`    elseif string.sub(cmd, 1, 12) == "SPAWN_ENEMY:" then\n` +
-`        local p1, p2, p3 = string.match(string.sub(cmd, 13), "([^:]+):?([^:]*):?([^:]*)")\n` +
-`        local enemyId = tonumber(p1) or 40900579\n` +
+`    elseif string.sub(cmd, 1, 11) == "SPAWN_ENEMY" then\n` +
+`        local p1, p2, p3 = string.match(string.sub(cmd, 12), "^:?([^:]*):?([^:]*):?([^:]*)")\n` +
+`        local reqId = tonumber(p1)\n` +
+`        local enemyId = reqId or (function()\n` +
+`            local id = 40900579\n` +
+`            pcall(function()\n` +
+`                if LTConfig and LTConfig.AutoTestBossTestConfig and LTConfig.AutoTestBossTestConfig.count and LTConfig.AutoTestBossTestConfig.count > 0 then\n` +
+`                    for i = 0, LTConfig.AutoTestBossTestConfig.count - 1 do\n` +
+`                        local cfg = LTConfig.AutoTestBossTestConfig.LoadAt(i)\n` +
+`                        if cfg and cfg.BossId and #cfg.BossId > 0 and cfg.BossId[1] and cfg.BossId[1].EnemyId then\n` +
+`                            id = cfg.BossId[1].EnemyId\n` +
+`                            return\n` +
+`                        end\n` +
+`                    end\n` +
+`                end\n` +
+`            end)\n` +
+`            return id\n` +
+`        end)()\n` +
 `        local camp = tonumber(p2) or 0\n` +
 `        if camp == 2 then camp = 0 end\n` +
 `        local count = tonumber(p3) or 1\n` +
@@ -468,12 +613,28 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            elseif gCS and gCS.GmUtils and gCS.GmUtils.AddEnemy then\n` +
 `                gCS.GmUtils.AddEnemy(enemyId)\n` +
 `            end\n` +
-`            if gClientToGameSceneGMDelegate then\n` +
+`            if gClientToGameSceneGMDelegate and gClientToGameSceneGMDelegate.GmAddEnemyByPlayer then\n` +
 `                pcall(function() gClientToGameSceneGMDelegate:GmAddEnemyByPlayer(enemyId, camp) end)\n` +
 `            end\n` +
-`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
-`                gCS.MessageTipsMgr:ShowMessageTips("Spawned Enemy ID: " .. enemyId)\n` +
+`            pcall(function()\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent("Spawned Enemy ID: " .. tostring(enemyId))\n` +
+`                end\n` +
+`                if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                    gCS.MessageTipsMgr:ShowMessageTips("Spawned Enemy ID: " .. tostring(enemyId))\n` +
+`                end\n` +
+`            end)\n` +
+`        end)\n` +
+`    elseif cmd == "OPEN_MONSTER_PANEL" then\n` +
+`        pcall(function()\n` +
+`            if gPanelManager and gPanelId and gPanelId.S_SKILL_DEBUG_PANEL then\n` +
+`                gPanelManager:CheckShow(gPanelId.S_SKILL_DEBUG_PANEL, { ShowAddEnemy = true })\n` +
 `            end\n` +
+`            pcall(function()\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent("Opened Monster Spawn Menu")\n` +
+`                end\n` +
+`            end)\n` +
 `        end)\n` +
 `    elseif cmd == "TOGGLE_CLOTHES" then\n` +
 `        pcall(function()\n` +
@@ -496,9 +657,15 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                    end\n` +
 `                end\n` +
 `            end\n` +
-`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
-`                gCS.MessageTipsMgr:ShowMessageTips(_G._clothesHidden and "Outfit Hidden (Base Body)" or "Outfit Shown")\n` +
-`            end\n` +
+`            pcall(function()\n` +
+`                local tip = _G._clothesHidden and "Outfit Hidden (Base Body)" or "Outfit Shown"\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`                end\n` +
+`                if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                    gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`                end\n` +
+`            end)\n` +
 `        end)\n` +
 `    end\n` +
 `end\n\n` +
