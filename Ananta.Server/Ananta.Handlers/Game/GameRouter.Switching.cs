@@ -111,8 +111,9 @@ internal sealed partial class GameRouter
         await PublishSafeRuntimeBuffSnapshot4229938(ctx, unitId, templateId, "minimal-direct-switch");
         state.AllBuildBuffsPublished = true;
 
-        if (oldUnitId != 0 && oldUnitId != unitId)
-            await ctx.NotifyAsync(MethodId.SyncLogicAgentLeave, WorldCodec.LogicAgentLeave(oldUnitId));
+        // Keep the previous character in the world scene so the player can interact with / carry them
+        // if (oldUnitId != 0 && oldUnitId != unitId)
+        //     await ctx.NotifyAsync(MethodId.SyncLogicAgentLeave, WorldCodec.LogicAgentLeave(oldUnitId));
         await ctx.NotifyAsync(MethodId.SyncGamePause, WorldCodec.GamePause(false));
 
         state.SwitchCount++;
