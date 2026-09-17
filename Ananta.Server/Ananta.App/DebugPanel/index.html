@@ -21,6 +21,17 @@
   td, th { border: 1px solid #333; padding: 4px 8px; text-align: left; font-size: 13px; }
   .muted { color: #888; font-size: 12px; }
   #log { white-space: pre-wrap; font-size: 12px; max-height: 160px; overflow-y: auto; }
+  .npc-tab { background: #1e293b; color: #94a3b8; border: 1px solid #334155; border-radius: 4px; padding: 5px 12px; font-size: 12px; cursor: pointer; transition: 0.15s; }
+  .npc-tab:hover { background: #334155; color: #fff; }
+  .npc-tab.active { background: #00838f; color: #fff; border-color: #00e5ff; font-weight: bold; }
+  .btn-add-npc { background: #2e7d32; color: #fff; border: 0; border-radius: 4px; padding: 3px 8px; font-size: 11px; cursor: pointer; font-weight: bold; }
+  .btn-add-npc:hover { background: #388e3c; }
+  .badge-cat { font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: bold; display: inline-block; }
+  .badge-monster { background: #5c1d1d; color: #ff8a80; border: 1px solid #b71c1c; }
+  .badge-citizen { background: #1a365d; color: #90cdf4; border: 1px solid #2b6cb0; }
+  .badge-police { background: #3e2723; color: #ffcc80; border: 1px solid #795548; }
+  .badge-animal { background: #1b4332; color: #95d5b2; border: 1px solid #2d6a4f; }
+  .badge-ally { background: #4a148c; color: #e1bee7; border: 1px solid #8e24aa; }
 </style>
 </head>
 <body>
@@ -105,17 +116,82 @@
 </div>
 
 <div class="card" style="border-color:#00bcd4">
-  <h2 style="color:#4dd0e1">👥 NPC Spawner (เสก NPC / ตัวละครเดินดิน)</h2>
-  <div class="muted">One NPC per line: AgentConfig ID, optionally followed by a POI action ID (เช่น 40130709, 2).</div>
-  <textarea id="npcItems" rows="6" style="width:100%;box-sizing:border-box;background:#101215;color:#d7dce2;border:1px solid #444;border-radius:6px;padding:6px;font-family:inherit;margin:6px 0;resize:vertical" placeholder="40130001, 0" spellcheck="false">40130709, 2</textarea>
-  <div>
-    <label>X spacing</label><input id="npcXSpacing" type="number" min="0" step="any" value="1.5" style="width:70px">
-    <label>Z spacing</label><input id="npcZSpacing" type="number" min="0" step="any" value="1.5" style="width:70px">
-    <label>Max per row</label><input id="npcMaxPerRow" type="number" min="1" step="1" value="10" style="width:70px">
-    <button id="npcSpawn" style="background:#0097a7;margin-left:8px" onclick="spawnNpcs()">Spawn NPCs</button>
+  <h2 style="color:#4dd0e1">👥 NPC & Monster Spawner (เสก NPC / มอนสเตอร์ / สัตว์ / ตัวละคร)</h2>
+  <div class="muted">มอนสเตอร์ สัตว์ และชาวเมืองในเกมใช้โครงสร้าง Agent เดียวกัน ค้นหาหรือเลือกหมวดหมู่ แล้วกด <b>➕ Add</b> เพื่อเพิ่ม ID ลงในคิวเสกได้ทันที</div>
+
+  <!-- Category Filter Tabs -->
+  <div style="display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px 0" id="npcCatTabs">
+    <button class="npc-tab active" data-cat="all" onclick="setNpcCategory('all')">🌟 ทั้งหมด (All)</button>
+    <button class="npc-tab" data-cat="monster" onclick="setNpcCategory('monster')">⚔️ มอนสเตอร์ & บอส</button>
+    <button class="npc-tab" data-cat="citizen" onclick="setNpcCategory('citizen')">🚶 ชาวเมือง (Citizens)</button>
+    <button class="npc-tab" data-cat="police" onclick="setNpcCategory('police')">👮 ตำรวจ & ยาม (Police)</button>
+    <button class="npc-tab" data-cat="animal" onclick="setNpcCategory('animal')">🐱 สัตว์ & มาสคอต</button>
+    <button class="npc-tab" data-cat="ally" onclick="setNpcCategory('ally')">🤝 พันธมิตร & ตัวละคร</button>
   </div>
-  <div class="muted" style="margin-top:4px">NPCs are placed in a player-relative grid in front of you.</div>
-  <pre id="npcResult" style="background:#101215;border:1px solid #333;border-radius:6px;padding:8px;max-height:160px;overflow-y:auto;white-space:pre-wrap;margin-top:6px;font-size:12px"></pre>
+
+  <!-- Search & Pose Toolbar -->
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:8px">
+    <div style="flex:1;min-width:220px">
+      <input id="npcSearchInput" type="text" placeholder="🔍 ค้นหา (พิมพ์ชื่อ เช่น 谜面, Nanami, เป็ด, สุนัข หรือเลข ID)..." style="width:100%;box-sizing:border-box" oninput="onNpcSearchInput()">
+    </div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <label style="font-size:12px;color:#aaa">ท่าทาง (Pose):</label>
+      <select id="npcPoiSelect" style="min-width:180px">
+        <option value="0">🧍 Auto / None (0)</option>
+        <option value="2" selected>🧍 Idle ยืนนิ่ง (2)</option>
+        <option value="1">🚶 Walk เดิน (1)</option>
+        <option value="4">🏃 Run วิ่ง (4)</option>
+        <option value="11">📱 Phone คุยโทรศัพท์/ถ่ายรูป (11)</option>
+        <option value="10">🧱 Lean Wall พิงกำแพง (10)</option>
+        <option value="12">🪑 Formal Sit นั่งเรียบร้อย (12)</option>
+        <option value="13">🪑 Relax Sit นั่งผ่อนคลาย (13)</option>
+        <option value="15">💬 Sit & Talk นั่งคุย (15)</option>
+        <option value="6">👏 Clap ปรบมือ (6)</option>
+        <option value="5">👀 Spectate ยืนมุง (5)</option>
+        <option value="3">😱 Scared ตกใจกลัว (3)</option>
+        <option value="8">🥤 Vending กดตู้ขายน้ำ (8)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Catalog Table -->
+  <div style="max-height:240px;overflow-y:auto;border:1px solid #333;border-radius:6px;background:#0d1117;margin-bottom:10px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;text-align:left">
+      <thead>
+        <tr style="background:#161b22;border-bottom:1px solid #30363d;position:sticky;top:0;z-index:1">
+          <th style="padding:6px 8px;width:75px">หมวด</th>
+          <th style="padding:6px 8px;width:95px">ID</th>
+          <th style="padding:6px 8px">ชื่อ (Name)</th>
+          <th style="padding:6px 8px;width:80px">Model ID</th>
+          <th style="padding:6px 8px;width:70px;text-align:center">Action</th>
+        </tr>
+      </thead>
+      <tbody id="npcTableBody">
+        <tr><td colspan="5" style="padding:12px;text-align:center;color:#888">กำลังโหลดรายชื่อ Agent...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Textarea & Spawn Controls -->
+  <div style="margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+    <span style="font-size:12px;font-weight:bold;color:#4dd0e1">📋 รายการที่จะเสก (คั่นด้วยบรรทัดใหม่: ID, POI_ID):</span>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="ghost" style="padding:2px 8px;font-size:11px" onclick="clearNpcList()">🧹 ล้างรายการ</button>
+      <button class="ghost" style="padding:2px 8px;font-size:11px" onclick="setNpcPreset('gang')">⚔️ แก๊ง 4 ตัว</button>
+      <button class="ghost" style="padding:2px 8px;font-size:11px" onclick="setNpcPreset('citizens')">🚶 ชาวเมือง 3 คน</button>
+      <button class="ghost" style="padding:2px 8px;font-size:11px" onclick="setNpcPreset('animals')">🦆 สัตว์ 3 ตัว</button>
+    </div>
+  </div>
+  <textarea id="npcItems" rows="4" style="width:100%;box-sizing:border-box;background:#101215;color:#d7dce2;border:1px solid #444;border-radius:6px;padding:6px;font-family:monospace;margin:4px 0 8px 0;resize:vertical" placeholder="40900579, 0" spellcheck="false">40130709, 2</textarea>
+
+  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+    <label>X spacing <input id="npcXSpacing" type="number" min="0" step="any" value="1.5" style="width:55px"></label>
+    <label>Z spacing <input id="npcZSpacing" type="number" min="0" step="any" value="1.5" style="width:55px"></label>
+    <label>Max / row <input id="npcMaxPerRow" type="number" min="1" step="1" value="10" style="width:55px"></label>
+    <button id="npcSpawn" style="background:#0097a7;padding:8px 16px;font-weight:bold" onclick="spawnNpcs()">🚀 เสกเข้าเกม (Spawn)</button>
+  </div>
+  <div class="muted" style="margin-top:4px">NPC / มอนสเตอร์จะถูกวางเป็นแถวกริดด้านหน้าตัวละครของคุณโดยอิงจากตำแหน่งและมุมหันในปัจจุบัน</div>
+  <pre id="npcResult" style="background:#101215;border:1px solid #333;border-radius:6px;padding:8px;max-height:120px;overflow-y:auto;white-space:pre-wrap;margin-top:6px;font-size:12px;display:none"></pre>
 </div>
 
 <div class="card">
@@ -172,36 +248,6 @@
     <button style="background:#f57c00" onclick="rollback10s()">Rollback Position (10s Ago)</button>
   </div>
   <div class="muted" style="margin-top:6px">Immediately forces client transition reset, restores user input, and rolls back coordinates to before the glitch.</div>
-</div>
-
-<div class="card">
-  <h2>Combat & Monster Spawner</h2>
-  <div style="margin-bottom:6px">
-    Monster:
-    <select id="enemypreset" onchange="onEnemyPresetChange()">
-      <option value="40900579">Melee Combatant (Verified) [40900579]</option>
-      <option value="40950138">Tactical Ranged Soldier (Verified) [40950138]</option>
-      <option value="100101">Street Thug (Melee) [100101]</option>
-      <option value="100102">Street Thug (Ranged Pistol) [100102]</option>
-      <option value="100201">Elite Enforcer (Katana) [100201]</option>
-      <option value="100301">Heavy Shield Brawler [100301]</option>
-      <option value="200101">Chaos Mutant Boss [200101]</option>
-      <option value="200201">Armored Mech Boss [200201]</option>
-      <option value="custom">Custom ID...</option>
-    </select>
-    ID: <input id="enemyId" type="number" style="width:100px" value="40900579">
-  </div>
-  <div>
-    Camp:
-    <select id="enemyCamp">
-      <option value="0">Enemy / Hostile (0)</option>
-      <option value="1">Ally / Friendly (1)</option>
-      <option value="2">Neutral (2)</option>
-    </select>
-    Count: <input id="enemyCount" type="number" style="width:70px" value="1" min="1" max="10">
-    <button style="background:#e53935;margin-left:8px" onclick="spawnEnemy()">Spawn Opponent</button>
-  </div>
-  <div class="muted" style="margin-top:6px">Spawns enemies near the player for live combat testing. Use with active weapon & combat sandbox.</div>
 </div>
 
 <div class="card" style="border-color:#4caf50">
@@ -418,14 +464,129 @@ const scenePresets = {
   airport: { raid: 23300888, instance: 20001222, universe: 76000888, x: -4468.3, y: -6.15, z: -2597.5, facing: 85.5 }
 };
 let npcBusy = false;
+let currentNpcCategory = 'all';
+let npcCatalogData = [];
+let npcSearchTimeout = null;
+
+async function loadNpcCatalog(category = 'all', query = '') {
+  try {
+    const q = encodeURIComponent(query || '');
+    const cat = encodeURIComponent(category || 'all');
+    const r = await api(`/api/npc/catalog?cat=${cat}&q=${q}&limit=150`);
+    if (r && r.items) {
+      npcCatalogData = r.items;
+      renderNpcTable(npcCatalogData);
+      if (r.poiActions && document.getElementById('npcPoiSelect').children.length <= 1) {
+        renderPoiSelect(r.poiActions);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to load NPC catalog:', err);
+  }
+}
+
+function renderPoiSelect(poiList) {
+  const sel = document.getElementById('npcPoiSelect');
+  if (!sel) return;
+  sel.innerHTML = '';
+  poiList.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = `${p.name} [${p.id}]`;
+    if (p.id === 2) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function renderNpcTable(items) {
+  const tbody = document.getElementById('npcTableBody');
+  if (!tbody) return;
+  if (!items || items.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="padding:12px;text-align:center;color:#888">ไม่พบ Agent ในเงื่อนไขนี้</td></tr>';
+    return;
+  }
+
+  const catBadges = {
+    monster: '<span class="badge-cat badge-monster">⚔️ Monster</span>',
+    citizen: '<span class="badge-cat badge-citizen">🚶 Citizen</span>',
+    police: '<span class="badge-cat badge-police">👮 Guard</span>',
+    animal: '<span class="badge-cat badge-animal">🐱 Animal</span>',
+    ally: '<span class="badge-cat badge-ally">🤝 Ally</span>'
+  };
+
+  tbody.innerHTML = items.map(item => {
+    const badge = catBadges[item.category] || '<span class="badge-cat">Agent</span>';
+    const escapedName = (item.name || '').replace(/'/g, "\\'");
+    return `<tr style="border-bottom:1px solid #222">
+      <td style="padding:4px 8px">${badge}</td>
+      <td style="padding:4px 8px;font-family:monospace;color:#4dd0e1;font-weight:bold">${item.id}</td>
+      <td style="padding:4px 8px">${item.name}</td>
+      <td style="padding:4px 8px;color:#888;font-family:monospace">${item.model || '-'}</td>
+      <td style="padding:4px 8px;text-align:center">
+        <button class="btn-add-npc" onclick="addNpcToInput(${item.id}, '${escapedName}')">➕ Add</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function setNpcCategory(cat) {
+  currentNpcCategory = cat;
+  const tabs = document.querySelectorAll('.npc-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  const activeTab = document.querySelector(`.npc-tab[data-cat="${cat}"]`);
+  if (activeTab) activeTab.classList.add('active');
+  const q = document.getElementById('npcSearchInput').value.trim();
+  loadNpcCatalog(currentNpcCategory, q);
+}
+
+function onNpcSearchInput() {
+  if (npcSearchTimeout) clearTimeout(npcSearchTimeout);
+  npcSearchTimeout = setTimeout(() => {
+    const q = document.getElementById('npcSearchInput').value.trim();
+    loadNpcCatalog(currentNpcCategory, q);
+  }, 250);
+}
+
+function addNpcToInput(id, name) {
+  const textarea = document.getElementById('npcItems');
+  const poi = document.getElementById('npcPoiSelect').value || '0';
+  const newLine = `${id}, ${poi}`;
+  const cur = textarea.value.trim();
+  if (!cur) {
+    textarea.value = newLine;
+  } else {
+    textarea.value = cur + '\n' + newLine;
+  }
+  textarea.scrollTop = textarea.scrollHeight;
+  log(`Added to spawn queue: ${name} [${id}] (POI: ${poi})`);
+}
+
+function clearNpcList() {
+  document.getElementById('npcItems').value = '';
+}
+
+function setNpcPreset(preset) {
+  const textarea = document.getElementById('npcItems');
+  if (preset === 'gang') {
+    textarea.value = '40900579, 0\n40100004, 0\n40100011, 0\n40100034, 0';
+  } else if (preset === 'citizens') {
+    textarea.value = '40130709, 2\n40130001, 1\n4065053, 11';
+  } else if (preset === 'animals') {
+    textarea.value = '4065051, 0\n40120100, 2\n40120325, 0';
+  }
+}
+
 async function spawnNpcs() {
   if (npcBusy) return;
-  const lines = document.getElementById('npcItems').value.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
-  const items = lines.map(line => {
-    const parts = line.split(/[\s,;]+/);
+  const rawLines = document.getElementById('npcItems').value.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  const items = rawLines.map(line => {
+    const clean = line.split('//')[0].split('#')[0].trim();
+    const parts = clean.split(/[\s,;]+/);
     return { npcFormworkId: Number(parts[0]), poiActionId: Number(parts[1] || 0) };
-  });
+  }).filter(item => Number.isInteger(item.npcFormworkId) && item.npcFormworkId > 0);
+
   const output = document.getElementById('npcResult');
+  output.style.display = 'block';
   if (!items.length || items.some(item => !Number.isInteger(item.npcFormworkId) || item.npcFormworkId < 1 || item.npcFormworkId > 4294967295 || !Number.isInteger(item.poiActionId) || item.poiActionId < 0 || item.poiActionId > 4294967295)) {
     output.textContent = 'Enter valid numeric IDs, one NPC per line.';
     return;
@@ -435,7 +596,7 @@ async function spawnNpcs() {
   const maxPerRow = Number(document.getElementById('npcMaxPerRow').value);
   npcBusy = true;
   document.getElementById('npcSpawn').disabled = true;
-  output.textContent = 'Spawning NPCs...';
+  output.textContent = 'Spawning NPCs/Monsters into world...';
   try {
     const r = await api('/api/npc/spawn', {
       method: 'POST',
@@ -443,6 +604,7 @@ async function spawnNpcs() {
       body: JSON.stringify({ items, xSpacing: xSp, zSpacing: zSp, maxPerRow })
     });
     output.textContent = JSON.stringify(r, null, 2);
+    log('Spawned ' + items.length + ' entities: ' + (r.ok ? 'SUCCESS' : r.message));
   } catch (err) {
     output.textContent = 'Spawn request failed: ' + err.message;
   } finally {
@@ -560,23 +722,6 @@ async function setCustomWeather() {
   await setWeather(id);
 }
 
-function onEnemyPresetChange() {
-  const sel = document.getElementById('enemypreset').value;
-  if (sel !== 'custom') {
-    document.getElementById('enemyId').value = sel;
-  }
-}
-
-async function spawnEnemy() {
-  const body = {
-    enemyId: parseInt(document.getElementById('enemyId').value || '40900579', 10),
-    camp: parseInt(document.getElementById('enemyCamp').value || '0', 10),
-    count: parseInt(document.getElementById('enemyCount').value || '1', 10)
-  };
-  const r = await api('/api/enemy/spawn', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  log('spawn enemy: ' + JSON.stringify(r));
-}
-
 function onTimelinePresetChange() {
   const sel = document.getElementById('timelinepreset').value;
   if (sel !== 'custom') {
@@ -595,6 +740,7 @@ async function playTimeline() {
 
 loadFleet();
 loadScenes();
+loadNpcCatalog();
 refresh();
 setInterval(refresh, 2000);
 document.getElementById('timeslider').addEventListener('input', e => {

@@ -141,6 +141,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await NpcSpawnAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "GET" && path == "/api/scenes")
                 await WriteJsonAsync(ctx, Scenes(), token);
+            else if (method == "GET" && path == "/api/npc/catalog")
+                await WriteJsonAsync(ctx, NpcCatalog(ctx.Request), token);
             else
                 await WriteJsonAsync(ctx, new { ok = false, error = "unknown route" }, token, 404);
         }
@@ -571,6 +573,55 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 y = p.Y,
                 z = p.Z,
                 facing = p.Facing,
+            }).ToList()
+        };
+    }
+
+    private static object NpcCatalog(HttpListenerRequest req)
+    {
+        var q = req.QueryString["q"];
+        var cat = req.QueryString["cat"];
+        int limit = 150;
+        if (int.TryParse(req.QueryString["limit"], out var l) && l > 0)
+            limit = Math.Clamp(l, 1, 300);
+
+        var entries = NpcCatalog4229938.Search(q, cat, limit);
+
+        return new
+        {
+            categories = new[]
+            {
+                new { id = "all", label = "🌟 All (ทั้งหมด)" },
+                new { id = "monster", label = "⚔️ Monsters & Bosses (มอนสเตอร์/บอส)" },
+                new { id = "citizen", label = "🚶 Citizens (ชาวเมือง/ประชาชน)" },
+                new { id = "police", label = "👮 Police & Security (ตำรวจ/ยาม)" },
+                new { id = "animal", label = "🐱 Animals & Pets (สัตว์/เป็ด/แมว)" },
+                new { id = "ally", label = "🤝 Allies & Story (พันธมิตร/ตัวละคร)" },
+            },
+            poiActions = new[]
+            {
+                new { id = 0, name = "🧍 Auto / None (ไม่ระบุท่า)" },
+                new { id = 2, name = "🧍 Idle (ยืนนิ่ง)" },
+                new { id = 1, name = "🚶 Walk (เดิน)" },
+                new { id = 4, name = "🏃 Run (วิ่ง)" },
+                new { id = 11, name = "📱 Phone / Camera (คุยโทรศัพท์/ถ่ายรูป)" },
+                new { id = 10, name = "🧱 Lean on Wall (พิงกำแพง)" },
+                new { id = 12, name = "🪑 Formal Sit (นั่งเก้าอี้เรียบร้อย)" },
+                new { id = 13, name = "🪑 Relaxed Sit (นั่งเก้าอี้ผ่อนคลาย)" },
+                new { id = 15, name = "💬 Sit & Talk (นั่งคุย)" },
+                new { id = 6, name = "👏 Clapping (ปรบมือ)" },
+                new { id = 5, name = "👀 Spectating (ยืนมุงดู)" },
+                new { id = 3, name = "😱 Scared / Panicking (ตกใจกลัว)" },
+                new { id = 8, name = "🥤 Vending Machine (กดตู้ขายน้ำ)" }
+            },
+            items = entries.Select(e => new
+            {
+                id = e.Id,
+                name = string.IsNullOrWhiteSpace(e.Name) ? $"Agent_{e.Id}" : e.Name,
+                category = e.Category,
+                model = e.GeneralModelId,
+                camp = e.Camp,
+                defaultPoi = e.Category == "monster" ? 0 : 2
             }).ToList()
         };
     }
