@@ -73,7 +73,7 @@ internal sealed class WorldEntryState
     internal bool RestoreResourcesAfterActiveSkill { get; set; }
     internal int ActiveClientSkillInstanceId { get; set; }
     internal long ActiveSkillStartedTicks { get; set; }
-    internal Dictionary<uint, long> SkillCooldownUntilTicks { get; } = [];
+    internal Dictionary<ulong, uint> StaticNpcPreparedPlotEvents { get; } = new();
     internal ulong ActiveWeaponInstanceId { get; set; }
     internal uint ActiveFightStyleId { get; set; }
     internal Dictionary<uint, ulong> LastWeaponBySpirit { get; } = [];

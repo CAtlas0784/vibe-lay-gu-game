@@ -77,7 +77,7 @@ internal sealed partial class GameRouter
         await ctx.NotifyAsync(MethodId.SyncUnitPositionAndFacing,
             WorldCodec.PositionAndFacing(unitId, switchPosition, switchFacing));
         await ctx.NotifyAsync(MethodId.SyncPlayerCurrentSpirit,
-            WorldCodec.CurrentSpirit(Profile.PlayerPid, templateId, unitId, isAgentSwitch: true));
+            WorldCodec.CurrentSpirit(Profile.PlayerPid, templateId, unitId, isAgentSwitch: false));
         // CurrentSpirit can rebuild the controlled actor on the client. Re-assert the frozen transform
         // after ownership transfer so the new character cannot fall back to its template/default spawn.
         await ctx.NotifyAsync(MethodId.SyncUnitPositionAndFacing,
@@ -111,9 +111,8 @@ internal sealed partial class GameRouter
         await PublishSafeRuntimeBuffSnapshot4229938(ctx, unitId, templateId, "minimal-direct-switch");
         state.AllBuildBuffsPublished = true;
 
-        // Keep the previous character in the world scene so the player can interact with / carry them
-        // if (oldUnitId != 0 && oldUnitId != unitId)
-        //     await ctx.NotifyAsync(MethodId.SyncLogicAgentLeave, WorldCodec.LogicAgentLeave(oldUnitId));
+        if (oldUnitId != 0 && oldUnitId != unitId)
+            await ctx.NotifyAsync(MethodId.SyncLogicAgentLeave, WorldCodec.LogicAgentLeave(oldUnitId));
         await ctx.NotifyAsync(MethodId.SyncGamePause, WorldCodec.GamePause(false));
 
         state.SwitchCount++;
@@ -130,3 +129,4 @@ internal sealed partial class GameRouter
     }
 
 }
+

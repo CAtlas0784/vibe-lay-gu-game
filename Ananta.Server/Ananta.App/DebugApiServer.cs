@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Ananta.SDK.Network;
 using Ananta.SDK.Serialization;
+using Ananta.Server.ClientData.Client4229938;
 using Ananta.Server.Configuration;
 using Ananta.Server.Handlers.Game;
 using Ananta.Server.Protocol.Client4229938;
@@ -136,6 +137,10 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await PlayCutsceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/timeline/play")
                 await WriteJsonAsync(ctx, await PlayTimelineAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/npc/spawn")
+                await WriteJsonAsync(ctx, await NpcSpawnAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "GET" && path == "/api/scenes")
+                await WriteJsonAsync(ctx, Scenes(), token);
             else
                 await WriteJsonAsync(ctx, new { ok = false, error = "unknown route" }, token, 404);
         }
@@ -551,6 +556,61 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         return await SendPlayerTeleportAsync(session, unitId, x, y, z, facing, "teleport", token);
     }
 
+    private static object Scenes()
+    {
+        return new
+        {
+            presets = SceneCatalog4229938.Presets.Select(p => new
+            {
+                key = p.Key,
+                label = p.Label,
+                raidId = p.RaidId,
+                instanceId = p.InstanceId,
+                universeId = p.UniverseId,
+                x = p.X,
+                y = p.Y,
+                z = p.Z,
+                facing = p.Facing,
+            }).ToList()
+        };
+    }
+
+    private sealed class NpcSpawnRequest
+    {
+        public List<AdminNpcSpawnItem>? Items { get; set; }
+        public float XSpacing { get; set; } = 1.5f;
+        public float ZSpacing { get; set; } = 1.5f;
+        public int MaxPerRow { get; set; } = 10;
+    }
+
+    private async Task<object> NpcSpawnAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, message = "no live game session (is the client in the world?)" };
+
+        NpcSpawnRequest? cmd;
+        try
+        {
+            cmd = JsonSerializer.Deserialize<NpcSpawnRequest>(json, JsonOptions);
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, message = "bad request: " + ex.Message };
+        }
+
+        if (cmd?.Items is not { Count: >= 1 } || cmd.Items.Any(i => i is null || i.NpcFormworkId == 0)
+            || !float.IsFinite(cmd.XSpacing) || cmd.XSpacing < 0f || !float.IsFinite(cmd.ZSpacing) || cmd.ZSpacing < 0f)
+        {
+            return new { ok = false, message = "provide at least one item with a non-zero npcFormworkId, finite non-negative X/Z spacing, and maxPerRow of at least 1" };
+        }
+        if (cmd.MaxPerRow < 1)
+            return new { ok = false, message = "maxPerRow must be at least 1" };
+
+        var result = await GameRouter.SpawnStaticNpcsAsync(session, cmd.Items, cmd.XSpacing, cmd.ZSpacing, cmd.MaxPerRow);
+        return new { ok = result.Ok, message = result.Message, ids = result.Ids.Select(id => id.ToString()).ToArray() };
+    }
+
     private async Task<object> SwitchSceneAsync(string json, CancellationToken token)
     {
         var session = hub.Current;
@@ -566,6 +626,22 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         {
             using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
             var root = doc.RootElement;
+            if (root.TryGetProperty("preset", out var pp) && pp.ValueKind == JsonValueKind.String)
+            {
+                var key = pp.GetString();
+                var preset = SceneCatalog4229938.Presets.FirstOrDefault(p =>
+                    string.Equals(p.Key, key, StringComparison.OrdinalIgnoreCase));
+                if (preset != null)
+                {
+                    raidId = preset.RaidId;
+                    instanceId = preset.InstanceId;
+                    universeId = preset.UniverseId;
+                    x = preset.X;
+                    y = preset.Y;
+                    z = preset.Z;
+                    facing = preset.Facing;
+                }
+            }
             if (root.TryGetProperty("raidId", out var pr) || root.TryGetProperty("raid", out pr))
                 raidId = pr.GetUInt32();
             if (root.TryGetProperty("instanceId", out var pi) || root.TryGetProperty("instance", out pi))

@@ -1,0 +1,6040 @@
+{
+  "_class": "MapentranceConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 93,
+  "records": [
+    {
+      "Id": 199,
+      "Name": "Sunny Bay Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017312,
+      "Information": "Sitting on Sunny Avenue next to an emerging mixed‑use neighborhood, this station may not be right on central Golden Beach, but the yachting and speedboat options at the nearby Albatross Wharf make it a handy spot for locals and tourists alike. Expect mostly commuters during rush hour.",
+      "Coordinate": [
+        2376.03491,
+        -1.09500003,
+        2729.5769
+      ],
+      "EntranceFacing": 104.5,
+      "EntranceArea": [
+        2374.323,
+        0,
+        2731.56909,
+        3,
+        5.5999999
+      ],
+      "MapTeleportPos": [
+        2376.03491,
+        -1.09500003,
+        2729.5769
+      ],
+      "Facing": 104.5,
+      "XYAxisValues": [
+        99.5,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 93699,
+      "__RAW__Name": "",
+      "__IDX__Information": 129893,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 200,
+      "Name": "Rixxy Wonderland",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        2
+      ],
+      "ImageId": 0,
+      "SImageId": 28017306,
+      "Information": "This station offers direct access to a notable city landmark—Rixxy Wonderland, itself located right next to Golden Beach. It’s a popular vacation spot for both local families and visiting tourists. Visitors are advised to remain aware of their belongings as well as final train times.",
+      "Coordinate": [
+        2947.37305,
+        -1.09500003,
+        1030.31396
+      ],
+      "EntranceFacing": -148.300003,
+      "EntranceArea": [
+        2949.81396,
+        0,
+        1031.349,
+        3,
+        5.5999999
+      ],
+      "MapTeleportPos": [
+        2947.37305,
+        -1.09500003,
+        1030.31396
+      ],
+      "Facing": -148.300003,
+      "XYAxisValues": [
+        -153.300003,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 93701,
+      "__RAW__Name": "",
+      "__IDX__Information": 93700,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 201,
+      "Name": "Freshville Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        2
+      ],
+      "ImageId": 0,
+      "SImageId": 28017082,
+      "Information": "One of the first subway stations built in Nova City. This station provides access to Marine MechWorks, Portview Market, and Luminary Academy.",
+      "Coordinate": [
+        898.390015,
+        -1.09500003,
+        1558.15002
+      ],
+      "EntranceFacing": 51,
+      "EntranceArea": [
+        895.744019,
+        0,
+        1558.03296,
+        3,
+        6.30000019
+      ],
+      "MapTeleportPos": [
+        898.390015,
+        -1.09500003,
+        1558.15002
+      ],
+      "Facing": 51,
+      "XYAxisValues": [
+        46,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 38394,
+      "__RAW__Name": "",
+      "__IDX__Information": 38393,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 202,
+      "Name": "Glimmergold",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017086,
+      "Information": "You can reach Glimmergold Lane, VitalWorks Chemicals, and Veritas Institute from here. It’s buzzing 24/7, second only to the Citylink Station.",
+      "Coordinate": [
+        1878.76501,
+        -1.09500003,
+        2250.48901
+      ],
+      "EntranceFacing": 93,
+      "EntranceArea": [
+        1876.66797,
+        0,
+        2252.03711,
+        3,
+        5.5999999
+      ],
+      "MapTeleportPos": [
+        1878.76501,
+        -1.09500003,
+        2250.48901
+      ],
+      "Facing": 93,
+      "XYAxisValues": [
+        85,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 38396,
+      "__RAW__Name": "",
+      "__IDX__Information": 38395,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 203,
+      "Name": "Memorial Park",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017088,
+      "Information": "Direct access to Skyfall Memorial Park, a hot tourist spot in Downtown East, honoring Nova heroes.",
+      "Coordinate": [
+        2748.3291,
+        -1.09500003,
+        2046.62805
+      ],
+      "EntranceFacing": 93,
+      "EntranceArea": [
+        2746.18799,
+        0,
+        2048.073,
+        3,
+        5.5999999
+      ],
+      "MapTeleportPos": [
+        2748.3291,
+        -1.09500003,
+        2046.62805
+      ],
+      "Facing": 93,
+      "XYAxisValues": [
+        86,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 38398,
+      "__RAW__Name": "",
+      "__IDX__Information": 38397,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 204,
+      "Name": "Azure North Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017083,
+      "Information": "This station is situated directly in the center of the tech and finance sector, giving you access to Aerie Bank, Nova TV Station, and various shopping malls. It’s also one of the key commuter stations.",
+      "Coordinate": [
+        3158.98389,
+        -1.09500003,
+        2643.04199
+      ],
+      "EntranceFacing": -1,
+      "EntranceArea": [
+        3157.49194,
+        0,
+        2640.85205,
+        3,
+        5.6500001
+      ],
+      "MapTeleportPos": [
+        3158.98389,
+        -1.09500003,
+        2643.04199
+      ],
+      "Facing": -1,
+      "XYAxisValues": [
+        -6,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 38400,
+      "__RAW__Name": "",
+      "__IDX__Information": 38399,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 205,
+      "Name": "Future Port Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        2
+      ],
+      "ImageId": 0,
+      "SImageId": 28017084,
+      "Information": "This station provides access to the Pop Cool Center, Crystal Plaza, and Albatross Wharf, all of which are currently under construction. Passengers heading to the beach can get off here as well.",
+      "Coordinate": [
+        3661.71411,
+        -1.04499996,
+        1286.922
+      ],
+      "EntranceFacing": 86,
+      "EntranceArea": [
+        3659.45703,
+        0,
+        1288.28003,
+        3,
+        5.5999999
+      ],
+      "MapTeleportPos": [
+        3661.71411,
+        -1.04499996,
+        1286.922
+      ],
+      "Facing": 86,
+      "XYAxisValues": [
+        81,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 38402,
+      "__RAW__Name": "",
+      "__IDX__Information": 38401,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 206,
+      "Name": "Coastal Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        2
+      ],
+      "ImageId": 0,
+      "SImageId": 28001733,
+      "Information": "For Champion Stadium, Floramoon Park, and Mi Mall. It also serves passengers heading to the Ferris Wheel.",
+      "Coordinate": [
+        2243.62109,
+        -1.09500003,
+        1616.91003
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [
+        2245.76294,
+        0,
+        1615.37,
+        3,
+        5.80000019
+      ],
+      "MapTeleportPos": [
+        2243.62109,
+        -1.09500003,
+        1616.91003
+      ],
+      "Facing": -90,
+      "XYAxisValues": [
+        -95,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 51660,
+      "__RAW__Name": "",
+      "__IDX__Information": 51659,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 207,
+      "Name": "Vista Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017081,
+      "Information": "Welcome to the Vista Hub, where you can reach Aerie Bank, Nova City Bank, Saturn Tower, and Albatross Wharf. Passengers needing financial or banking services may alight here.",
+      "Coordinate": [
+        3941.69604,
+        -1.09500003,
+        1974.08105
+      ],
+      "EntranceFacing": -93,
+      "EntranceArea": [
+        3943.99194,
+        0,
+        1971.47302,
+        3,
+        5.5999999
+      ],
+      "MapTeleportPos": [
+        3941.69604,
+        -1.09500003,
+        1974.08105
+      ],
+      "Facing": -93,
+      "XYAxisValues": [
+        -98,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 51662,
+      "__RAW__Name": "",
+      "__IDX__Information": 51661,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 208,
+      "Name": "Veluxity Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017118,
+      "Information": "For Greenwave Residences, Paradox Plaza, and Freshville Commercial. Passengers heading to the seaside are advised to avoid peak hours.",
+      "Coordinate": [
+        1232.87,
+        -1.09500003,
+        2213.05103
+      ],
+      "EntranceFacing": -7,
+      "EntranceArea": [
+        1231.61902,
+        0,
+        2210.73193,
+        3,
+        6.30000019
+      ],
+      "MapTeleportPos": [
+        1232.87,
+        -1.09500003,
+        2213.05103
+      ],
+      "Facing": -7,
+      "XYAxisValues": [
+        -12,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 51664,
+      "__RAW__Name": "",
+      "__IDX__Information": 51663,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 209,
+      "Name": "Paradox Plaza Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        1
+      ],
+      "ImageId": 0,
+      "SImageId": 28017087,
+      "Information": "This station is adjacent to Paradox Extreme Sports Park and Skate Plaza, and is a hotspot for all the young trendsetters. Visitors are encouraged to keep their personal belongings secure and not to roll solo after dark.",
+      "Coordinate": [
+        620.210999,
+        -1,
+        2072.05493
+      ],
+      "EntranceFacing": -131.800003,
+      "EntranceArea": [
+        622.869995,
+        0,
+        2072.37012,
+        3,
+        5.94000006
+      ],
+      "MapTeleportPos": [
+        620.210999,
+        -1,
+        2072.05493
+      ],
+      "Facing": -131.800003,
+      "XYAxisValues": [
+        -136.800003,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 56586,
+      "__RAW__Name": "",
+      "__IDX__Information": 58314,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 210,
+      "Name": "Marine MechWorks Station",
+      "RaidId": 23300888,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        2
+      ],
+      "ImageId": 0,
+      "SImageId": 28001732,
+      "Information": "This station is located inside the industrial center of the city, which features major enterprises like machinery manufacturing and logistics. It can become extremely congested during rush hour, so please have your ID badge ready and exit the station in an orderly fashion.",
+      "Coordinate": [
+        1383.12695,
+        -1.09500003,
+        1267.71106
+      ],
+      "EntranceFacing": 170,
+      "EntranceArea": [
+        1384.22998,
+        0,
+        1270.58496,
+        3,
+        5.75
+      ],
+      "MapTeleportPos": [
+        1383.12695,
+        -1.09500003,
+        1267.71106
+      ],
+      "Facing": 170,
+      "XYAxisValues": [
+        165,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 56587,
+      "__RAW__Name": "",
+      "__IDX__Information": 58315,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 212,
+      "Name": "Beachside Bungalow",
+      "RaidId": 23300888,
+      "Type": 12,
+      "TLType": 1,
+      "IconId": 28001604,
+      "SIconId": 28001604,
+      "DisableIconId": 28021672,
+      "SDisableIconId": 28021672,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001666,
+      "SDisableMiniMapIconId": 28021672,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017107,
+      "Information": "Live the easy life, in a vibrant community, with Reign Real Estate apartments.",
+      "Coordinate": [
+        1613.15796,
+        -0.0786110833,
+        1582.53503
+      ],
+      "EntranceFacing": -128,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        1612.5,
+        0,
+        1580.30005
+      ],
+      "Facing": -128,
+      "XYAxisValues": [
+        -133,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": true,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 63508,
+      "__RAW__Name": "",
+      "__IDX__Information": 63668,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 213,
+      "Name": "Nova City Airport",
+      "RaidId": 23300888,
+      "Type": 15,
+      "TLType": 1,
+      "IconId": 0,
+      "SIconId": 28017633,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017632,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28004983,
+      "Information": "Nova City International Airport. The runway stretches onto the horizon, and beyond that lies your destination.",
+      "Coordinate": [
+        -807.47998,
+        0,
+        -1368.98999
+      ],
+      "EntranceFacing": -60.6885414,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -807.47998,
+        0,
+        -1368.98999
+      ],
+      "Facing": -60.6885414,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148704,
+      "__RAW__Name": "",
+      "__IDX__Information": 148703,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 214,
+      "Name": "DK9 HQ",
+      "RaidId": 23300888,
+      "Type": 16,
+      "TLType": 1,
+      "IconId": 28002699,
+      "SIconId": 28002699,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28002699,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28002905,
+      "Information": "An abandoned baseball field where Garm grew up, and the last remaining territory of Fenrir, head of the Demons. It is now the HQ for Garm’s DK9.",
+      "Coordinate": [
+        756,
+        0,
+        1248
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        756,
+        0,
+        1248
+      ],
+      "Facing": 90,
+      "XYAxisValues": [
+        0,
+        0.699999988
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [
+        15020989
+      ],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148706,
+      "__RAW__Name": "",
+      "__IDX__Information": 148705,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 215,
+      "Name": "绿屿公馆",
+      "RaidId": 23300888,
+      "Type": 12,
+      "TLType": 1,
+      "IconId": 28001604,
+      "SIconId": 28001604,
+      "DisableIconId": 28021672,
+      "SDisableIconId": 28021672,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001666,
+      "SDisableMiniMapIconId": 28021672,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28021866,
+      "Information": "以温润木质与繁茂绿意构筑的复古风情宅邸。细腻雕花与柔和线条交织，自成一座静谧又生机盎然的岛屿。",
+      "Coordinate": [
+        2277.896,
+        0.0143328002,
+        1471.46594
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        2287.65088,
+        0.0143388603,
+        1471.64697
+      ],
+      "Facing": -90,
+      "XYAxisValues": [
+        -90,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": true,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "绿屿公馆",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "以温润木质与繁茂绿意构筑的复古风情宅邸。细腻雕花与柔和线条交织，自成一座静谧又生机盎然的岛屿。"
+    },
+    {
+      "Id": 216,
+      "Name": "旧物仓公寓",
+      "RaidId": 23300888,
+      "Type": 12,
+      "TLType": 1,
+      "IconId": 28001604,
+      "SIconId": 28001604,
+      "DisableIconId": 28021672,
+      "SDisableIconId": 28021672,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001666,
+      "SDisableMiniMapIconId": 28021672,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28021862,
+      "Information": "由工业仓库改造而成的特色住宅，开敞空间通透随性，原质感墙面与复古街机元素相融，随性又潮流。",
+      "Coordinate": [
+        1647.802,
+        0.0110011399,
+        2339.92798
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        1647.52002,
+        0.0100784004,
+        2348.83398
+      ],
+      "Facing": 179.512299,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": true,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "旧物仓公寓",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "由工业仓库改造而成的特色住宅，开敞空间通透随性，原质感墙面与复古街机元素相融，随性又潮流。"
+    },
+    {
+      "Id": 217,
+      "Name": "观澜北岸",
+      "RaidId": 23300888,
+      "Type": 12,
+      "TLType": 1,
+      "IconId": 28001604,
+      "SIconId": 28001604,
+      "DisableIconId": 28021672,
+      "SDisableIconId": 28021672,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001666,
+      "SDisableMiniMapIconId": 28021672,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "开阔视野与利落线条交织的现代风格住宅，超大落地窗引光入室，铺陈出沉稳而自由的生活主场。",
+      "Coordinate": [
+        2641.95996,
+        0,
+        2596.3999
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        2641.95996,
+        0,
+        2596.3999
+      ],
+      "Facing": 0,
+      "XYAxisValues": [
+        0,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": true,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "观澜北岸",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "开阔视野与利落线条交织的现代风格住宅，超大落地窗引光入室，铺陈出沉稳而自由的生活主场。"
+    },
+    {
+      "Id": 218,
+      "Name": "素光小筑",
+      "RaidId": 23300888,
+      "Type": 12,
+      "TLType": 1,
+      "IconId": 28001604,
+      "SIconId": 28001604,
+      "DisableIconId": 28021672,
+      "SDisableIconId": 28021672,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001666,
+      "SDisableMiniMapIconId": 28021672,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "由原质木色与柔光织就的简约居所，木梁格栅与留白墙壁相映，提供一处安静的栖心之地。",
+      "Coordinate": [
+        1095.42004,
+        5.15999985,
+        2401.62012
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        1095.42004,
+        5.15999985,
+        2401.62012
+      ],
+      "Facing": 145,
+      "XYAxisValues": [
+        145.621094,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": true,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "素光小筑",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "由原质木色与柔光织就的简约居所，木梁格栅与留白墙壁相映，提供一处安静的栖心之地。"
+    },
+    {
+      "Id": 221,
+      "Name": "Dinglan North Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        3,
+        5
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004968,
+      "Information": "From this station, you can reach the Westside District residential area and the waterfront commercial zone. Of all the stations in the commercial district, this one is the most active at night.",
+      "Coordinate": [
+        -1638,
+        18.0249996,
+        1540.5
+      ],
+      "EntranceFacing": -6.3996582,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1638,
+        18.0249996,
+        1540.5
+      ],
+      "Facing": -6.3996582,
+      "XYAxisValues": [
+        -90,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148708,
+      "__RAW__Name": "",
+      "__IDX__Information": 148707,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 222,
+      "Name": "Zhaohua Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        3,
+        4
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28001391,
+      "Information": "From this station, you can reach the Westside District residential area. All Lingyun City residents pass through here on their way to work, making it rank first in commuter traffic among all residential-district stations.",
+      "Coordinate": [
+        -1492.48706,
+        17.6350002,
+        1107.87195
+      ],
+      "EntranceFacing": -83.7583923,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1492.48706,
+        17.6350002,
+        1107.87195
+      ],
+      "Facing": -83.7583923,
+      "XYAxisValues": [
+        0,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148710,
+      "__RAW__Name": "",
+      "__IDX__Information": 148709,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 223,
+      "Name": "Dinglan Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        3
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004969,
+      "Information": "From this station, you can reach the N.8 Complex, with the Weilan Lake scenic area only a few minutes’ walk away and Lingyun City’s famous sights right before you. Shopping, food, and lake views all in one stop.",
+      "Coordinate": [
+        -1431.70996,
+        17.9820004,
+        564.969971
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1431.70996,
+        17.9820004,
+        564.969971
+      ],
+      "Facing": 180,
+      "XYAxisValues": [
+        -90,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148712,
+      "__RAW__Name": "",
+      "__IDX__Information": 148711,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 224,
+      "Name": "Lakeside Pedestrian Street",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        3
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004974,
+      "Information": "Stepping out of this station puts you at Weilan Lakeside Pedestrian Street, a popular family-friendly tourist destination. Stroll along the lake and take in the picturesque scenery, but be sure to plan ahead when traveling on holidays.",
+      "Coordinate": [
+        -1725.54602,
+        17.4799995,
+        12.0509996
+      ],
+      "EntranceFacing": -80.0024109,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1725.54602,
+        17.4799995,
+        12.0509996
+      ],
+      "Facing": -80.0024109,
+      "XYAxisValues": [
+        -83,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148714,
+      "__RAW__Name": "",
+      "__IDX__Information": 148713,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 225,
+      "Name": "Zenith Center",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        5
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004750,
+      "Information": "This station connects directly to Zenith Tower, one of Lingyun City’s landmark buildings. Visitors can head to Zenith Park to experience interacting with robots.",
+      "Coordinate": [
+        -1002.45001,
+        17.6569996,
+        115.336998
+      ],
+      "EntranceFacing": 173.148697,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1002.45001,
+        17.6569996,
+        115.336998
+      ],
+      "Facing": 173.148697,
+      "XYAxisValues": [
+        -170,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148716,
+      "__RAW__Name": "",
+      "__IDX__Information": 148715,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 226,
+      "Name": "Lakeside South Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        5
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004743,
+      "Information": "From this station you can reach the lakeside residential area. While located adjacent to Dinglan Road, it nevertheless retains its own sense of community. Live by the water and enjoy the easy life.",
+      "Coordinate": [
+        -1788.44495,
+        17.4519997,
+        -574.638672
+      ],
+      "EntranceFacing": -85.3232117,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1788.44495,
+        17.4519997,
+        -574.638672
+      ],
+      "Facing": -85.3232117,
+      "XYAxisValues": [
+        0,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148718,
+      "__RAW__Name": "",
+      "__IDX__Information": 148717,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 227,
+      "Name": "Great Ferry Port",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        4,
+        5
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004967,
+      "Information": "From this station, you can reach the East Harbor District entrance, the port freight center, and the industrial park. It is Lingyun City’s trade hub.",
+      "Coordinate": [
+        -844.013,
+        17.5499992,
+        1133.74597
+      ],
+      "EntranceFacing": -84.6924362,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -844.013,
+        17.5499992,
+        1133.74597
+      ],
+      "Facing": -84.6924362,
+      "XYAxisValues": [
+        0,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148720,
+      "__RAW__Name": "",
+      "__IDX__Information": 148719,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 228,
+      "Name": "Xinfeng Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        5
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004977,
+      "Information": "From this station, you can reach the city’s business district, lined with modern office towers and a gathering place for career-focused elites.",
+      "Coordinate": [
+        -624.411987,
+        17.6060009,
+        660.377014
+      ],
+      "EntranceFacing": 162.732697,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -624.411987,
+        17.6060009,
+        660.377014
+      ],
+      "Facing": 162.732697,
+      "XYAxisValues": [
+        158,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148722,
+      "__RAW__Name": "",
+      "__IDX__Information": 148721,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 229,
+      "Name": "Yaojin Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        4
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004979,
+      "Information": "From this station, you can reach one of Lingyun City’s largest commercial districts, where brands of every kind can be found among the bustling streets.",
+      "Coordinate": [
+        61.6409988,
+        17.4899998,
+        778.335022
+      ],
+      "EntranceFacing": -132.937103,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        61.6409988,
+        17.4899998,
+        778.335022
+      ],
+      "Facing": -132.937103,
+      "XYAxisValues": [
+        135,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148724,
+      "__RAW__Name": "",
+      "__IDX__Information": 148723,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 230,
+      "Name": "Yaojin Pedestrian Street",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        4
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004980,
+      "Information": "From this station, you can reach the Yaojin Pedestrian Street and the Ocean Tide Theater, making for a blend of commerce and culture. Shopping, dining, and artistic performances are all on offer here.",
+      "Coordinate": [
+        375.76001,
+        17.4699993,
+        98.3779984
+      ],
+      "EntranceFacing": 67.415802,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        375.76001,
+        17.4699993,
+        98.3779984
+      ],
+      "Facing": 67.415802,
+      "XYAxisValues": [
+        0,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148726,
+      "__RAW__Name": "",
+      "__IDX__Information": 148725,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 231,
+      "Name": "Mingchun North",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        3
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004975,
+      "Information": "From this station, you can reach the banks of the Mingchun River. Stroll the riverside and have a quiet moment in the otherwise bustling city.",
+      "Coordinate": [
+        -427.579987,
+        17.5400009,
+        354
+      ],
+      "EntranceFacing": 140.628494,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -427.579987,
+        17.5400009,
+        354
+      ],
+      "Facing": 140.628494,
+      "XYAxisValues": [
+        0,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148728,
+      "__RAW__Name": "",
+      "__IDX__Information": 148727,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 232,
+      "Name": "Lakefront Institute",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        4
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004971,
+      "Information": "From this station, you can reach the Lakefront Institute and the New Horizon Youth Center, which brim with youthful fervor and a strong academic atmosphere. Free rides are available with a student ID.",
+      "Coordinate": [
+        -2442.73901,
+        17.5440006,
+        1015.59003
+      ],
+      "EntranceFacing": -102,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -2442.73901,
+        17.5440006,
+        1015.59003
+      ],
+      "Facing": -102,
+      "XYAxisValues": [
+        -10,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148730,
+      "__RAW__Name": "",
+      "__IDX__Information": 148729,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 233,
+      "Name": "Yanli Lane",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004978,
+      "Information": "From this station, you can reach the Yanli Lane food street, Xiangnong Market, the morning-market strip, and more. All manner of culinary surprises wait around every corner, making it a real paradise for adventurous foodies.",
+      "Coordinate": [
+        -1125.20496,
+        18.0300007,
+        643.369995
+      ],
+      "EntranceFacing": 176.892593,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1125.20496,
+        18.0300007,
+        643.369995
+      ],
+      "Facing": 176.892593,
+      "XYAxisValues": [
+        -43,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148732,
+      "__RAW__Name": "",
+      "__IDX__Information": 148731,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 234,
+      "Name": "Lingjing Supervisory Agency",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004972,
+      "Information": "From this station, you can reach the Lingjing Supervisory Agency (LSA), Lingyun City’s professional Chaos management institution. It serves every citizen suffering from Chaos-related troubles.",
+      "Coordinate": [
+        -230.479004,
+        17.9750004,
+        -2.4460001
+      ],
+      "EntranceFacing": -140,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -230.479004,
+        17.9750004,
+        -2.4460001
+      ],
+      "Facing": -140,
+      "XYAxisValues": [
+        149,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 138102,
+      "__RAW__Name": "",
+      "__IDX__Information": 148733,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 235,
+      "Name": "Qijin Lane",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004976,
+      "Information": "From this station, you can reach the Qijin Lane commercial street, where you can really take in the city’s distinctive sense of style.",
+      "Coordinate": [
+        264.811005,
+        18.0319996,
+        537.591003
+      ],
+      "EntranceFacing": -123.191399,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        264.811005,
+        18.0319996,
+        537.591003
+      ],
+      "Facing": -123.191399,
+      "XYAxisValues": [
+        147,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148735,
+      "__RAW__Name": "",
+      "__IDX__Information": 148734,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 236,
+      "Name": "Diurnal Port",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004966,
+      "Information": "From this station, you can reach Lingyun City’s most dazzling nightlife landmark, the Diurnal Port entertainment zone. Amid the brilliant lights, take in the luxurious nocturnal urban landscape.",
+      "Coordinate": [
+        554.315002,
+        17.9710007,
+        -150.923996
+      ],
+      "EntranceFacing": -96.8791809,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        554.315002,
+        17.9710007,
+        -150.923996
+      ],
+      "Facing": -96.8791809,
+      "XYAxisValues": [
+        -82,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148737,
+      "__RAW__Name": "",
+      "__IDX__Information": 148736,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 237,
+      "Name": "Lingyun Pier",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004973,
+      "Information": "From this station, you can reach the City Observation Deck, the Lingyun Grand Theater, the Riptide Hotel, and more. Climb high for sweeping views of the diverse skyline.",
+      "Coordinate": [
+        -1334.49402,
+        17.9720001,
+        -1135.06494
+      ],
+      "EntranceFacing": -101,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1334.49402,
+        17.9720001,
+        -1135.06494
+      ],
+      "Facing": -101,
+      "XYAxisValues": [
+        -82,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148739,
+      "__RAW__Name": "",
+      "__IDX__Information": 148738,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 238,
+      "Name": "Bachong Pagoda",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004965,
+      "Information": "From this station, you can reach Huiming Temple and Bachong Pagoda. Amid the spiritual charm of the ancient temple and curling incense smoke, gaze out at Weilan Lake and feel the blend of historic and modern urban architecture.",
+      "Coordinate": [
+        -2865.37988,
+        28.1779995,
+        -1527.68005
+      ],
+      "EntranceFacing": -92.9712524,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -2865.37988,
+        28.1779995,
+        -1527.68005
+      ],
+      "Facing": -92.9712524,
+      "XYAxisValues": [
+        36,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148741,
+      "__RAW__Name": "",
+      "__IDX__Information": 148740,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 239,
+      "Name": "Longqi Village",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004744,
+      "Information": "From this station, you can reach Longqi Village. Tour the elegant mountain dwellings, savor tea and conversation, and return to nature in this secluded haven.",
+      "Coordinate": [
+        -4506.74707,
+        180.166,
+        -2588.90601
+      ],
+      "EntranceFacing": -25.4145508,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -4506.74707,
+        180.166,
+        -2588.90601
+      ],
+      "Facing": -25.4145508,
+      "XYAxisValues": [
+        9,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 142297,
+      "__RAW__Name": "",
+      "__IDX__Information": 148742,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 240,
+      "Name": "场地赛车场",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28001391,
+      "Information": "环山赛道。",
+      "Coordinate": [
+        -6783.32812,
+        177.867599,
+        -863.410095
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -6783.32812,
+        177.867599,
+        -863.410095
+      ],
+      "Facing": 0,
+      "XYAxisValues": [
+        -103,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "场地赛车场",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "环山赛道。"
+    },
+    {
+      "Id": 241,
+      "Name": "Jeiqing Dike",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004970,
+      "Information": "From this station, you can reach Jeiqing Dike. Visit a teahouse, or row a boat across Weilan Lake in this place which is the ultimate embodiment of slow living.",
+      "Coordinate": [
+        -3931.65894,
+        19.0900002,
+        -516.698975
+      ],
+      "EntranceFacing": 15.2513304,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -3931.65894,
+        19.0900002,
+        -516.698975
+      ],
+      "Facing": 15.2513304,
+      "XYAxisValues": [
+        -103,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148744,
+      "__RAW__Name": "",
+      "__IDX__Information": 148743,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 242,
+      "Name": "Hermit Hill Trail",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004981,
+      "Information": "From this station, you can reach Yinshan Studio, Zhiwei House, Ganquan Tea House, and more, offering a sublime intersection of art and cuisine.",
+      "Coordinate": [
+        -3297.59399,
+        18.8859997,
+        555.281006
+      ],
+      "EntranceFacing": 38.9787292,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -3297.59399,
+        18.8859997,
+        555.281006
+      ],
+      "Facing": 38.9787292,
+      "XYAxisValues": [
+        52,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148746,
+      "__RAW__Name": "",
+      "__IDX__Information": 148745,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 243,
+      "Name": "山区赛车场",
+      "RaidId": 23300999,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 25600445,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        6
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28001391,
+      "Information": "环山赛道。",
+      "Coordinate": [
+        -6010.44678,
+        431.427307,
+        -4305.11279
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -6010.44678,
+        431.427307,
+        -4305.11279
+      ],
+      "Facing": 0,
+      "XYAxisValues": [
+        52,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_general_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "山区赛车场",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "环山赛道。"
+    },
+    {
+      "Id": 244,
+      "Name": "Cloudstream West Road",
+      "RaidId": 23300999,
+      "Type": 11,
+      "TLType": 1,
+      "IconId": 25600445,
+      "SIconId": 28001070,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28001648,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 31,
+      "IndoorID": 0,
+      "RouteID": [
+        3
+      ],
+      "ImageId": 30300519,
+      "SImageId": 28004982,
+      "Information": "From this station, you can reach the high-tech economic zone south of Zenith Center, the bustling hub of the new business-centered city and a powerful driving force for Lingyun City’s future.",
+      "Coordinate": [
+        -1138.19299,
+        17.7119999,
+        -602.263977
+      ],
+      "EntranceFacing": 172.399994,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -1138.19299,
+        17.7119999,
+        -602.263977
+      ],
+      "Facing": 172.399994,
+      "XYAxisValues": [
+        -12,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "loading_metro_end_1",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 148748,
+      "__RAW__Name": "",
+      "__IDX__Information": 148747,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 250,
+      "Name": "新启机场岛屿站",
+      "RaidId": 23300888,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 0,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        7
+      ],
+      "ImageId": 0,
+      "SImageId": 28004983,
+      "Information": "广告位招租",
+      "Coordinate": [
+        -680.919983,
+        0,
+        -977.710022
+      ],
+      "EntranceFacing": 31.1306496,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        -680.919983,
+        0,
+        -977.710022
+      ],
+      "Facing": 31.1306496,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "新启机场岛屿站",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "广告位招租"
+    },
+    {
+      "Id": 251,
+      "Name": "南部群岛公交站",
+      "RaidId": 23300888,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 0,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        7
+      ],
+      "ImageId": 0,
+      "SImageId": 28004984,
+      "Information": "广告位招租",
+      "Coordinate": [
+        4960.08008,
+        4.99459982,
+        -2036.66003
+      ],
+      "EntranceFacing": 100.244301,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        4960.08008,
+        4.99459982,
+        -2036.66003
+      ],
+      "Facing": 100.244301,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "南部群岛公交站",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "广告位招租"
+    },
+    {
+      "Id": 252,
+      "Name": "中部群岛站",
+      "RaidId": 23300888,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 0,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        7
+      ],
+      "ImageId": 0,
+      "SImageId": 28004985,
+      "Information": "广告位招租",
+      "Coordinate": [
+        5734.22021,
+        0.487265795,
+        856.01001
+      ],
+      "EntranceFacing": -112.983704,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        5734.22021,
+        0.487265795,
+        856.01001
+      ],
+      "Facing": -112.983704,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "中部群岛站",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "广告位招租"
+    },
+    {
+      "Id": 253,
+      "Name": "北方群岛站",
+      "RaidId": 23300888,
+      "Type": 14,
+      "TLType": 2,
+      "IconId": 0,
+      "SIconId": 28017494,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 28017495,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [
+        7
+      ],
+      "ImageId": 0,
+      "SImageId": 28004986,
+      "Information": "广告位招租",
+      "Coordinate": [
+        2610.46997,
+        11.5299997,
+        4303.00977
+      ],
+      "EntranceFacing": 161.673706,
+      "EntranceArea": [],
+      "MapTeleportPos": [
+        2610.46997,
+        11.5299997,
+        4303.00977
+      ],
+      "Facing": 161.673706,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "Loading_bus_end",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "北方群岛站",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "广告位招租"
+    },
+    {
+      "Id": 300,
+      "Name": "不科学法阵",
+      "RaidId": 0,
+      "Type": 13,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 28009029,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "科学家传送锚点",
+      "Coordinate": [],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 0,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "",
+      "JiguanXYAxisValues": [],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "不科学法阵",
+      "__IDX__Information": 4294967293,
+      "__RAW__Information": "科学家传送锚点"
+    },
+    {
+      "Id": 301,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1495.33301,
+        2.34800005,
+        1876.33997
+      ],
+      "EntranceFacing": -7,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23301096,
+      "JiguanTeleportPos": 1008320,
+      "JiguanTeleportPosName": "InsideGov",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_in02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 302,
+      "Name": "",
+      "RaidId": 23301096,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1517.02502,
+        191.817993,
+        1902.19299
+      ],
+      "EntranceFacing": -83,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1015236,
+      "JiguanTeleportPosName": "OutsideGov",
+      "JiguanXYAxisValues": [
+        180,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_out01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_out02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 303,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1350.65906,
+        2.79889989,
+        1831.71301
+      ],
+      "EntranceFacing": -45,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23301098,
+      "JiguanTeleportPos": 1008322,
+      "JiguanTeleportPosName": "InsideLibrary",
+      "JiguanXYAxisValues": [
+        180,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_in02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 304,
+      "Name": "",
+      "RaidId": 23301098,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1500.06799,
+        904.34198,
+        1916.70996
+      ],
+      "EntranceFacing": 15,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1015237,
+      "JiguanTeleportPosName": "OutsideLibrary",
+      "JiguanXYAxisValues": [
+        130,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_out01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_out02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 317,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1149.28101,
+        0.167999998,
+        2089.927
+      ],
+      "EntranceFacing": 18,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1020112,
+      "JiguanTeleportPosName": "InsideNo28waist",
+      "JiguanXYAxisValues": [
+        135,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 318,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1160.21301,
+        36.0699997,
+        2099.20093
+      ],
+      "EntranceFacing": -40,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1020113,
+      "JiguanTeleportPosName": "OutsideNo28waist",
+      "JiguanXYAxisValues": [
+        230,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 319,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1444.69495,
+        -20.0130005,
+        2358.43896
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1020300,
+      "JiguanTeleportPosName": "Repairshop1PlayerExit",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 320,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2071.68994,
+        1.95000005,
+        2337.3501
+      ],
+      "EntranceFacing": 85,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23301148,
+      "JiguanTeleportPos": 1020300,
+      "JiguanTeleportPosName": "inside_artmuseum",
+      "JiguanXYAxisValues": [
+        180,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_in02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 321,
+      "Name": "",
+      "RaidId": 23301148,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2068.95996,
+        -302.122986,
+        2392.42603
+      ],
+      "EntranceFacing": -5,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1020300,
+      "JiguanTeleportPosName": "outside_artmuseum",
+      "JiguanXYAxisValues": [
+        -90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_in02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 323,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2735.81104,
+        0.0670000017,
+        2124.18994
+      ],
+      "EntranceFacing": 80,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1025914,
+      "JiguanTeleportPosName": "InsideNo25waist",
+      "JiguanXYAxisValues": [
+        0,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 324,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2753.81812,
+        36.8979988,
+        2113.09595
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1025915,
+      "JiguanTeleportPosName": "OutsideNo25waist",
+      "JiguanXYAxisValues": [
+        270,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 325,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2782.56006,
+        -11.9580002,
+        1255.82996
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1029717,
+      "JiguanTeleportPosName": "Repairshop2PlayerExit",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 326,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        3144.4729,
+        0.000483512908,
+        1878.76001
+      ],
+      "EntranceFacing": 98.0371399,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "AlanAPre3Inside",
+      "JiguanXYAxisValues": [
+        0,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000000
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 327,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        3103.46997,
+        -300,
+        1864.66003
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 0,
+      "JiguanTeleportPosName": "AlanAPre3Outside",
+      "JiguanXYAxisValues": [
+        0,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000000
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1,
+        2
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 328,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1277.28101,
+        0.167999998,
+        2110.72095
+      ],
+      "EntranceFacing": 50,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1056963,
+      "JiguanTeleportPosName": "EggpartyInsideNo28Waist",
+      "JiguanXYAxisValues": [
+        57,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 329,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1285.41797,
+        28.0100002,
+        2111.93188
+      ],
+      "EntranceFacing": -124,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1056964,
+      "JiguanTeleportPosName": "EggpartyOutsideNo28waist",
+      "JiguanXYAxisValues": [
+        237,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.9.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 330,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1497.23706,
+        0.1199992,
+        1706.93298
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1081392,
+      "JiguanTeleportPosName": "SpikoSafeHouseInside",
+      "JiguanXYAxisValues": [
+        180,
+        0.5
+      ],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 331,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        1497.26904,
+        -7.9000001,
+        1707.51794
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1081393,
+      "JiguanTeleportPosName": "SpikoSafeHouseOutside",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 332,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2376.57202,
+        -1.96200001,
+        1188.57397
+      ],
+      "EntranceFacing": -110,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1482086,
+      "JiguanTeleportPosName": "insideMuseum",
+      "JiguanXYAxisValues": [
+        -90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_in02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 333,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        3447.74194,
+        10.5579996,
+        1123.56702
+      ],
+      "EntranceFacing": 30.1930199,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1606852,
+      "JiguanTeleportPosName": "InsideWellsClubhouse",
+      "JiguanXYAxisValues": [
+        170,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 334,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2473.21997,
+        1,
+        1169.03003
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23301243,
+      "JiguanTeleportPos": 1129019,
+      "JiguanTeleportPosName": "ChaosMuseumIn",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_indoor_in01",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_indoor_in02",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 335,
+      "Name": "凌云市-重霄",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        -783.940002,
+        0.100001298,
+        -1328.06006
+      ],
+      "EntranceFacing": -61.5601501,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300999,
+      "JiguanTeleportPos": 1880913,
+      "JiguanTeleportPosName": "60015803_Teleport",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "loading_plane02",
+      "JiguanEndTimeline": "",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V0.10.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "凌云市-重霄",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 336,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        -806.817017,
+        0.361999989,
+        -1369.44299
+      ],
+      "EntranceFacing": -59.4233093,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300999,
+      "JiguanTeleportPos": 1888659,
+      "JiguanTeleportPosName": "ArriveChongxiaoAirport",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "",
+      "JiguanLoadingTimeline": "loading_plane01",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888,
+        76000000
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 337,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.78101,
+        0,
+        1458.24194
+      ],
+      "EntranceFacing": 90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917305,
+      "JiguanTeleportPosName": "TeleportPos_337_338_339_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 338,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.78101,
+        0,
+        1453.41602
+      ],
+      "EntranceFacing": 90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917305,
+      "JiguanTeleportPosName": "TeleportPos_337_338_339_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 339,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.78101,
+        0,
+        1448.44897
+      ],
+      "EntranceFacing": 90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917305,
+      "JiguanTeleportPosName": "TeleportPos_337_338_339_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 340,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.78101,
+        0,
+        1458.24194
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917531,
+      "JiguanTeleportPosName": "TeleportPos_340_341_342_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 341,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.78101,
+        0,
+        1453.41602
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917531,
+      "JiguanTeleportPosName": "TeleportPos_340_341_342_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 342,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.78101,
+        0,
+        1448.44897
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917531,
+      "JiguanTeleportPosName": "TeleportPos_340_341_342_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 343,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2277.53589,
+        160.595001,
+        1412.50098
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917575,
+      "JiguanTeleportPosName": "TeleportPos_343_345_target",
+      "JiguanXYAxisValues": [
+        0,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 344,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2277.53589,
+        160.595001,
+        1412.50098
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917531,
+      "JiguanTeleportPosName": "TeleportPos_340_341_342_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 345,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.81104,
+        -18.9101009,
+        1458.17102
+      ],
+      "EntranceFacing": 90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917575,
+      "JiguanTeleportPosName": "TeleportPos_343_345_target",
+      "JiguanXYAxisValues": [
+        0,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 346,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2257.81104,
+        -18.9101009,
+        1458.17102
+      ],
+      "EntranceFacing": 90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1917305,
+      "JiguanTeleportPosName": "TeleportPos_337_338_339_target",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 347,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2643.77002,
+        0.104999997,
+        2623.25806
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919422,
+      "JiguanTeleportPosName": "TeleportPos_347_348_354_house",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 348,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2639.34497,
+        0.104999997,
+        2623.25806
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919422,
+      "JiguanTeleportPosName": "TeleportPos_347_348_354_house",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 349,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2643.77002,
+        0.104999997,
+        2623.25806
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919397,
+      "JiguanTeleportPosName": "TeleportPos_349_350_352_garage",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 350,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2639.34497,
+        0.104999997,
+        2623.25806
+      ],
+      "EntranceFacing": 180,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919397,
+      "JiguanTeleportPosName": "TeleportPos_349_350_352_garage",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 351,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2635.229,
+        188.462006,
+        2619.90991
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919421,
+      "JiguanTeleportPosName": "TeleportPos_351_353_hall",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 352,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2635.229,
+        188.462006,
+        2619.90991
+      ],
+      "EntranceFacing": -90,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919397,
+      "JiguanTeleportPosName": "TeleportPos_349_350_352_garage",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 353,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2610.05591,
+        -20.0100002,
+        2610.96509
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919421,
+      "JiguanTeleportPosName": "TeleportPos_351_353_hall",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 354,
+      "Name": "",
+      "RaidId": 23300888,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        2610.05591,
+        -20.0100002,
+        2610.96509
+      ],
+      "EntranceFacing": 0,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300888,
+      "JiguanTeleportPos": 1919422,
+      "JiguanTeleportPosName": "TeleportPos_347_348_354_house",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 355,
+      "Name": "",
+      "RaidId": 23300999,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        442.464203,
+        18.3430004,
+        -112.908997
+      ],
+      "EntranceFacing": 67.7611771,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300999,
+      "JiguanTeleportPos": 1919460,
+      "JiguanTeleportPosName": "TeleportPos_355_356_top",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 356,
+      "Name": "",
+      "RaidId": 23300999,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        434.819,
+        18.3430004,
+        -116.0177
+      ],
+      "EntranceFacing": -112.2388,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300999,
+      "JiguanTeleportPos": 1919460,
+      "JiguanTeleportPosName": "TeleportPos_355_356_top",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 357,
+      "Name": "",
+      "RaidId": 23300999,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        443.135498,
+        54.6339989,
+        -113.024101
+      ],
+      "EntranceFacing": 67.7611771,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300999,
+      "JiguanTeleportPos": 1919459,
+      "JiguanTeleportPosName": "TeleportPos_357_358_hall",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    },
+    {
+      "Id": 358,
+      "Name": "",
+      "RaidId": 23300999,
+      "Type": 1,
+      "TLType": 0,
+      "IconId": 0,
+      "SIconId": 0,
+      "DisableIconId": 0,
+      "SDisableIconId": 0,
+      "WeakGuideIconId": 0,
+      "SWeakGuideIconId": 0,
+      "SMiniMapIconId": 0,
+      "SDisableMiniMapIconId": 0,
+      "BlockId": 0,
+      "IndoorID": 0,
+      "RouteID": [],
+      "ImageId": 0,
+      "SImageId": 28017589,
+      "Information": "",
+      "Coordinate": [
+        434.787903,
+        54.6339989,
+        -116.514
+      ],
+      "EntranceFacing": -112.2388,
+      "EntranceArea": [],
+      "MapTeleportPos": [],
+      "Facing": 0,
+      "XYAxisValues": [
+        180,
+        0.5
+      ],
+      "TeleportStartTimeLine": "",
+      "TeleportLoadingTimeLine": "",
+      "TeleportEndTimeLine": "",
+      "JiguanRaidID": 23300999,
+      "JiguanTeleportPos": 1919459,
+      "JiguanTeleportPosName": "TeleportPos_357_358_hall",
+      "JiguanXYAxisValues": [
+        90,
+        0.5
+      ],
+      "JiguanStartTimeline": "loading_elevator02",
+      "JiguanLoadingTimeline": "",
+      "JiguanEndTimeline": "loading_general_end",
+      "ShowLimitSpirit": [],
+      "IsAboveFog": false,
+      "Multiverse": [
+        76000888
+      ],
+      "StartVersion": "V99.0.0",
+      "EndVersion": "",
+      "TagList": [
+        0
+      ],
+      "__IDX__Name": 0,
+      "__RAW__Name": "",
+      "__IDX__Information": 0,
+      "__RAW__Information": ""
+    }
+  ],
+  "_dumpedCount": 93,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

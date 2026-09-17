@@ -38,29 +38,6 @@ internal sealed partial class GameRouter
             return;
         }
 
-        var cooldown = weapon.Cooldown(style, req.SkillId, 0f);
-        var nowTicks = Environment.TickCount64;
-        if (cooldown > 0f)
-        {
-            if (state.SkillCooldownUntilTicks.TryGetValue(req.SkillId, out var untilTicks) && nowTicks < untilTicks)
-            {
-                ctx.Session.Log.Warn($"[COMBAT] reject skill={req.SkillId} cooldown remaining={untilTicks - nowTicks}ms");
-                return;
-            }
-            state.SkillCooldownUntilTicks[req.SkillId] = nowTicks + (long)(cooldown * 1000f);
-        }
-        else
-        {
-            // Prevent rapid re-triggering of the same active or unique skill while the animation is executing
-            if (state.ActiveSkillId == req.SkillId &&
-                (req.SkillId == weapon.ActiveSkill(style) || req.SkillId == weapon.UniqueSkill(style)) &&
-                (nowTicks - state.ActiveSkillStartedTicks) < 1200)
-            {
-                ctx.Session.Log.Warn($"[COMBAT] ignore rapid spam of active/unique skill={req.SkillId} elapsed={nowTicks - state.ActiveSkillStartedTicks}ms");
-                return;
-            }
-        }
-
         state.CombatUseCount++;
         state.RestoreResourcesAfterActiveSkill |=
             req.SkillId == weapon.ActiveSkill(style) ||
@@ -107,9 +84,21 @@ internal sealed partial class GameRouter
         state.ActiveClientSkillInstanceId = 0;
         state.ActiveSkillStartedTicks = 0;
 
-        // Do not immediately force full recharge here, allowing skills to respect their configured cooldowns.
+        // Ordinary attacks must finish without any server-side skill-state rewrite. Re-publishing the
+        // whole charge/resource snapshot after each common attack can make the client save a new action
+        // while the previous trigger graph is still iterating, which restarts the first animation on
+        // every click. Only cooldown/charge abilities and ultimates need sandbox restoration.
         if (!restoreResources)
             return;
+
+        // The private server runs an unrestricted combat sandbox: restore charges and ultimate energy
+        // only after the complete authored ability chain has ended, never between combo/hold stages.
+        await ctx.NotifyAsync(MethodId.SyncPlayerAllSkillChargeData,
+            CombatCodec.AllSkillCharges(state.ActiveSpiritUnitId, weapon, style));
+        await ctx.NotifyAsync(MethodId.SyncFightResource,
+            CombatCodec.FightResource(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, CombatCodec.UltimateResourceMax));
+        await ctx.NotifyAsync(MethodId.SyncFightResourceFreeState,
+            CombatCodec.FightResourceFreeState(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, true));
     }
 
     Task OnSkillHit(RpcContext ctx, SceneMethods.SkillHitData hit)
@@ -398,7 +387,7 @@ internal sealed partial class GameRouter
         ctx.Session.Log.Info($"[ARMORY] slots committed operation={operation} spirit={spiritId} active={isActive} current={currentWeaponId} unique={slots.Where(x => x != 0).Distinct().Count()} slots={slots.Count}");
     }
 
-    private static bool IsEditableWeaponSlot(int index) => index >= 0 && index < 16;
+    private static bool IsEditableWeaponSlot(int index) => index >= 1 && index < 16;
 
     private static List<ulong> WeaponSlotIds(WorldEntryState state, uint spiritId)
     {
@@ -584,9 +573,6 @@ internal sealed partial class GameRouter
         CombatWeaponDefinition weapon,
         CombatStyleDefinition style)
     {
-        var state = GetWorldState(ctx);
-        state.CombatProfilePublished = true;
-
         // Switching/individually styling one weapon must never overwrite the character-wide
         // FightStyleInfo map. OnSwitchFightStyle publishes that map explicitly.
         await ctx.NotifyAsync(MethodId.SyncPlayerAllSkillChargeData,
@@ -595,7 +581,6 @@ internal sealed partial class GameRouter
         await PublishSkillBindings(ctx, unitId, weapon, style);
         await ctx.NotifyAsync(MethodId.SyncSpiritLastUsedWeapon,
             CombatCodec.SpiritLastUsedWeapon(templateId, weapon.InstanceId));
-        ctx.Session.Log.Info($"[COMBAT] profile published unit={unitId} template={templateId} weapon={weapon.TemplateId}/{weapon.InstanceId} style={style.Id} skills={style.CommonSkill},{style.HeavyCommonSkill},{style.DodgeSkill},{style.ControlSkill},{weapon.ActiveSkill(style)},{weapon.UniqueSkill(style)}");
     }
 
     private static CombatStyleDefinition ResolveWeaponStyle(WorldEntryState state, CombatWeaponDefinition weapon)
@@ -618,3 +603,4 @@ internal sealed partial class GameRouter
         return ResolveWeaponStyle(state, weapon);
     }
 }
+

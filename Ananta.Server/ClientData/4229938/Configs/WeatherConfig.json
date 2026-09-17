@@ -1,0 +1,78 @@
+{
+  "_class": "WeatherConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 5,
+  "records": [
+    {
+      "Id": 1,
+      "WindScale": 1,
+      "Icon": 25600351,
+      "TimerAppTitleIcon": 30300201,
+      "Name": "晴天",
+      "SoundEffect": 0,
+      "TaWeatherIndex": 0,
+      "PerformanceType": [
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "晴天"
+    },
+    {
+      "Id": 2,
+      "WindScale": 2,
+      "Icon": 25600341,
+      "TimerAppTitleIcon": 30300202,
+      "Name": "阴天",
+      "SoundEffect": 0,
+      "TaWeatherIndex": 1,
+      "PerformanceType": [
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "阴天"
+    },
+    {
+      "Id": 3,
+      "WindScale": 2,
+      "Icon": 25600348,
+      "TimerAppTitleIcon": 30300203,
+      "Name": "雨天",
+      "SoundEffect": 70300844,
+      "TaWeatherIndex": 2,
+      "PerformanceType": [
+        0
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "雨天"
+    },
+    {
+      "Id": 4,
+      "WindScale": 2,
+      "Icon": 25600347,
+      "TimerAppTitleIcon": 30300204,
+      "Name": "风",
+      "SoundEffect": 0,
+      "TaWeatherIndex": 3,
+      "PerformanceType": [],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "风"
+    },
+    {
+      "Id": 5,
+      "WindScale": 1,
+      "Icon": 25600341,
+      "TimerAppTitleIcon": 30300202,
+      "Name": "雨后",
+      "SoundEffect": 0,
+      "TaWeatherIndex": 4,
+      "PerformanceType": [
+        1
+      ],
+      "__IDX__Name": 4294967293,
+      "__RAW__Name": "雨后"
+    }
+  ],
+  "_dumpedCount": 5,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

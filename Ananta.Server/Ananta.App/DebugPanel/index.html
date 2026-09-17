@@ -104,17 +104,26 @@
   <div id="summoned">—</div>
 </div>
 
+<div class="card" style="border-color:#00bcd4">
+  <h2 style="color:#4dd0e1">👥 NPC Spawner (เสก NPC / ตัวละครเดินดิน)</h2>
+  <div class="muted">One NPC per line: AgentConfig ID, optionally followed by a POI action ID (เช่น 40130709, 2).</div>
+  <textarea id="npcItems" rows="6" style="width:100%;box-sizing:border-box;background:#101215;color:#d7dce2;border:1px solid #444;border-radius:6px;padding:6px;font-family:inherit;margin:6px 0;resize:vertical" placeholder="40130001, 0" spellcheck="false">40130709, 2</textarea>
+  <div>
+    <label>X spacing</label><input id="npcXSpacing" type="number" min="0" step="any" value="1.5" style="width:70px">
+    <label>Z spacing</label><input id="npcZSpacing" type="number" min="0" step="any" value="1.5" style="width:70px">
+    <label>Max per row</label><input id="npcMaxPerRow" type="number" min="1" step="1" value="10" style="width:70px">
+    <button id="npcSpawn" style="background:#0097a7;margin-left:8px" onclick="spawnNpcs()">Spawn NPCs</button>
+  </div>
+  <div class="muted" style="margin-top:4px">NPCs are placed in a player-relative grid in front of you.</div>
+  <pre id="npcResult" style="background:#101215;border:1px solid #333;border-radius:6px;padding:8px;max-height:160px;overflow-y:auto;white-space:pre-wrap;margin-top:6px;font-size:12px"></pre>
+</div>
+
 <div class="card">
   <h2>Scene ("raid") switch</h2>
   <div style="margin-bottom:8px">
     Preset: 
     <select id="scenepreset" onchange="onPresetChange()" style="min-width:380px">
-      <option value="longqi">Longqi Village (raid 23300999) (raid 23300999)</option>
-      <option value="longqi_tea">Longqi Village — Tea Field (Scenic)</option>
-      <option value="longqi_temple">Longqi Village — Hushi Zen Temple</option>
-      <option value="longqi_wukang">Longqi Village — Wukang Mansion</option>
-      <option value="maincity">Main City (WorldMap_Release) (raid 23300888)</option>
-      <option value="airport">Main City — Airport Terminal (raid 23300888)</option>
+      <option value="loading">Loading scene presets...</option>
     </select>
     <button style="background:#2e7d32;margin-left:8px" onclick="switchToPreset()">Switch to preset</button>
   </div>
@@ -408,21 +417,86 @@ const scenePresets = {
   maincity: { raid: 23300888, instance: 20001222, universe: 76000888, x: 3142.67, y: 0, z: 2522.78, facing: 0 },
   airport: { raid: 23300888, instance: 20001222, universe: 76000888, x: -4468.3, y: -6.15, z: -2597.5, facing: 85.5 }
 };
-function onPresetChange() {
-  const sel = document.getElementById('scenepreset').value;
-  const p = scenePresets[sel];
-  if (!p) return;
-  document.getElementById('s_raid').value = p.raid;
-  document.getElementById('s_instance').value = p.instance;
-  document.getElementById('s_universe').value = p.universe;
-  document.getElementById('s_x').value = p.x;
-  document.getElementById('s_y').value = p.y;
-  document.getElementById('s_z').value = p.z;
-  document.getElementById('s_f').value = p.facing;
+let npcBusy = false;
+async function spawnNpcs() {
+  if (npcBusy) return;
+  const lines = document.getElementById('npcItems').value.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
+  const items = lines.map(line => {
+    const parts = line.split(/[\s,;]+/);
+    return { npcFormworkId: Number(parts[0]), poiActionId: Number(parts[1] || 0) };
+  });
+  const output = document.getElementById('npcResult');
+  if (!items.length || items.some(item => !Number.isInteger(item.npcFormworkId) || item.npcFormworkId < 1 || item.npcFormworkId > 4294967295 || !Number.isInteger(item.poiActionId) || item.poiActionId < 0 || item.poiActionId > 4294967295)) {
+    output.textContent = 'Enter valid numeric IDs, one NPC per line.';
+    return;
+  }
+  const xSp = Number(document.getElementById('npcXSpacing').value);
+  const zSp = Number(document.getElementById('npcZSpacing').value);
+  const maxPerRow = Number(document.getElementById('npcMaxPerRow').value);
+  npcBusy = true;
+  document.getElementById('npcSpawn').disabled = true;
+  output.textContent = 'Spawning NPCs...';
+  try {
+    const r = await api('/api/npc/spawn', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items, xSpacing: xSp, zSpacing: zSp, maxPerRow })
+    });
+    output.textContent = JSON.stringify(r, null, 2);
+  } catch (err) {
+    output.textContent = 'Spawn request failed: ' + err.message;
+  } finally {
+    npcBusy = false;
+    document.getElementById('npcSpawn').disabled = false;
+  }
 }
+
+async function loadScenes() {
+  try {
+    const r = await api('/api/scenes');
+    const sel = document.getElementById('scenepreset');
+    if (!sel || !r.presets) return;
+    sel.innerHTML = '';
+    r.presets.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.key;
+      opt.text = p.label;
+      opt.dataset.p = JSON.stringify(p);
+      sel.appendChild(opt);
+    });
+    sel.onchange = onPresetChange;
+    if (sel.options.length) onPresetChange();
+  } catch (err) {
+    console.warn('loadScenes failed:', err);
+  }
+}
+
+function onPresetChange() {
+  const sel = document.getElementById('scenepreset');
+  if (!sel || !sel.selectedOptions[0] || !sel.selectedOptions[0].dataset.p) return;
+  const p = JSON.parse(sel.selectedOptions[0].dataset.p);
+  document.getElementById('s_raid').value = p.raidId;
+  document.getElementById('s_instance').value = p.instanceId;
+  document.getElementById('s_universe').value = p.universeId;
+  document.getElementById('s_x').value = p.x.toFixed(1);
+  document.getElementById('s_y').value = p.y.toFixed(1);
+  document.getElementById('s_z').value = p.z.toFixed(1);
+  document.getElementById('s_f').value = p.facing.toFixed(1);
+}
+
 async function switchToPreset() {
-  onPresetChange();
-  await switchSceneCustom();
+  const sel = document.getElementById('scenepreset');
+  if (sel && sel.value) {
+    const r = await api('/api/world/switch-scene', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ preset: sel.value })
+    });
+    log('switch scene preset: ' + JSON.stringify(r));
+    refresh();
+  } else {
+    await switchSceneCustom();
+  }
 }
 async function switchSceneCustom() {
   const body = {
@@ -520,6 +594,7 @@ async function playTimeline() {
 
 
 loadFleet();
+loadScenes();
 refresh();
 setInterval(refresh, 2000);
 document.getElementById('timeslider').addEventListener('input', e => {
