@@ -213,6 +213,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            mapStore._teleportHooked = true\n` +
 `            local origOnShow = mapStore.OnShow\n` +
 `            mapStore.OnShow = function(self, ...)\n` +
+`                self._pendingPin = nil\n` +
 `                pcall(function()\n` +
 `                    if self.fogNode then self.fogNode:SetActive(false) end\n` +
 `                    if self.fogRoot then self.fogRoot:SetActive(false) end\n` +
@@ -227,33 +228,48 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                        isAlt = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftAlt) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightAlt) or UnityEngine.Input.GetKey(308) or UnityEngine.Input.GetKey(307)\n` +
 `                    end\n` +
 `                end)\n` +
-`                if isAlt or (evtData and evtData.button == 1) then\n` +
-`                    local worldX, worldZ = nil, nil\n` +
-`                    pcall(function()\n` +
-`                        local uiPos = self.GetPointerUIPos and self:GetPointerUIPos()\n` +
-`                        local mousePos = (evtData and evtData.position) or (UnityEngine and UnityEngine.Input and UnityEngine.Input.mousePosition)\n` +
-`                        if not uiPos and mousePos and gCS and gCS.LuaUtils and self.bindData and self.bindData.rootRT then\n` +
-`                            uiPos = gCS.LuaUtils.TransformScreenPointToUI(self.bindData.rootRT, mousePos)\n` +
-`                        end\n` +
-`                        if uiPos and self.TransformUIToTex then\n` +
-`                            local texPos = self:TransformUIToTex(uiPos)\n` +
-`                            if texPos then\n` +
-`                                if self.bindData and self.bindData.bigWorldBg and self.bindData.bigWorldBg.LuaTryGetWorldPos then\n` +
-`                                    local suc, areaId, wx, wz = self.bindData.bigWorldBg:LuaTryGetWorldPos(texPos.x, texPos.y)\n` +
-`                                    if suc and wx and wz and (math.abs(wx) > 0.1 or math.abs(wz) > 0.1) then\n` +
-`                                        worldX, worldZ = wx, wz\n` +
-`                                    end\n` +
+`                local isRightClick = (evtData and evtData.button == 1)\n` +
+`                local worldX, worldZ = nil, nil\n` +
+`                pcall(function()\n` +
+`                    local uiPos = self.GetPointerUIPos and self:GetPointerUIPos()\n` +
+`                    local mousePos = (evtData and evtData.position) or (UnityEngine and UnityEngine.Input and UnityEngine.Input.mousePosition)\n` +
+`                    if not uiPos and mousePos and gCS and gCS.LuaUtils and self.bindData and self.bindData.rootRT then\n` +
+`                        uiPos = gCS.LuaUtils.TransformScreenPointToUI(self.bindData.rootRT, mousePos)\n` +
+`                    end\n` +
+`                    if uiPos and self.TransformUIToTex then\n` +
+`                        local texPos = self:TransformUIToTex(uiPos)\n` +
+`                        if texPos then\n` +
+`                            if self.bindData and self.bindData.bigWorldBg and self.bindData.bigWorldBg.LuaTryGetWorldPos then\n` +
+`                                local suc, areaId, wx, wz = self.bindData.bigWorldBg:LuaTryGetWorldPos(texPos.x, texPos.y)\n` +
+`                                if suc and wx and wz and (math.abs(wx) > 0.1 or math.abs(wz) > 0.1) then\n` +
+`                                    worldX, worldZ = wx, wz\n` +
 `                                end\n` +
-`                                if not worldX and self.TryTransformTexToWorld then\n` +
-`                                    local areaId, wPos = self:TryTransformTexToWorld(texPos)\n` +
-`                                    if wPos and (math.abs(wPos.x) > 0.1 or math.abs(wPos.z) > 0.1) then\n` +
-`                                        worldX, worldZ = wPos.x, wPos.z\n` +
-`                                    end\n` +
+`                            end\n` +
+`                            if not worldX and self.TryTransformTexToWorld then\n` +
+`                                local areaId, wPos = self:TryTransformTexToWorld(texPos)\n` +
+`                                if wPos and (math.abs(wPos.x) > 0.1 or math.abs(wPos.z) > 0.1) then\n` +
+`                                    worldX, worldZ = wPos.x, wPos.z\n` +
 `                                end\n` +
 `                            end\n` +
 `                        end\n` +
-`                    end)\n` +
-`                    if worldX and worldZ and (math.abs(worldX) > 0.1 or math.abs(worldZ) > 0.1) then\n` +
+`                    end\n` +
+`                end)\n` +
+`                if worldX and worldZ and (math.abs(worldX) > 0.1 or math.abs(worldZ) > 0.1) then\n` +
+`                    local now = (os and os.clock and os.clock()) or 0\n` +
+`                    local shouldWarp = false\n` +
+`                    if isAlt or isRightClick then\n` +
+`                        shouldWarp = true\n` +
+`                    elseif self._pendingPin and (now - self._pendingPin.time) < 12.0 then\n` +
+`                        local dx = worldX - self._pendingPin.x\n` +
+`                        local dz = worldZ - self._pendingPin.z\n` +
+`                        if (dx * dx + dz * dz) < 6400 then\n` +
+`                            shouldWarp = true\n` +
+`                            worldX = self._pendingPin.x\n` +
+`                            worldZ = self._pendingPin.z\n` +
+`                        end\n` +
+`                    end\n` +
+`                    if shouldWarp then\n` +
+`                        self._pendingPin = nil\n` +
 `                        local playerY = 274.6\n` +
 `                        pcall(function()\n` +
 `                            local p = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pos\n` +
@@ -271,13 +287,23 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                        end)\n` +
 `                        pcall(function()\n` +
 `                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
-`                                gDisplayMessageMgr:ShowMessageContent(string.format("Map Teleport: X=%.1f, Z=%.1f", worldX, worldZ))\n` +
+`                                gDisplayMessageMgr:ShowMessageContent(string.format("Warped to Pin: X=%.1f, Z=%.1f", worldX, worldZ))\n` +
 `                            end\n` +
 `                        end)\n` +
 `                        pcall(function() gMainPhoneUtils.CloseMainPhonePanel(true) end)\n` +
 `                        pcall(function() self:OnBtnClose() end)\n` +
 `                        return\n` +
 `                    else\n` +
+`                        self._pendingPin = { x = worldX, z = worldZ, time = now }\n` +
+`                        pcall(function()\n` +
+`                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                                gDisplayMessageMgr:ShowMessageContent("Pin set! Click again to Warp")\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        if origOnMainClick then return origOnMainClick(self, evtData) end\n` +
+`                    end\n` +
+`                else\n` +
+`                    if isAlt or isRightClick then\n` +
 `                        pcall(function()\n` +
 `                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
 `                                gDisplayMessageMgr:ShowMessageContent("Map Click: Target outside world bounds")\n` +
@@ -285,8 +311,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                        end)\n` +
 `                        return\n` +
 `                    end\n` +
+`                    if origOnMainClick then return origOnMainClick(self, evtData) end\n` +
 `                end\n` +
-`                if origOnMainClick then return origOnMainClick(self, evtData) end\n` +
 `            end\n` +
 `        end\n` +
 `        if C_InteractionManager then\n` +
