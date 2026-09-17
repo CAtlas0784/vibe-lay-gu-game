@@ -137,6 +137,10 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await PlayCutsceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/timeline/play")
                 await WriteJsonAsync(ctx, await PlayTimelineAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/minigame/launch")
+                await WriteJsonAsync(ctx, await LaunchMinigameAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "GET" && path == "/api/cutscene/catalog")
+                await WriteJsonAsync(ctx, CutsceneCatalog(), token);
             else if (method == "POST" && path == "/api/npc/spawn")
                 await WriteJsonAsync(ctx, await NpcSpawnAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "GET" && path == "/api/scenes")
@@ -1239,6 +1243,41 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
 
         session.Log.Info("[DEBUG-API] toggle clothes dispatched");
         return new { ok = true };
+    }
+
+    private static object CutsceneCatalog()
+    {
+        return new
+        {
+            ok = true,
+            items = new[]
+            {
+                new { id = "TL_SEYM_010_Q010_S01", name = "Seymour Story Quest: Chapter 1 S01 (เนื้อเรื่องหลัก)" },
+                new { id = "SwitchChar_tafei_01", name = "Taffy Cinematic Arrival (ทาฟี่ โดดจากตึก)" },
+                new { id = "SwitchChar_dila_03", name = "Dila Combat Cinematic (ดิลา แอกชันสตรีท)" },
+                new { id = "SwitchChar_saimo_05", name = "Seymour Street Arrival (เซย์มัวร์ สไตล์คูล)" },
+                new { id = "SwitchChar_lixi_04", name = "Richie Motorcycle Rush (ริชชี่ ซิ่งมอเตอร์ไซค์)" },
+                new { id = "SwitchChar_nanzhujue_02", name = "Male MC Arrival A (พระเอก สลับตัว A)" },
+                new { id = "SwitchChar_nanzhujue_03", name = "Male MC Arrival B (พระเอก สลับตัว B)" },
+                new { id = "SwitchChar_common_01", name = "Metropolis Skyline Overview (มุมกล้องเมือง 1)" },
+                new { id = "SwitchChar_common_04", name = "Street Parkour Traverse (มุมกล้องฟรีรันนิง 4)" },
+                new { id = "SwitchChar_common_10", name = "Night Neon Lights (มุมกล้องวิวกลางคืน 10)" },
+                new { id = "SwitchChar_common_27", name = "Dynamic Roof Drop (แอกชันดรอป 27)" },
+            }
+        };
+    }
+
+    private async Task<object> LaunchMinigameAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        var cmd = "CMD:LAUNCH_MINIGAME:FIGHTER";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info("[DEBUG-API] launch arcade minigame fighter dispatched");
+        return new { ok = true, game = "FIGHTER" };
     }
 
     private static async Task<string> ReadBodyAsync(HttpListenerRequest request, CancellationToken token)

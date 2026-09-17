@@ -177,7 +177,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `    end)\n` +
 `    pcall(function()\n` +
 `        if gTakePhotoUtils then\n` +
-`            gTakePhotoUtils.isDebugForce = true\n` +
+`            gTakePhotoUtils.isDebugForce = false\n` +
 `            gTakePhotoUtils.PhotoPermission = true\n` +
 `        end\n` +
 `    end)\n` +
@@ -196,10 +196,10 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `        if LX6 and LX6.Gps and LX6.Gps.MapFogDataMgr then\n` +
 `            LX6.Gps.MapFogDataMgr.IsInFog = function(sceneId, x, z) return false end\n` +
-`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(101, true) end)\n` +
-`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(102, true) end)\n` +
-`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(103, true) end)\n` +
-`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(1001, true) end)\n` +
+`            local unlockScenes = { 1, 101, 102, 103, 1001, 10001, 20001125, 20001222, 20001223, 23300888, 23300999 }\n` +
+`            for _, sid in ipairs(unlockScenes) do\n` +
+`                pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(sid, true) end)\n` +
+`            end\n` +
 `        end\n` +
 `        if C_MapView_Fog then\n` +
 `            C_MapView_Fog.InFog = function(self, instanceId) return false end\n` +
@@ -212,11 +212,36 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        if mapStore and not mapStore._teleportHooked then\n` +
 `            mapStore._teleportHooked = true\n` +
 `            local origOnShow = mapStore.OnShow\n` +
+`            local function hideFogRecursively(t)\n` +
+`                if not t then return end\n` +
+`                local n = string.lower(t.name or "")\n` +
+`                if string.find(n, "fog") or string.find(n, "cloud") or string.find(n, "mask") then\n` +
+`                    pcall(function() t.gameObject:SetActive(false) end)\n` +
+`                end\n` +
+`                local count = t.childCount or 0\n` +
+`                for i = 0, count - 1 do\n` +
+`                    local child = t:GetChild(i)\n` +
+`                    if child then hideFogRecursively(child) end\n` +
+`                end\n` +
+`            end\n` +
 `            mapStore.OnShow = function(self, ...)\n` +
 `                self._pendingPin = nil\n` +
 `                pcall(function()\n` +
 `                    if self.fogNode then self.fogNode:SetActive(false) end\n` +
 `                    if self.fogRoot then self.fogRoot:SetActive(false) end\n` +
+`                    if self.bindData and self.bindData.bigWorldBg then\n` +
+`                        local bg = self.bindData.bigWorldBg\n` +
+`                        if bg.instFogRoot and bg.instFogRoot.gameObject then\n` +
+`                            bg.instFogRoot.gameObject:SetActive(false)\n` +
+`                        end\n` +
+`                        if bg.transform then hideFogRecursively(bg.transform) end\n` +
+`                    end\n` +
+`                    if self.bindData and self.bindData.rootRT then\n` +
+`                        hideFogRecursively(self.bindData.rootRT)\n` +
+`                    end\n` +
+`                    if self.transform then\n` +
+`                        hideFogRecursively(self.transform)\n` +
+`                    end\n` +
 `                end)\n` +
 `                if origOnShow then return origOnShow(self, ...) end\n` +
 `            end\n` +
@@ -661,6 +686,20 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            if CS.LX6.Engine.ResourceManager.IsNeedWarmupPSO then CS.LX6.Engine.ResourceManager.IsNeedWarmupPSO = function() return false end end\n` +
 `        end\n` +
 `    end)\n` +
+`    pcall(function()\n` +
+`        if UpdateBeat and UpdateBeat.Add and not _G._hotkeyF8Registered then\n` +
+`            _G._hotkeyF8Registered = true\n` +
+`            UpdateBeat:Add(function()\n` +
+`                pcall(function()\n` +
+`                    if UnityEngine and UnityEngine.Input then\n` +
+`                        if UnityEngine.Input.GetKeyDown(289) or (UnityEngine.KeyCode and UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F8)) then\n` +
+`                            ProcessDebugCommand("TOGGLE_CLOTHES")\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`            end)\n` +
+`        end\n` +
+`    end)\n` +
 `end\n\n` +
 `ProcessDebugCommand = function(cmd)\n` +
 `    if not cmd or type(cmd) ~= "string" then return end\n` +
@@ -754,11 +793,49 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                end\n` +
 `            end)\n` +
 `        end)\n` +
+`    elseif cmd == "LAUNCH_MINIGAME:FIGHTER" then\n` +
+`        pcall(function()\n` +
+`            if gPanelManager and gPanelId and gPanelId.S_FIGHTER_MINIGAME_PANEL then\n` +
+`                gPanelManager:OpenWindow(gPanelId.S_FIGHTER_MINIGAME_PANEL)\n` +
+`            elseif CS and CS.L18 and CS.L18.MiniGame and CS.L18.MiniGame.Fighter and CS.L18.MiniGame.Fighter.FighterMinigame then\n` +
+`                local mg = CS.L18.MiniGame.Fighter.FighterMinigame.Instance\n` +
+`                if mg then\n` +
+`                    mg.GameStarted = true\n` +
+`                    pcall(function() mg:CreatePlayer() end)\n` +
+`                    pcall(function() mg:CreateEnemy() end)\n` +
+`                end\n` +
+`            end\n` +
+`            local tip = "Launched Arcade Fighter Minigame"\n` +
+`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`            end\n` +
+`        end)\n` +
 `    elseif cmd == "TOGGLE_CLOTHES" then\n` +
 `        pcall(function()\n` +
 `            local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
 `            if not unit or not unit.PlayerObj then return end\n` +
 `            _G._clothesHidden = not _G._clothesHidden\n` +
+`            pcall(function()\n` +
+`                if CS and CS.LX6 and CS.LX6.Share and CS.LX6.Share.FashionPartSlot then\n` +
+`                    local partSlots = unit.PlayerObj:GetComponentsInChildren(typeof(CS.LX6.Share.FashionPartSlot), true)\n` +
+`                    if partSlots then\n` +
+`                        for i = 0, partSlots.Length - 1 do\n` +
+`                            local ps = partSlots[i]\n` +
+`                            if ps then\n` +
+`                                local psName = string.lower((ps.gameObject and ps.gameObject.name) or "")\n` +
+`                                local isHeadOrBody = string.find(psName, "head") or string.find(psName, "face") or string.find(psName, "body") or string.find(psName, "skin")\n` +
+`                                if not isHeadOrBody then\n` +
+`                                    if ps.gameObject then ps.gameObject:SetActive(not _G._clothesHidden) end\n` +
+`                                    if ps.selfRenderer then ps.selfRenderer.enabled = not _G._clothesHidden end\n` +
+`                                end\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end\n` +
+`            end)\n` +
 `            local fs = nil\n` +
 `            pcall(function()\n` +
 `                if CS and CS.LX6 and CS.LX6.Share and CS.LX6.Share.FashionSlot then\n` +
@@ -772,6 +849,12 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            end\n` +
 `            if fs then\n` +
 `                pcall(function()\n` +
+`                    if fs.allFashionRendererList then\n` +
+`                        for i = 0, fs.allFashionRendererList.Count - 1 do\n` +
+`                            local r = fs.allFashionRendererList[i]\n` +
+`                            if r then r.enabled = not _G._clothesHidden end\n` +
+`                        end\n` +
+`                    end\n` +
 `                    local clothesSlots = { fs.Cloth, fs.Bottom, fs.Dress, fs.Bag, fs.Hood, fs.Belt, fs.Necklace }\n` +
 `                    for _, r in ipairs(clothesSlots) do\n` +
 `                        if r then r.enabled = not _G._clothesHidden end\n` +
@@ -793,7 +876,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                for i = 0, smrs.Length - 1 do\n` +
 `                    local smr = smrs[i]\n` +
 `                    if smr then\n` +
-`                        local n = string.lower(smr.name)\n` +
+`                        local n = string.lower(smr.name or "")\n` +
 `                        local isBodyLimb = string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "brow") or string.find(n, "mouth") or string.find(n, "ear") or string.find(n, "tail") or string.find(n, "arm") or string.find(n, "hand") or string.find(n, "glove") or string.find(n, "sleeve") or string.find(n, "leg") or string.find(n, "foot") or string.find(n, "feet") or string.find(n, "shoe") or string.find(n, "boot") or string.find(n, "skin") or string.find(n, "flesh") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian") or string.find(n, "shou") or string.find(n, "bi") or string.find(n, "tui")\n` +
 `                        local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "hood") or string.find(n, "cape") or string.find(n, "cloak") or string.find(n, "belt") or string.find(n, "bag") or string.find(n, "prop") or string.find(n, "necklace") or string.find(n, "acc")\n` +
 `                        if isBodyLimb and not (isClothing and not string.find(n, "arm") and not string.find(n, "hand") and not string.find(n, "leg") and not string.find(n, "foot") and not string.find(n, "face")) then\n` +
@@ -809,7 +892,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                end\n` +
 `            end\n` +
 `            pcall(function()\n` +
-`                local tip = _G._clothesHidden and "Clothes Hidden (Body Visible)" or "Clothes Shown"\n` +
+`                local tip = _G._clothesHidden and "Outfit Hidden / ร่างต้น (F8)" or "Outfit Shown / แสดงชุดปกติ (F8)"\n` +
 `                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
 `                    gDisplayMessageMgr:ShowMessageContent(tip)\n` +
 `                end\n` +

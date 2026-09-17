@@ -17,30 +17,64 @@ internal sealed partial class GameRouter
 
         conn.Session.Log.Info($"[GACHA] AskDrawGacha: poolId={poolId} count={count} autoEx={args.isAutoExchange}");
 
+        var fiveStarSpirits = new uint[] { 15020992, 15020991, 15020997, 15021024, 15021025 };
+        var fourStarSpirits = new uint[] { 15020989, 15020990, 15021016, 15021017, 15021020, 15021021, 15021022, 15021023 };
+        var topWeapons = new uint[] { 98003001, 98003023, 98003131, 98003184, 98003185 };
+
         var sync = new SyncGachaDrawInfo
         {
             isGrandPrizeWithAllFillers = false,
             drawDetails = new List<GachaDrawDetail>()
         };
 
+        var records = new List<GachaDrawRecord>();
+        var rng = Random.Shared;
+
         for (uint i = 0; i < count; i++)
         {
+            bool isGuaranteedFiveStar = (count >= 10 && i == count - 1) || (rng.Next(100) < 15);
+            bool isFourStar = !isGuaranteedFiveStar && (rng.Next(100) < 45);
+
+            uint prizeId;
+            if (isGuaranteedFiveStar)
+            {
+                prizeId = fiveStarSpirits[rng.Next(fiveStarSpirits.Length)];
+            }
+            else if (isFourStar)
+            {
+                prizeId = fourStarSpirits[rng.Next(fourStarSpirits.Length)];
+            }
+            else
+            {
+                prizeId = topWeapons[rng.Next(topWeapons.Length)];
+            }
+
             sync.drawDetails.Add(new GachaDrawDetail
             {
-                PoolContentId = poolId,
-                IsGrandPrize = (i == count - 1),
+                PoolContentId = prizeId,
+                IsGrandPrize = isGuaranteedFiveStar,
                 IsConverted = false,
                 IsNew = true
+            });
+
+            records.Add(new GachaDrawRecord
+            {
+                GachaId = poolId,
+                PoolContentId = prizeId,
+                DropId = prizeId,
+                DrawTimeUnix = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
             });
         }
 
         await conn.NotifyAsync(MethodId.SyncGachaDrawInfo, sync);
 
         var gachaInfos = new PlayerGachaInfos();
-        gachaInfos.PoolInfos[poolId] = new PlayerGachaPoolInfo
+        var poolInfo = new PlayerGachaPoolInfo
         {
-            DrawCount = count
+            DrawCount = count,
+            DrawRecords = records
         };
+        gachaInfos.PoolInfos[poolId] = poolInfo;
         gachaInfos.GroupInfos[poolId] = new PlayerGachaGroupInfo
         {
             TotalDrawCount = count

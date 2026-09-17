@@ -161,11 +161,19 @@ internal static class RuntimePayloadFactory
         root.InfoAchievement.SceneFogMaps = new Dictionary<uint, Auto.SceneFogMap>
         {
             [1] = new Auto.SceneFogMap { All = true },
+            [101] = new Auto.SceneFogMap { All = true },
+            [102] = new Auto.SceneFogMap { All = true },
+            [103] = new Auto.SceneFogMap { All = true },
             [1001] = new Auto.SceneFogMap { All = true },
-            [10001] = new Auto.SceneFogMap { All = true }
+            [10001] = new Auto.SceneFogMap { All = true },
+            [20001125] = new Auto.SceneFogMap { All = true }, // SouDaChe / Parkour
+            [20001222] = new Auto.SceneFogMap { All = true }, // Xinqi Main City
+            [20001223] = new Auto.SceneFogMap { All = true }, // Chongxiao Longqi Village
+            [23300888] = new Auto.SceneFogMap { All = true }, // Main City Raid
+            [23300999] = new Auto.SceneFogMap { All = true }, // Chongxiao Raid
         };
         // Unlock all Map POIs
-        root.InfoAchievement.SceneFogMapPoiIds = Enumerable.Range(1, 1000).Select(i => (uint)i).ToList();
+        root.InfoAchievement.SceneFogMapPoiIds = Enumerable.Range(1, 5000).Select(i => (uint)i).ToList();
 
         return root;
     }

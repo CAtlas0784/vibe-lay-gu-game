@@ -235,10 +235,41 @@
 
 <div class="card" style="border-color:#ab47bc">
   <h2 style="color:#ce93d8">👗 Outfit / Appearance (สลับชุด / ซ่อนเสื้อผ้า)</h2>
-  <div>
-    <button style="background:#8e24aa;color:white" onclick="toggleClothes()">Toggle Clothes / ซ่อน-แสดงชุด</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button style="background:#8e24aa;color:white" onclick="toggleClothes()">Toggle Clothes / ซ่อน-แสดงชุด (F8)</button>
+    <span class="badge" style="background:#4a148c;color:#e1bee7">กดปุ่ม F8 ในเกมได้</span>
   </div>
-  <div class="muted" style="margin-top:6px">สลับการแสดงผลเสื้อผ้า (SkinnedMeshRenderer) ของตัวละครที่กำลังเล่นอยู่ โดยยังคงแสดงโมเดลบอดี้เดิมไว้</div>
+  <div class="muted" style="margin-top:6px">สลับการแสดงผลเสื้อผ้าและ Dynamic Bone ของชุดชั้นนอกอย่างหมดจด โดยยังคงโมเดลบอดี้เดิมไว้ 100% ไร้ชิ้นส่วนลอยค้าง</div>
+</div>
+
+<div class="card" style="border-color:#00bcd4">
+  <h2 style="color:#4dd0e1">🎬 3D Cinematics & Story Timelines (ฉากคัทซีนเนื้อเรื่อง)</h2>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <select id="cutsceneSelect" style="flex:1;min-width:260px;background:#263238;color:#eee;border:1px solid #37474f;border-radius:4px;padding:6px">
+      <option value="TL_SEYM_010_Q010_S01">Seymour Story Quest: Chapter 1 S01 (เนื้อเรื่องหลัก)</option>
+      <option value="SwitchChar_tafei_01">Taffy Cinematic Arrival (ทาฟี่ โดดจากตึก)</option>
+      <option value="SwitchChar_dila_03">Dila Combat Cinematic (ดิลา แอกชันสตรีท)</option>
+      <option value="SwitchChar_saimo_05">Seymour Street Arrival (เซย์มัวร์ สไตล์คูล)</option>
+      <option value="SwitchChar_lixi_04">Richie Motorcycle Rush (ริชชี่ ซิ่งมอเตอร์ไซค์)</option>
+      <option value="SwitchChar_nanzhujue_02">Male MC Arrival A (พระเอก สลับตัว A)</option>
+      <option value="SwitchChar_nanzhujue_03">Male MC Arrival B (พระเอก สลับตัว B)</option>
+      <option value="SwitchChar_common_01">Metropolis Skyline Overview (มุมกล้องเมือง 1)</option>
+      <option value="SwitchChar_common_04">Street Parkour Traverse (มุมกล้องฟรีรันนิง 4)</option>
+      <option value="SwitchChar_common_10">Night Neon Lights (มุมกล้องวิวกลางคืน 10)</option>
+      <option value="SwitchChar_common_27">Dynamic Roof Drop (แอกชันดรอป 27)</option>
+    </select>
+    <button style="background:#00838f;color:white" onclick="playSelectedCutscene()">Play Cinematic / เล่นคัทซีน</button>
+  </div>
+  <div class="muted" style="margin-top:6px">สั่งเล่นฉาก Cinematic Timeline 3D ภายใน Engine ของเกมทันทีแบบเรียลไทม์</div>
+</div>
+
+<div class="card" style="border-color:#ff9800">
+  <h2 style="color:#ffb74d">🕹️ Arcade Minigame (ตู้เกมต่อสู้อาร์เคด)</h2>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button style="background:#e65100;color:white" onclick="launchArcadeMinigame()">Launch Arcade Fighter / เปิดตู้เกมต่อสู้</button>
+    <span class="badge" style="background:#bf360c;color:#ffccbc">L18 Street Fighter</span>
+  </div>
+  <div class="muted" style="margin-top:6px">เปิดระบบมินิเกมตู้เกม Arcade Fighter ในฉาก</div>
 </div>
 
 <div class="card" style="border-color:#e53935">
@@ -659,6 +690,22 @@ async function rollback10s() {
 async function toggleClothes() {
   const r = await api('/api/player/toggle-clothes', { method: 'POST' });
   log('toggle clothes: ' + JSON.stringify(r));
+}
+
+async function playSelectedCutscene() {
+  const sel = document.getElementById('cutsceneSelect');
+  const name = sel ? sel.value : 'TL_SEYM_010_Q010_S01';
+  const r = await api('/api/timeline/play', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name })
+  });
+  log('play cutscene: ' + JSON.stringify(r));
+}
+
+async function launchArcadeMinigame() {
+  const r = await api('/api/minigame/launch', { method: 'POST' });
+  log('launch arcade minigame: ' + JSON.stringify(r));
 }
 
 async function setTimePreset(hour, minute) {

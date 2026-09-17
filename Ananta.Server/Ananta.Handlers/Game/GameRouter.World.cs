@@ -368,8 +368,9 @@ internal sealed partial class GameRouter
         await ctx.NotifyAsync(MethodId.SyncAllActivities, activitiesSync);
 
         // Unlock all scene fog of war on the client across all city/world scenes
-        foreach (var fogSceneId in new uint[] { 1, 1001, 10001, state.ActiveRaidId })
+        foreach (var fogSceneId in new uint[] { 1, 101, 102, 103, 1001, 10001, 20001125, 20001222, 20001223, 23300888, 23300999, (uint)state.SceneId, state.ActiveRaidId })
         {
+            if (fogSceneId == 0) continue;
             await ctx.NotifyAsync(MethodId.SyncSceneFogMapAllUnlock, new SceneMethods.SyncSceneFogMapAllUnlockInfo
             {
                 SceneId = fogSceneId,

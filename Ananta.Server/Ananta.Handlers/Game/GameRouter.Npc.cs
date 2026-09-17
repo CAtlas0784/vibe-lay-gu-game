@@ -175,14 +175,15 @@ internal sealed partial class GameRouter
         AdminNpcSpawnItem item, NpcCatalogEntry4229938 npc,
         PoiActionCatalogEntry4229938? poi, uint mainActionId)
     {
+        bool isMonster = npc.Category == "monster" || npc.Camp is 0 or 26;
         return new GameMethods.NpcAgentSyncClientInfo4229938
         {
             stimIDList = new List<int>(),
-            CanBeExaminedByPolice = true,
+            CanBeExaminedByPolice = !isMonster,
             indoorList = new(),
             roomIds = new List<int>(),
             SpoonAgentId = (int)item.NpcFormworkId,
-            treeName = "PedBase",
+            treeName = isMonster ? "" : "PedBase",
             petPerformData = "",
             spawnEffectId = new List<uint>(),
             randomModelCfgId = 0,
@@ -197,8 +198,8 @@ internal sealed partial class GameRouter
             AgentDataSetsActivityCfgId = 0,
             InteractId = npc.InteractSettingId,
             AISetting = npc.AiSettingId,
-            beHitType = 1, // Civilian hit reaction without combat damage.
-            agentStimType = 0,
+            beHitType = (byte)(isMonster ? 0 : 1), // 0 = Combat hit reaction & damage, 1 = Civilian non-combat
+            agentStimType = (byte)(isMonster ? 1 : 0), // 1 = Aggressive combat stimulation
             forbidStimulateType = 0,
             isAttackInSafeMode = true,
         };
