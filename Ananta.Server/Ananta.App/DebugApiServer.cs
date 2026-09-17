@@ -900,6 +900,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
             state.HasExplicitWeather = true;
         }
         await GameRouter.PushSessionWeatherAsync(session);
+        var cmd = $"CMD:SET_WEATHER:{weatherId}";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
         session.Log.Info($"[DEBUG-API] weather set id={weatherId} transition={transition}s");
         return new { ok = true, weatherId, transition };
     }

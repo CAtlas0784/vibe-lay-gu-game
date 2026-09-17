@@ -38,13 +38,27 @@ internal sealed partial class GameRouter
             return;
         }
 
-        // Prevent rapid re-triggering of the same active or unique skill while the animation is executing
-        if (state.ActiveSkillId == req.SkillId &&
-            (req.SkillId == weapon.ActiveSkill(style) || req.SkillId == weapon.UniqueSkill(style)) &&
-            (Environment.TickCount64 - state.ActiveSkillStartedTicks) < 1200)
+        var cooldown = weapon.Cooldown(style, req.SkillId, 0f);
+        var nowTicks = Environment.TickCount64;
+        if (cooldown > 0f)
         {
-            ctx.Session.Log.Warn($"[COMBAT] ignore rapid spam of active/unique skill={req.SkillId} elapsed={Environment.TickCount64 - state.ActiveSkillStartedTicks}ms");
-            return;
+            if (state.SkillCooldownUntilTicks.TryGetValue(req.SkillId, out var untilTicks) && nowTicks < untilTicks)
+            {
+                ctx.Session.Log.Warn($"[COMBAT] reject skill={req.SkillId} cooldown remaining={untilTicks - nowTicks}ms");
+                return;
+            }
+            state.SkillCooldownUntilTicks[req.SkillId] = nowTicks + (long)(cooldown * 1000f);
+        }
+        else
+        {
+            // Prevent rapid re-triggering of the same active or unique skill while the animation is executing
+            if (state.ActiveSkillId == req.SkillId &&
+                (req.SkillId == weapon.ActiveSkill(style) || req.SkillId == weapon.UniqueSkill(style)) &&
+                (nowTicks - state.ActiveSkillStartedTicks) < 1200)
+            {
+                ctx.Session.Log.Warn($"[COMBAT] ignore rapid spam of active/unique skill={req.SkillId} elapsed={nowTicks - state.ActiveSkillStartedTicks}ms");
+                return;
+            }
         }
 
         state.CombatUseCount++;
@@ -93,21 +107,9 @@ internal sealed partial class GameRouter
         state.ActiveClientSkillInstanceId = 0;
         state.ActiveSkillStartedTicks = 0;
 
-        // Ordinary attacks must finish without any server-side skill-state rewrite. Re-publishing the
-        // whole charge/resource snapshot after each common attack can make the client save a new action
-        // while the previous trigger graph is still iterating, which restarts the first animation on
-        // every click. Only cooldown/charge abilities and ultimates need sandbox restoration.
+        // Do not immediately force full recharge here, allowing skills to respect their configured cooldowns.
         if (!restoreResources)
             return;
-
-        // The private server runs an unrestricted combat sandbox: restore charges and ultimate energy
-        // only after the complete authored ability chain has ended, never between combo/hold stages.
-        await ctx.NotifyAsync(MethodId.SyncPlayerAllSkillChargeData,
-            CombatCodec.AllSkillCharges(state.ActiveSpiritUnitId, weapon, style));
-        await ctx.NotifyAsync(MethodId.SyncFightResource,
-            CombatCodec.FightResource(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, CombatCodec.UltimateResourceMax));
-        await ctx.NotifyAsync(MethodId.SyncFightResourceFreeState,
-            CombatCodec.FightResourceFreeState(state.ActiveSpiritUnitId, CombatCodec.UltimateResourceId, false));
     }
 
     Task OnSkillHit(RpcContext ctx, SceneMethods.SkillHitData hit)

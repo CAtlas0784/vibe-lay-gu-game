@@ -59,6 +59,12 @@ internal sealed partial class GameRouter
     private async Task GmTeleportXYZ(Connection conn, UxRpcMessage msg)
     {
         var args = msg.GetArgs<SceneMethods.GmTeleportXYZ>();
+        if (MathF.Abs(args.X) < 0.1f && MathF.Abs(args.Z) < 0.1f)
+        {
+            conn.Session.Log.Warn($"[GM] reject teleport to origin (0, 0, 0)");
+            await conn.ReturnAsync(msg, 0);
+            return;
+        }
         var state = GetWorldState(msg.Context);
         var targetY = args.Y;
         if (targetY <= 10f)

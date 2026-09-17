@@ -122,82 +122,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `\n` +
 `gGameSwitch = M\n\n` +
 `local ProcessDebugCommand\n` +
-`local _lastHotkeyFrame = -1\n` +
 `local function CheckCustomHotkeys()\n` +
-`    pcall(function()\n` +
-`        if not UnityEngine or not UnityEngine.Input then return end\n` +
-`        local curFrame = UnityEngine.Time and UnityEngine.Time.frameCount or -1\n` +
-`        if curFrame == _lastHotkeyFrame then return end\n` +
-`        _lastHotkeyFrame = curFrame\n\n` +
-`        local UnityInput = (CS and CS.UnityEngine and CS.UnityEngine.Input) or (UnityEngine and UnityEngine.Input)\n` +
-`        local UnityKeyCode = (CS and CS.UnityEngine and CS.UnityEngine.KeyCode) or (UnityEngine and UnityEngine.KeyCode) or KeyCode\n` +
-`        local f8 = false\n` +
-`        local f7 = false\n` +
-`        local isShift = false\n` +
-`        if UnityInput then\n` +
-`            if UnityKeyCode and UnityKeyCode.F8 then\n` +
-`                pcall(function() f8 = UnityInput.GetKeyDown(UnityKeyCode.F8) end)\n` +
-`            end\n` +
-`            if UnityKeyCode and UnityKeyCode.F7 then\n` +
-`                pcall(function() f7 = UnityInput.GetKeyDown(UnityKeyCode.F7) end)\n` +
-`            end\n` +
-`            if not f8 then\n` +
-`                pcall(function() f8 = UnityInput.GetKeyDown(289) end)\n` +
-`            end\n` +
-`            if not f7 then\n` +
-`                pcall(function() f7 = UnityInput.GetKeyDown(288) end)\n` +
-`            end\n` +
-`            if not f8 then\n` +
-`                pcall(function() f8 = UnityInput.GetKeyDown("f8") end)\n` +
-`            end\n` +
-`            if not f7 then\n` +
-`                pcall(function() f7 = UnityInput.GetKeyDown("f7") end)\n` +
-`            end\n` +
-`            if UnityKeyCode and UnityKeyCode.LeftShift then\n` +
-`                pcall(function() isShift = UnityInput.GetKey(UnityKeyCode.LeftShift) or UnityInput.GetKey(UnityKeyCode.RightShift) end)\n` +
-`            end\n` +
-`            if not isShift then\n` +
-`                pcall(function() isShift = UnityInput.GetKey(304) or UnityInput.GetKey(303) end)\n` +
-`            end\n` +
-`            if not isShift then\n` +
-`                pcall(function() isShift = UnityInput.GetKey("left shift") or UnityInput.GetKey("right shift") end)\n` +
-`            end\n` +
-`        end\n\n` +
-`        if f8 then\n` +
-`            if ProcessDebugCommand then ProcessDebugCommand("TOGGLE_CLOTHES") end\n` +
-`        end\n` +
-`        if f7 then\n` +
-`            if isShift then\n` +
-`                if ProcessDebugCommand then ProcessDebugCommand("OPEN_MONSTER_PANEL") end\n` +
-`            else\n` +
-`                if ProcessDebugCommand then ProcessDebugCommand("SPAWN_ENEMY") end\n` +
-`            end\n` +
-`        end\n` +
-`        pcall(function()\n` +
-`            local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
-`            if myUnit then\n` +
-`                local hasMove = UnityEngine.Input.GetKey(119) or UnityEngine.Input.GetKey(97) or UnityEngine.Input.GetKey(115) or UnityEngine.Input.GetKey(100)\n` +
-`                if hasMove then\n` +
-`                    if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.LockMoveDirModule then\n` +
-`                        CS.LX6.Units.Module.LockMoveDirModule.ClearLockMoveDir(myUnit)\n` +
-`                    end\n` +
-`                end\n` +
-`                if gCS and gCS.PaoKuManager and gCS.PaoKuManager.ParkourStateLua == 25 then\n` +
-`                    gCS.PaoKuManager.enableAccSpeed = true\n` +
-`                    if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.MotoModule then\n` +
-`                        local motoMod = myUnit:GetModule(typeof(CS.LX6.Units.Module.MotoModule))\n` +
-`                        if motoMod then\n` +
-`                            motoMod.acceleratorValue = 1.0\n` +
-`                            local isShiftKey = UnityEngine.Input.GetKey(304) or UnityEngine.Input.GetKey(303)\n` +
-`                            if isShiftKey then\n` +
-`                                motoMod.isMotoRush = true\n` +
-`                            end\n` +
-`                        end\n` +
-`                    end\n` +
-`                end\n` +
-`            end\n` +
-`        end)\n` +
-`    end)\n` +
 `end\n\n` +
 `-- Bypass CBT date expiration for Gacha pools and unlock all map/systems\n` +
 `local function ApplyAllGlobalHooks()\n` +
@@ -280,9 +205,6 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            C_MapView_Fog.InFog = function(self, instanceId) return false end\n` +
 `            C_MapView_Fog.SetFogEnable = function(self, enable) end\n` +
 `        end\n` +
-`        if L50 and L50.Gm and L50.Gm.AutoQaFunctions then\n` +
-`            L50.Gm.AutoQaFunctions.GetMapClickToTeleport = function() return true end\n` +
-`        end\n` +
 `        if gCS and gCS.LuaUtils then\n` +
 `            gCS.LuaUtils.IsNotUseGM = false\n` +
 `        end\n` +
@@ -302,28 +224,65 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                local isAlt = false\n` +
 `                pcall(function()\n` +
 `                    if UnityEngine and UnityEngine.Input and UnityEngine.KeyCode then\n` +
-`                        isAlt = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftAlt) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightAlt)\n` +
+`                        isAlt = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftAlt) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightAlt) or UnityEngine.Input.GetKey(308) or UnityEngine.Input.GetKey(307)\n` +
 `                    end\n` +
 `                end)\n` +
-`                if isAlt or (evtData and evtData.button == 1) or (L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.GetMapClickToTeleport()) then\n` +
-`                    local uiPos = self:GetPointerUIPos()\n` +
-`                    local texPos = self:TransformUIToTex(uiPos)\n` +
-`                    local areaId, worldPos = self:TryTransformTexToWorld(texPos)\n` +
-`                    if worldPos then\n` +
+`                if isAlt or (evtData and evtData.button == 1) then\n` +
+`                    local worldX, worldZ = nil, nil\n` +
+`                    pcall(function()\n` +
+`                        local uiPos = self.GetPointerUIPos and self:GetPointerUIPos()\n` +
+`                        local mousePos = (evtData and evtData.position) or (UnityEngine and UnityEngine.Input and UnityEngine.Input.mousePosition)\n` +
+`                        if not uiPos and mousePos and gCS and gCS.LuaUtils and self.bindData and self.bindData.rootRT then\n` +
+`                            uiPos = gCS.LuaUtils.TransformScreenPointToUI(self.bindData.rootRT, mousePos)\n` +
+`                        end\n` +
+`                        if uiPos and self.TransformUIToTex then\n` +
+`                            local texPos = self:TransformUIToTex(uiPos)\n` +
+`                            if texPos then\n` +
+`                                if self.bindData and self.bindData.bigWorldBg and self.bindData.bigWorldBg.LuaTryGetWorldPos then\n` +
+`                                    local suc, areaId, wx, wz = self.bindData.bigWorldBg:LuaTryGetWorldPos(texPos.x, texPos.y)\n` +
+`                                    if suc and wx and wz and (math.abs(wx) > 0.1 or math.abs(wz) > 0.1) then\n` +
+`                                        worldX, worldZ = wx, wz\n` +
+`                                    end\n` +
+`                                end\n` +
+`                                if not worldX and self.TryTransformTexToWorld then\n` +
+`                                    local areaId, wPos = self:TryTransformTexToWorld(texPos)\n` +
+`                                    if wPos and (math.abs(wPos.x) > 0.1 or math.abs(wPos.z) > 0.1) then\n` +
+`                                        worldX, worldZ = wPos.x, wPos.z\n` +
+`                                    end\n` +
+`                                end\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end)\n` +
+`                    if worldX and worldZ and (math.abs(worldX) > 0.1 or math.abs(worldZ) > 0.1) then\n` +
 `                        local playerY = 274.6\n` +
 `                        pcall(function()\n` +
-`                            if gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit then\n` +
-`                                local p = gCS.MyPlayerManager.PlayerUnit.Pos\n` +
-`                                if p and p.y > 10 then playerY = p.y end\n` +
+`                            local p = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pos\n` +
+`                            if p and p.y > 10 then playerY = p.y end\n` +
+`                        end)\n` +
+`                        pcall(function()\n` +
+`                            if gClientToGameSceneGMDelegate and gClientToGameSceneGMDelegate.GmTeleportXYZ then\n` +
+`                                gClientToGameSceneGMDelegate:GmTeleportXYZ(worldX, playerY, worldZ, 0)\n` +
 `                            end\n` +
 `                        end)\n` +
-`                        if L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.TeleportXYZ then\n` +
-`                            L50.Gm.AutoQaFunctions.TeleportXYZ(worldPos.x, playerY, worldPos.z)\n` +
-`                        elseif L50 and L50.Gm and L50.Gm.AutoQaFunctions and L50.Gm.AutoQaFunctions.TeleportToPos then\n` +
-`                            L50.Gm.AutoQaFunctions.TeleportToPos(worldPos.x, worldPos.z)\n` +
-`                        end\n` +
+`                        pcall(function()\n` +
+`                            if gCS and gCS.GmUtils and gCS.GmUtils.TeleportXYZ then\n` +
+`                                gCS.GmUtils.TeleportXYZ(worldX, playerY, worldZ, 0)\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        pcall(function()\n` +
+`                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                                gDisplayMessageMgr:ShowMessageContent(string.format("Map Teleport: X=%.1f, Z=%.1f", worldX, worldZ))\n` +
+`                            end\n` +
+`                        end)\n` +
 `                        pcall(function() gMainPhoneUtils.CloseMainPhonePanel(true) end)\n` +
 `                        pcall(function() self:OnBtnClose() end)\n` +
+`                        return\n` +
+`                    else\n` +
+`                        pcall(function()\n` +
+`                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                                gDisplayMessageMgr:ShowMessageContent("Map Click: Target outside world bounds")\n` +
+`                            end\n` +
+`                        end)\n` +
 `                        return\n` +
 `                    end\n` +
 `                end\n` +
@@ -333,7 +292,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        if C_InteractionManager then\n` +
 `            local origCheck = C_InteractionManager.CheckUnitPcBtnShow\n` +
 `            C_InteractionManager.CheckUnitPcBtnShow = function(self, pid)\n` +
-`                if gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pid == pid then\n` +
+`                local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                if myUnit and myUnit.Pid == pid then\n` +
 `                    return false\n` +
 `                end\n` +
 `                if origCheck then return origCheck(self, pid) end\n` +
@@ -343,7 +303,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        if gInteractionManager then\n` +
 `            local origCheckG = gInteractionManager.CheckUnitPcBtnShow\n` +
 `            gInteractionManager.CheckUnitPcBtnShow = function(self, pid)\n` +
-`                if gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pid == pid then\n` +
+`                local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                if myUnit and myUnit.Pid == pid then\n` +
 `                    return false\n` +
 `                end\n` +
 `                if origCheckG then return origCheckG(self, pid) end\n` +
@@ -355,12 +316,23 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            hudCtrl._hideFHooked = true\n` +
 `            local oldHudUpdate = hudCtrl.Update\n` +
 `            hudCtrl.Update = function(self)\n` +
-`                if self.unit and self.unit.IsMe then\n` +
+`                local isCurrentControlled = false\n` +
+`                local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                if self.unit then\n` +
+`                    if myUnit and self.unit.Pid == myUnit.Pid then\n` +
+`                        isCurrentControlled = true\n` +
+`                    elseif self.unit.IsMe and (not myUnit or self.unit.Pid == myUnit.Pid) then\n` +
+`                        isCurrentControlled = true\n` +
+`                    end\n` +
+`                end\n` +
+`                if isCurrentControlled then\n` +
+`                    self.isBtnShowNew = false\n` +
 `                    pcall(function()\n` +
-`                        if self.interactBtn then\n` +
-`                            self.interactBtn:SetActive(false)\n` +
-`                        end\n` +
+`                        if self.SetPlayerHeadInfoVisible then self:SetPlayerHeadInfoVisible(true) end\n` +
+`                        if self.interactBtn then self.interactBtn:SetActive(false) end\n` +
+`                        if self.bindData then self.bindData.isBtnShow = false end\n` +
 `                    end)\n` +
+`                    return\n` +
 `                end\n` +
 `                if oldHudUpdate then return oldHudUpdate(self) end\n` +
 `            end\n` +
@@ -395,31 +367,54 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            local origBeforeSet = switchMgr.BeforeSetChangeUnit\n` +
 `            switchMgr.BeforeSetChangeUnit = function(self, spiritUnitPid, noClearold)\n` +
 `                local oldUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                local newUnit = gCS and gCS.SceneDataMgr and gCS.SceneDataMgr.GetUnit(spiritUnitPid)\n` +
+`                if oldUnit and newUnit and CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.SwitchSpiritManager and CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove then\n` +
+`                    pcall(function() CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove(oldUnit, newUnit) end)\n` +
+`                end\n` +
 `                local res = origBeforeSet and origBeforeSet(self, spiritUnitPid, noClearold)\n` +
 `                pcall(function()\n` +
-`                    local newUnit = gCS and gCS.SceneDataMgr and gCS.SceneDataMgr.GetUnit(spiritUnitPid)\n` +
-`                    if newUnit then\n` +
+`                    local curUnit = (gCS and gCS.SceneDataMgr and gCS.SceneDataMgr.GetUnit(spiritUnitPid)) or (gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit)\n` +
+`                    if curUnit then\n` +
+`                        pcall(function() curUnit.IsMe = true end)\n` +
+`                        if curUnit.CharacterController then\n` +
+`                            pcall(function() curUnit.CharacterController.enabled = true end)\n` +
+`                        end\n` +
 `                        if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.LockMoveDirModule then\n` +
-`                            CS.LX6.Units.Module.LockMoveDirModule.ClearLockMoveDir(newUnit)\n` +
+`                            pcall(function() CS.LX6.Units.Module.LockMoveDirModule.ClearLockMoveDir(curUnit) end)\n` +
 `                        end\n` +
-`                        if newUnit.RootMotionLockMoveAndRotate then\n` +
-`                            pcall(function() newUnit.RootMotionLockMoveAndRotate:ClearAll() end)\n` +
-`                            pcall(function() newUnit.RootMotionLockMoveAndRotate:ClearLockExtraRotation() end)\n` +
+`                        if curUnit.RootMotionLockMoveAndRotate then\n` +
+`                            pcall(function() curUnit.RootMotionLockMoveAndRotate:ClearAll() end)\n` +
+`                            pcall(function() curUnit.RootMotionLockMoveAndRotate:ClearLockExtraRotation() end)\n` +
 `                        end\n` +
-`                        if newUnit.State then\n` +
-`                            newUnit.State.nowInteractiveAction = 0\n` +
-`                            newUnit.State.isFree = true\n` +
+`                        if curUnit.State then\n` +
+`                            curUnit.State.nowInteractiveAction = 0\n` +
+`                            curUnit.State.isFree = true\n` +
+`                            curUnit.State.isPause = false\n` +
+`                            curUnit.State.isLockMove = false\n` +
+`                            curUnit.State.isLockRotate = false\n` +
+`                        end\n` +
+`                        if curUnit.CCMove then\n` +
+`                            pcall(function() curUnit.CCMove:SetEnable(true) end)\n` +
+`                            pcall(function() curUnit.CCMove:ResetMoveSpeed() end)\n` +
+`                        end\n` +
+`                        if curUnit.UnitFightAction then\n` +
+`                            pcall(function() curUnit.UnitFightAction:ClearAllAction() end)\n` +
+`                            pcall(function() curUnit.UnitFightAction:StopAllAction() end)\n` +
+`                        end\n` +
+`                        if curUnit.Animator then\n` +
+`                            pcall(function() curUnit.Animator.speed = 1.0 end)\n` +
 `                        end\n` +
 `                        if gCS and gCS.BattleManager and gCS.BattleManager.RefreshAllSkills then\n` +
-`                            gCS.BattleManager.RefreshAllSkills(false, false)\n` +
+`                            pcall(function() gCS.BattleManager.RefreshAllSkills(false, false) end)\n` +
 `                        end\n` +
 `                        local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
 `                        if btnMgr then\n` +
-`                            pcall(function() btnMgr:RemoveBtnByType(newUnit.Pid, 1) end)\n` +
-`                            pcall(function() btnMgr:RemoveBtnByType(newUnit.Pid, 2) end)\n` +
+`                            pcall(function() btnMgr:RemoveBtnByType(curUnit.Pid, 1) end)\n` +
+`                            pcall(function() btnMgr:RemoveBtnByType(curUnit.Pid, 2) end)\n` +
 `                        end\n` +
 `                    end\n` +
 `                    if oldUnit and oldUnit.Pid ~= spiritUnitPid then\n` +
+`                        pcall(function() oldUnit.IsMe = false end)\n` +
 `                        local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
 `                        if btnMgr and CS and CS.LX6 and CS.LX6.Interact then\n` +
 `                            pcall(function()\n` +
@@ -430,10 +425,19 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                                    btnInfo.target = oldUnit.PlayerObj\n` +
 `                                    btnInfo.text = "Switch Character"\n` +
 `                                    btnInfo.isAvailable = true\n` +
+`                                    local oldTemplateId = oldUnit.TemplateId or 15020967\n` +
 `                                    btnInfo.DoClick = function()\n` +
-`                                        if gSwitchSpiritManager then\n` +
-`                                            gSwitchSpiritManager:BeforeSetChangeUnit(oldUnit.Pid, false)\n` +
-`                                        end\n` +
+`                                        pcall(function()\n` +
+`                                            if gClientToGameSceneDelegate and gClientToGameSceneDelegate.AskSwitchSpirit then\n` +
+`                                                gClientToGameSceneDelegate:AskSwitchSpirit(oldTemplateId)\n` +
+`                                            elseif gSwitchSpiritManager then\n` +
+`                                                local cUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                                                if cUnit and oldUnit and CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.SwitchSpiritManager and CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove then\n` +
+`                                                    CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove(cUnit, oldUnit)\n` +
+`                                                end\n` +
+`                                                gSwitchSpiritManager:BeforeSetChangeUnit(oldUnit.Pid, false)\n` +
+`                                            end\n` +
+`                                        end)\n` +
 `                                    end\n` +
 `                                    btnMgr:AddBtn(btnInfo)\n` +
 `                                end\n` +
@@ -442,6 +446,24 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                    end\n` +
 `                end)\n` +
 `                return res\n` +
+`            end\n` +
+`        end\n` +
+`        local sceneImpl = GameSceneToClientImpl or (package and package.loaded and package.loaded["LX6/Service/GameSceneToClientImpl"])\n` +
+`        if sceneImpl and not sceneImpl._weatherRainHooked then\n` +
+`            sceneImpl._weatherRainHooked = true\n` +
+`            local origWeather = sceneImpl.SyncPlayerWeather\n` +
+`            sceneImpl.SyncPlayerWeather = function(weatherTypeId, nextWeatherTypeId, transitionSecond)\n` +
+`                if origWeather then origWeather(weatherTypeId, nextWeatherTypeId, transitionSecond) end\n` +
+`                pcall(function()\n` +
+`                    if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
+`                        CS.CTT3.Weather.WeatherBridge.SetWeather(weatherTypeId, transitionSecond or 2.0)\n` +
+`                        if weatherTypeId == 3 or weatherTypeId == 4 then\n` +
+`                            CS.CTT3.Weather.WeatherBridge.SetGPURainActive(true)\n` +
+`                        else\n` +
+`                            CS.CTT3.Weather.WeatherBridge.SetGPURainActive(false)\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
 `            end\n` +
 `        end\n` +
 `        if gBuyHouseUtils then\n` +
@@ -461,41 +483,6 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            photoStore.OnShow = function(self, ...)\n` +
 `                self.selectedSpirit = self.selectedSpirit or (gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.TemplateId) or 15020967\n` +
 `                if origOnShowPhoto then origOnShowPhoto(self, ...) end\n` +
-`            end\n` +
-`            local origSetMode = photoStore.SetCurrentPhotoMode\n` +
-`            photoStore.SetCurrentPhotoMode = function(self)\n` +
-`                if origSetMode then origSetMode(self) end\n` +
-`                if self.photoMode == 1 then\n` +
-`                    pcall(function()\n` +
-`                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = true end\n` +
-`                        if gCS and gCS.CameraDataMgr and gCS.CameraDataMgr.cinemachineManager then\n` +
-`                            gCS.CameraDataMgr.cinemachineManager:SwitchSelfiePhotoMode(false, 0.2)\n` +
-`                            gCS.CameraDataMgr.cinemachineManager:SetFov(68, 0, 0, false)\n` +
-`                        end\n` +
-`                    end)\n` +
-`                else\n` +
-`                    pcall(function()\n` +
-`                        if gCS and gCS.TransitionMgr then gCS.TransitionMgr.showMainCube = false end\n` +
-`                    end)\n` +
-`                end\n` +
-`            end\n` +
-`            local origOnClosePhoto = photoStore.OnClose\n` +
-`            photoStore.OnClose = function(self, ...)\n` +
-`                pcall(function()\n` +
-`                    local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
-`                    if unit then\n` +
-`                        if gCS.ClimbManager and gCS.ClimbManager.SetLayerActionStateAndCheckTransition then\n` +
-`                            gCS.ClimbManager.SetLayerActionStateAndCheckTransition(unit, false, 42)\n` +
-`                        end\n` +
-`                        if MuGenStates and MuGenStates.Logic and MuGenStates.Logic.ABPVarManager and LTConfig and LTConfig.ABPVarConfig then\n` +
-`                            MuGenStates.Logic.ABPVarManager.SetBool(unit, LTConfig.ABPVarConfig.PhoneSelfie, false)\n` +
-`                        end\n` +
-`                    end\n` +
-`                    if gTakePhotoUtils and gTakePhotoUtils.PlayTakePhotoAction and LTConfig and LTConfig.TakePhotoActionConfig then\n` +
-`                        gTakePhotoUtils.PlayTakePhotoAction(LTConfig.TakePhotoActionConfig.NormalTakePhoto)\n` +
-`                    end\n` +
-`                end)\n` +
-`                if origOnClosePhoto then return origOnClosePhoto(self, ...) end\n` +
 `            end\n` +
 `        end\n` +
 `        if gLuaClient and not gLuaClient._hotkeyHooked then\n` +
@@ -759,8 +746,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `            end\n` +
 `            if fs then\n` +
 `                pcall(function()\n` +
-`                    local clothes = { fs.Cloth, fs.Bottom, fs.Gloves, fs.Shoes, fs.Sleeve, fs.Dress, fs.Bag, fs.Hood, fs.Belt, fs.Necklace }\n` +
-`                    for _, r in ipairs(clothes) do\n` +
+`                    local clothesSlots = { fs.Cloth, fs.Bottom, fs.Dress, fs.Bag, fs.Hood, fs.Belt, fs.Necklace }\n` +
+`                    for _, r in ipairs(clothesSlots) do\n` +
 `                        if r then r.enabled = not _G._clothesHidden end\n` +
 `                    end\n` +
 `                    if fs.SpProps then\n` +
@@ -769,14 +756,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                            if r then r.enabled = not _G._clothesHidden end\n` +
 `                        end\n` +
 `                    end\n` +
-`                    if fs.allFashionRendererList then\n` +
-`                        for i = 0, fs.allFashionRendererList.Count - 1 do\n` +
-`                            local r = fs.allFashionRendererList[i]\n` +
-`                            if r then r.enabled = not _G._clothesHidden end\n` +
-`                        end\n` +
-`                    end\n` +
-`                    local keep = { fs.Face, fs.Hair, fs.Tail, fs.Hair01, fs.Hair02, fs.Ear }\n` +
-`                    for _, r in ipairs(keep) do\n` +
+`                    local keepSlots = { fs.Face, fs.Hair, fs.Hair01, fs.Hair02, fs.Ear, fs.Tail, fs.Gloves, fs.Shoes, fs.Sleeve }\n` +
+`                    for _, r in ipairs(keepSlots) do\n` +
 `                        if r then r.enabled = true end\n` +
 `                    end\n` +
 `                end)\n` +
@@ -787,9 +768,9 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                    local smr = smrs[i]\n` +
 `                    if smr then\n` +
 `                        local n = string.lower(smr.name)\n` +
-`                        local isBaseBody = string.find(n, "body") or string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "skin") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian") or string.find(n, "arm") or string.find(n, "hand") or string.find(n, "leg") or string.find(n, "foot") or string.find(n, "feet") or string.find(n, "shou") or string.find(n, "bi") or string.find(n, "tui") or string.find(n, "limb") or string.find(n, "torso") or string.find(n, "base") or string.find(n, "flesh") or string.find(n, "mouth") or string.find(n, "brow") or string.find(n, "ear") or string.find(n, "nose") or string.find(n, "tooth") or string.find(n, "teeth") or string.find(n, "tongue")\n` +
-`                        local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "top") or string.find(n, "bottom") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "shoe") or string.find(n, "sock") or string.find(n, "hat") or string.find(n, "wa") or string.find(n, "xie") or string.find(n, "under") or string.find(n, "suit") or string.find(n, "acc") or string.find(n, "hood") or string.find(n, "belt") or string.find(n, "sleeve") or string.find(n, "glove") or string.find(n, "bag") or string.find(n, "prop") or string.find(n, "fashion")\n` +
-`                        if isBaseBody and not (isClothing and not string.find(n, "body") and not string.find(n, "arm") and not string.find(n, "hand") and not string.find(n, "leg")) then\n` +
+`                        local isBodyLimb = string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "brow") or string.find(n, "mouth") or string.find(n, "ear") or string.find(n, "tail") or string.find(n, "arm") or string.find(n, "hand") or string.find(n, "glove") or string.find(n, "sleeve") or string.find(n, "leg") or string.find(n, "foot") or string.find(n, "feet") or string.find(n, "shoe") or string.find(n, "boot") or string.find(n, "skin") or string.find(n, "flesh") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian") or string.find(n, "shou") or string.find(n, "bi") or string.find(n, "tui")\n` +
+`                        local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "hood") or string.find(n, "cape") or string.find(n, "cloak") or string.find(n, "belt") or string.find(n, "bag") or string.find(n, "prop") or string.find(n, "necklace") or string.find(n, "acc")\n` +
+`                        if isBodyLimb and not (isClothing and not string.find(n, "arm") and not string.find(n, "hand") and not string.find(n, "leg") and not string.find(n, "foot") and not string.find(n, "face")) then\n` +
 `                            smr.enabled = true\n` +
 `                        elseif isClothing then\n` +
 `                            smr.enabled = not _G._clothesHidden\n` +
@@ -802,7 +783,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                end\n` +
 `            end\n` +
 `            pcall(function()\n` +
-`                local tip = _G._clothesHidden and "Outfit Hidden (Base Body Only)" or "Outfit Shown"\n` +
+`                local tip = _G._clothesHidden and "Clothes Hidden (Body Visible)" or "Clothes Shown"\n` +
 `                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
 `                    gDisplayMessageMgr:ShowMessageContent(tip)\n` +
 `                end\n` +
@@ -819,11 +800,22 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                if density > 0 then\n` +
 `                    CS.CTT3.Weather.WeatherBridge.EnableExternalExpFogDensity(density)\n` +
 `                    CS.CTT3.Weather.WeatherBridge.EnableExternalSkyFogDensity(density)\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalExpFogStartDistance(0.0)\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalSkyFogStartDistance(0.0)\n` +
 `                else\n` +
 `                    CS.CTT3.Weather.WeatherBridge.DisableExternalExpFogDensity()\n` +
 `                    CS.CTT3.Weather.WeatherBridge.DisableExternalSkyFogDensity()\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalExpFogStartDistance()\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalSkyFogStartDistance()\n` +
 `                end\n` +
 `            end\n` +
+`            pcall(function()\n` +
+`                local Color = UnityEngine.Color\n` +
+`                UnityEngine.RenderSettings.fog = (density > 0)\n` +
+`                UnityEngine.RenderSettings.fogDensity = density\n` +
+`                UnityEngine.RenderSettings.fogMode = UnityEngine.FogMode.ExponentialSquared\n` +
+`                UnityEngine.RenderSettings.fogColor = Color(0.75, 0.78, 0.82, 1.0)\n` +
+`            end)\n` +
 `            local tip = density > 0 and ("Fog Set: " .. tostring(density)) or "Fog Cleared"\n` +
 `            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
 `                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
@@ -838,6 +830,14 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        pcall(function()\n` +
 `            if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
 `                CS.CTT3.Weather.WeatherBridge.SetWeather(wId, 2.0)\n` +
+`                if wId == 3 or wId == 4 then\n` +
+`                    CS.CTT3.Weather.WeatherBridge.SetGPURainActive(true)\n` +
+`                else\n` +
+`                    CS.CTT3.Weather.WeatherBridge.SetGPURainActive(false)\n` +
+`                end\n` +
+`            end\n` +
+`            if CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.AtmosphereManager and CS.LX6.Manager.AtmosphereManager.Instance then\n` +
+`                pcall(function() CS.LX6.Manager.AtmosphereManager.Instance:SetWeather(wId, 2.0) end)\n` +
 `            end\n` +
 `            if gCS and gCS.WeatherManager and gCS.WeatherManager.SetWeather then\n` +
 `                gCS.WeatherManager:SetWeather(wId)\n` +
