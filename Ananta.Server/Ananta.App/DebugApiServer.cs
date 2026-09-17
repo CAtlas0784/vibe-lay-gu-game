@@ -1206,30 +1206,119 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         return new { ok = true, id = cutsceneId };
     }
 
+    private sealed record TimelineItem(string id, uint configId, string name, string category, float x = 0, float y = 0, float z = 0);
+
+    private static readonly TimelineItem[] AllTimelines =
+    [
+        // Story & Quests
+        new("TL_SEYM_010_Q010_S01", 2030u, "Seymour Story Quest: Chapter 1 S01 (黑客与发布会 - แฮกเกอร์กับงานแถลงข่าว)", "story", 3418.28f, 295.23f, 1415.67f),
+        new("TL_TAF_010_Q010_S04", 0u, "Taffy Story Quest: Chapter 1 S04 (เควสต์เนื้อเรื่องทาฟี่)", "story"),
+        new("TL_HEISTJ", 0u, "Bank Heist Cinematics Part J (ฉากภารกิจปล้นธนาคาร J)", "story"),
+        new("TL_HEISTZ", 0u, "Bank Heist Cinematics Part Z (ฉากภารกิจปล้นธนาคาร Z)", "story"),
+        new("TL_TGS_MQ_S02", 0u, "Tokyo Game Show Main Quest S02 (ฉากเปิดตัวงาน TGS)", "story"),
+        new("TL_SQ_020_Q005_S02", 0u, "Side Quest Special Cinematic (เควสต์ย่อย 020 S02)", "story"),
+        new("TL_Bernard", 0u, "Bernard Character Cinematic (คัทซีนเบอร์นาร์ด)", "story"),
+        new("TL_Erin_mm_hunhun", 0u, "Erin vs Thugs Street Scene (เอรินปะทะกลุ่มอันธพาล)", "story"),
+        new("xsb_phase3_part3", 0u, "Boss Encounter Phase 3 Part 3 (คัทซีนบอสเฟส 3)", "story"),
+
+        // Character Entrances & Customs
+        new("SwitchChar_tafei_01", 48u, "Taffy Skyscraper Apartment (ทาฟี่ โดดจากตึกอพาร์ตเมนต์)", "character", 1613.81f, 21.96f, 1565.65f),
+        new("SwitchChar_dila_03", 62u, "Dila Combat Rooftop Action (ดิลา แอ็กชันคอมแบทบนดาดฟ้า)", "character", 484.28f, 15.03f, 2018.23f),
+        new("SwitchChar_saimo_05", 100u, "Seymour Skyline Overview (เซย์มัวร์ ชมวิวตึกระฟ้าสไตล์คูล)", "character", 2198.68f, 92.08f, 1807.14f),
+        new("SwitchChar_lixi_04", 59u, "Richie Motorcycle Battle (ริชชี่ ซิ่งมอเตอร์ไซค์สู้แก๊งสเตอร์)", "character", 1647.65f, 0f, 1578.67f),
+        new("SwitchChar_nanzhujue_02", 61u, "Male MC Sports Car Arrival (พระเอก นั่งสปอร์ตคาร์มาส่ง)", "character", 3142.67f, 0f, 2522.78f),
+        new("SwitchChar_nanzhujue_03", 115u, "Male MC Rolls-Royce Arrival (พระเอก ก้าวลงจาก Rolls-Royce)", "character", 2468.71f, -0.1f, 1371.11f),
+        new("SwitchChar_character_2", 82u, "Taffy Park Bench Nap (ทาฟี่ นอนหลับบนม้านั่งสวนสาธารณะ)", "character", 403.61f, 0f, 2117.54f),
+        new("SwitchChar_character_3", 83u, "Aileen at Maid Cafe (ไอลีน สนทนากับเมดในคาเฟ่)", "character", 2086.22f, -0.11f, 2362.25f),
+        new("SwitchChar_character_4", 84u, "Bansy Street Graffiti (แบนซี พ่นสเปรย์กราฟิตี้ข้างถนน)", "character", 522.15f, 0f, 2083.76f),
+        new("SwitchChar_character_6", 85u, "Dila Scrolling Phone on Bench (ดิลา นั่งเล่นโทรศัพท์มือถือ)", "character", 395.99f, 0f, 2111.99f),
+        new("SwitchChar_character_7", 86u, "Enomi Drinking Milk (เอโนมิ ยืนดื่มนมกล่อง)", "character", 1606.63f, -0.1f, 1222.73f),
+        new("SwitchChar_character_13", 89u, "Garm Baseball Batting (การ์ม ซ้อมหวดลูกเบสบอลสุดเท่)", "character", 2862.36f, -0.67f, 2761.5f),
+        new("SwitchChar_character_14", 94u, "Richie Catching Criminal (ริชชี่ บุกจับคนร้ายคาหนังคาเขา)", "character", 3913.1f, -0.14f, 626.1f),
+        new("SwitchChar_character_16", 90u, "MC Receiving Street Flyer (พระเอก รับใบปลิวจากคนแจก)", "character", 2597.6f, 0.14f, 1156.3f),
+        new("SwitchChar_character_22", 113u, "Lykaia Peeling Apple in Mansion (ไลคาเอีย ปอกแอปเปิ้ลในคฤหาสน์หรู)", "character", 3204.52f, 104.46f, 959.45f),
+        new("SwitchChar_character_23", 114u, "Baijing High-Speed Overtake (ไป๋จิ้ง ซิ่งรถแซงโค้งความเร็วสูง)", "character", 3008.4f, -0.1f, 1614.91f),
+        new("SwitchChar_character_19", 302u, "Richie Official PV Cinematic (ริชชี่ ช็อตไฮไลท์จากเทรลเลอร์ PV)", "character", 3008.4f, -0.1f, 1614.91f),
+        new("SwitchChar_character_20", 303u, "Continuous One-Shot Camera (มุมกล้อง Long-Take ช็อตเดียวจบ)", "character", 3008.4f, -0.1f, 1614.91f),
+        new("SwitchChar_common_01", 1u, "Cherry Blossom Ave Passenger Drop (ไลคาเอีย ขับรถมาส่งที่ถนนซากุระ)", "character", 3008.4f, -0.1f, 1614.91f),
+        new("SwitchChar_common_07", 44u, "Taffy Driving Sports Car (ทาฟี่ ขับรถซิ่งบนถนนใหญ่)", "character", 3008.4f, -0.1f, 1614.91f),
+        new("SwitchChar_common_09", 49u, "Exiting City Taxi (เปิดประตูก้าวลงจากรถแท็กซี่)", "character", 3008.3f, 0f, 1616.5f),
+        new("SwitchChar_common_27", 87u, "Street Basketball Game (ดังก์บาสเกตบอลสตรีท)", "character", 410.72f, 0f, 2108.59f),
+
+        // Urban Life & Interactive
+        new("SwitchChar_common_04", 4u, "Exiting Mahjong Parlor (เดินออกจากร้านไพ่นกกระจอก)", "urban", 1031.7f, 0f, 1888.7f),
+        new("SwitchChar_common_21", 63u, "Exiting Store & Stretching (เดินออกจากร้านพร้อมบิดขี้เกียจ)", "urban", 1030.2f, 0f, 1889.73f),
+        new("SwitchChar_common_22", 96u, "Exiting Store Fist Pump (เดินออกจากร้านพร้อมชูกำปั้นมั่นใจ)", "urban", 2062.63f, 0f, 2459f),
+        new("SwitchChar_common_23", 106u, "Exiting Restaurant Patting Belly (เดินออกจากร้านอาหารลูบท้องอิ่ม)", "urban", 3074.69f, 0f, 2185.89f),
+        new("SwitchChar_common_24", 97u, "Walking & Hanging up Scam Call (คุยโทรศัพท์สายหลอกลวงแล้วส่ายหัวตัดสาย)", "urban", 1727f, 9.64f, 1968f),
+        new("SwitchChar_common_10", 28u, "Cyberpunk Nightclub Dancing 1 (แดนซ์ในผับไซเบอร์พังก์ 1)", "urban", 2875.39f, 0.02f, 2203.92f),
+        new("SwitchChar_common_11", 31u, "Wild Cyberpunk Nightclub Dancing 2 (แดนซ์ในผับไซเบอร์พังก์ 2)", "urban", 558.19f, -21.14f, 1933.61f),
+        new("SwitchChar_common_14", 54u, "Petting Street Cat (นั่งยองๆ ลูบหัวแมวจรจัด)", "urban", 2832.1f, 0.05f, 1880.63f),
+        new("SwitchChar_common_15", 55u, "Walking the Dog (พาสุนัขเดินเล่นรอบเมือง)", "urban", 2809.91f, 0.07f, 1940.67f),
+        new("SwitchChar_common_16", 57u, "Taking Landscape Photos (ยกกล้องถ่ายรูปวิวทิวทัศน์เมือง)", "urban", 589f, 0f, 1937.8f),
+        new("SwitchChar_common_17", 60u, "Street Smartphone Selfie (หยิบมือถือขึ้นมาถ่ายรูปเซลฟี่)", "urban", 706.56f, 3.41f, 2097.07f),
+        new("SwitchChar_common_18", 107u, "Photo with Citizen Fan (ถ่ายรูปร่วมกับแฟนคลับชาวเมือง)", "urban", 1229.34f, 0f, 1237.58f),
+        new("SwitchChar_common_26", 105u, "Polite Photo with NPC (ถ่ายรูปคู่กับ NPC อย่างสุภาพ)", "urban", 1889.75f, 0f, 2211.68f),
+        new("SwitchChar_common_19", 56u, "Tossing Can in Trash Bin (โยนกระป๋องลงถังขยะลงเป๊ะ)", "urban", 1717.25f, 0.08f, 2271.25f),
+        new("SwitchChar_common_25", 99u, "Tossing Can in Trash Bin Missed (โยนกระป๋องไม่ลงถังขยะ)", "urban", 1717.25f, 0.08f, 2271.25f),
+        new("SwitchChar_character_1", 88u, "Buying Drink at Vending Machine (หยอดเหรียญกดตู้เครื่องดื่ม)", "urban", 3010.08f, 0f, 1656.21f),
+        new("SwitchChar_common_20", 81u, "Defeat Gang & Escape (ถล่มแก๊งข้างถนนแล้วกระโดดหนี)", "urban", 3984.66f, -0.14f, 636.22f),
+        new("SwitchChar_common_20a", 111u, "Defeat Gold Gang & Escape (ถล่มแก๊งทองดำแล้วสปีดหนี)", "urban", 3984.66f, -0.14f, 636.22f),
+        new("SwitchChar_common_20b", 112u, "Defeat TV-Head Gang & Escape (ถล่มแก๊งหัวทีวีแล้วสเก็ตหนี)", "urban", 3984.66f, -0.14f, 636.22f),
+
+        // Transit & World Transitions
+        new("loading_plane01", 0u, "Airport Airplane Takeoff Cinematic (คัทซีนเครื่องบินขึ้นจากสนามบิน)", "transit"),
+        new("loading_plane02", 0u, "Airport Airplane Landing Cinematic (คัทซีนเครื่องบินร่อนลงจอด)", "transit"),
+        new("loading_metro_end_1", 0u, "Subway Metro Train Arrival (คัทซีนรถไฟใต้ดินเทียบชานชาลา)", "transit"),
+        new("Loading_bus_end", 0u, "Metropolis City Bus Arrival (คัทซีนรถเมล์เทศบาลเทียบป้าย)", "transit"),
+        new("loading_elevator02", 0u, "Skyscraper Glass Elevator (คัทซีนลิฟต์แก้วตึกระฟ้าความเร็วสูง)", "transit"),
+        new("loading_indoor_in01", 0u, "Cinematic Building Entry A (คัทซีนเดินเข้าอาคารแบบสมจริง A)", "transit"),
+        new("loading_indoor_out01", 0u, "Cinematic Building Exit A (คัทซีนเดินออกจากอาคารสู่ถนนใหญ่ A)", "transit"),
+    ];
+
     private async Task<object> PlayTimelineAsync(string json, CancellationToken token)
     {
         var session = hub.Current;
         if (session is null)
             return new { ok = false, error = "no live game session (is the client in the world?)" };
 
-        string timeline = "SwitchChar_tafei_01";
+        string timeline = "TL_SEYM_010_Q010_S01";
+        uint explicitConfigId = 0;
         try
         {
             using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
             var root = doc.RootElement;
             if (root.TryGetProperty("name", out var pn)) timeline = pn.GetString() ?? pn.GetRawText();
             else if (root.TryGetProperty("id", out var pi)) timeline = pi.GetString() ?? pi.GetRawText();
+            if (root.TryGetProperty("configId", out var pc)) explicitConfigId = pc.GetUInt32();
         }
         catch (Exception ex)
         {
             return new { ok = false, error = $"bad request: {ex.Message}" };
         }
 
+        var match = Array.Find(AllTimelines, t => t.id.Equals(timeline, StringComparison.OrdinalIgnoreCase));
+        uint configId = explicitConfigId != 0 ? explicitConfigId : (match?.configId ?? 0);
+
+        // 1. If configured in SwitchSpiritConfig, dispatch native SwitchSpiritConfigId RPC
+        if (configId != 0)
+        {
+            var state = GameRouter.GetStateIfExists(session);
+            var pos = (match is not null && (match.x != 0 || match.y != 0 || match.z != 0))
+                ? new Vec3(match.x, match.y, match.z)
+                : (state is not null && state.HasLastReportedPlayerTransform ? state.LastReportedPlayerPosition : new Vec3(0, 0, 0));
+
+            var payload = WorldCodec.SwitchSpiritConfigId(configId, pos);
+            await session.NotifyAsync(MethodId.SyncSwitchSpiritConfigId, UxSerializer.Serialize(payload), token);
+            session.Log.Info($"[DEBUG-API] sent native SwitchSpiritConfigId configId={configId} timeline={timeline}");
+        }
+
+        // 2. Dispatch Lua Fastpatch notice
         var cmd = $"CMD:PLAY_TIMELINE:{timeline}";
         await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
 
-        session.Log.Info($"[DEBUG-API] play realtime timeline={timeline}");
-        return new { ok = true, timeline };
+        session.Log.Info($"[DEBUG-API] play realtime timeline={timeline} configId={configId}");
+        return new { ok = true, timeline, configId };
     }
 
     private async Task<object> ToggleClothesAsync(CancellationToken token)
@@ -1250,20 +1339,7 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         return new
         {
             ok = true,
-            items = new[]
-            {
-                new { id = "TL_SEYM_010_Q010_S01", name = "Seymour Story Quest: Chapter 1 S01 (เนื้อเรื่องหลัก)" },
-                new { id = "SwitchChar_tafei_01", name = "Taffy Cinematic Arrival (ทาฟี่ โดดจากตึก)" },
-                new { id = "SwitchChar_dila_03", name = "Dila Combat Cinematic (ดิลา แอกชันสตรีท)" },
-                new { id = "SwitchChar_saimo_05", name = "Seymour Street Arrival (เซย์มัวร์ สไตล์คูล)" },
-                new { id = "SwitchChar_lixi_04", name = "Richie Motorcycle Rush (ริชชี่ ซิ่งมอเตอร์ไซค์)" },
-                new { id = "SwitchChar_nanzhujue_02", name = "Male MC Arrival A (พระเอก สลับตัว A)" },
-                new { id = "SwitchChar_nanzhujue_03", name = "Male MC Arrival B (พระเอก สลับตัว B)" },
-                new { id = "SwitchChar_common_01", name = "Metropolis Skyline Overview (มุมกล้องเมือง 1)" },
-                new { id = "SwitchChar_common_04", name = "Street Parkour Traverse (มุมกล้องฟรีรันนิง 4)" },
-                new { id = "SwitchChar_common_10", name = "Night Neon Lights (มุมกล้องวิวกลางคืน 10)" },
-                new { id = "SwitchChar_common_27", name = "Dynamic Roof Drop (แอกชันดรอป 27)" },
-            }
+            items = AllTimelines
         };
     }
 

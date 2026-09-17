@@ -692,13 +692,49 @@ async function toggleClothes() {
   log('toggle clothes: ' + JSON.stringify(r));
 }
 
+async function loadCutsceneCatalog() {
+  const sel = document.getElementById('cutsceneSelect');
+  if (!sel) return;
+  try {
+    const res = await api('/api/cutscene/catalog');
+    if (res && res.items && res.items.length > 0) {
+      const groups = {
+        story: { label: '🎬 เนื้อเรื่องหลัก & เควสต์ (Main Story & Quests)', items: [] },
+        character: { label: '🌟 แอนิเมชันเปิดตัวตัวละคร (Character Entrances & Specials)', items: [] },
+        urban: { label: '🏙️ ฉากชีวิตเมือง & กิจกรรม (Urban Life & Activities)', items: [] },
+        transit: { label: '✈️ ทรานซิชันโลก & ยานพาหนะ (World & Vehicle Transitions)', items: [] }
+      };
+      res.items.forEach(it => {
+        const cat = groups[it.category] ? it.category : 'character';
+        groups[cat].items.push(it);
+      });
+      let html = '';
+      for (const k in groups) {
+        const g = groups[k];
+        if (g.items.length > 0) {
+          html += `<optgroup label="${g.label}">`;
+          g.items.forEach(it => {
+            html += `<option value="${it.id}" data-config-id="${it.configId || 0}">${it.name}</option>`;
+          });
+          html += `</optgroup>`;
+        }
+      }
+      sel.innerHTML = html;
+    }
+  } catch (err) {
+    console.error('Failed to load cutscene catalog:', err);
+  }
+}
+
 async function playSelectedCutscene() {
   const sel = document.getElementById('cutsceneSelect');
+  const opt = sel ? sel.options[sel.selectedIndex] : null;
   const name = sel ? sel.value : 'TL_SEYM_010_Q010_S01';
+  const configId = opt ? parseInt(opt.getAttribute('data-config-id') || '0', 10) : 0;
   const r = await api('/api/timeline/play', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name })
+    body: JSON.stringify({ name, configId })
   });
   log('play cutscene: ' + JSON.stringify(r));
 }
@@ -742,6 +778,7 @@ async function setCustomWeather() {
 loadFleet();
 loadScenes();
 loadNpcCatalog();
+loadCutsceneCatalog();
 refresh();
 setInterval(refresh, 2000);
 document.getElementById('timeslider').addEventListener('input', e => {

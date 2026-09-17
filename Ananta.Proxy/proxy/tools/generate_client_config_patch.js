@@ -719,14 +719,48 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `    elseif string.sub(cmd, 1, 14) == "PLAY_TIMELINE:" then\n` +
 `        local arg = string.sub(cmd, 15)\n` +
 `        pcall(function()\n` +
-`            if gTimelineManager and gTimelineManager.Timeline_LoadAndPlay then\n` +
-`                gTimelineManager:Timeline_LoadAndPlay(arg, nil)\n` +
-`            elseif gTimelineManager and gTimelineManager.PlayTimeline then\n` +
-`                gTimelineManager:PlayTimeline(arg)\n` +
-`            elseif gDramaManager and gDramaManager.PlayTimeline then\n` +
-`                gDramaManager:PlayTimeline(arg)\n` +
-`            elseif gCS and gCS.LuaUtils and gCS.LuaUtils.PlayTimeline then\n` +
-`                gCS.LuaUtils.PlayTimeline(arg)\n` +
+`            local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`            local myPos = (unit and unit.Position) or (UnityEngine and UnityEngine.Vector3 and UnityEngine.Vector3.zero)\n` +
+`            local myRot = (unit and unit.Facing and UnityEngine and UnityEngine.Vector3 and UnityEngine.Vector3(0, unit.Facing, 0)) or (UnityEngine and UnityEngine.Vector3 and UnityEngine.Vector3.zero)\n` +
+`            local numId = tonumber(arg)\n` +
+`            if numId and CS and CS.LX6 and CS.LX6.GUI and CS.LX6.GUI.SwitchTeleportManager and CS.LX6.GUI.SwitchTeleportManager.Instance then\n` +
+`                pcall(function() CS.LX6.GUI.SwitchTeleportManager.Instance:OnSyncSwitchSpiritConfigId(numId) end)\n` +
+`            end\n` +
+`            local played = false\n` +
+`            if gTimelineManager then\n` +
+`                local tlData = nil\n` +
+`                if gTimelineManager.Timeline_CreateTimelineData then\n` +
+`                    tlData = gTimelineManager:Timeline_CreateTimelineData()\n` +
+`                    if tlData and myPos then\n` +
+`                        tlData.pos = myPos\n` +
+`                        tlData.rot = myRot\n` +
+`                    end\n` +
+`                end\n` +
+`                if gTimelineManager.Timeline_LoadAndPlay then\n` +
+`                    pcall(function() gTimelineManager:Timeline_LoadAndPlay(arg, tlData) played = true end)\n` +
+`                end\n` +
+`                if not played and gTimelineManager.PlayTimeline then\n` +
+`                    pcall(function() gTimelineManager:PlayTimeline(arg) played = true end)\n` +
+`                end\n` +
+`            end\n` +
+`            if not played and CS and CS.LX6 and CS.LX6.TimelineScript and CS.LX6.TimelineScript.CutsceneManager and CS.LX6.TimelineScript.CutsceneManager.Instance then\n` +
+`                local cm = CS.LX6.TimelineScript.CutsceneManager.Instance\n` +
+`                local tlData = cm:CreateTimelineData()\n` +
+`                if tlData and myPos then\n` +
+`                    tlData.pos = myPos\n` +
+`                    tlData.rot = myRot\n` +
+`                end\n` +
+`                pcall(function() cm:LoadAndPlay(arg, tlData) played = true end)\n` +
+`            end\n` +
+`            if not played and gCS and gCS.LuaUtils and gCS.LuaUtils.PlayTimeline then\n` +
+`                pcall(function() gCS.LuaUtils.PlayTimeline(arg) end)\n` +
+`            end\n` +
+`            local tip = "Playing Timeline: " .. tostring(arg)\n` +
+`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
 `            end\n` +
 `        end)\n` +
 `    elseif string.sub(cmd, 1, 14) == "PLAY_CUTSCENE:" then\n` +
@@ -735,10 +769,8 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        pcall(function()\n` +
 `            if numId and gPanelManager and gPanelId and gPanelId.S_VIDEO_PLAYER_PANEL then\n` +
 `                gPanelManager:OpenWindow(gPanelId.S_VIDEO_PLAYER_PANEL, { videoId = numId })\n` +
-`            elseif gTimelineManager and gTimelineManager.Timeline_LoadAndPlay then\n` +
-`                gTimelineManager:Timeline_LoadAndPlay(arg, nil)\n` +
-`            elseif gVideoManager and gVideoManager.PlayVideo then\n` +
-`                gVideoManager:PlayVideo(numId or arg)\n` +
+`            else\n` +
+`                ProcessDebugCommand("PLAY_TIMELINE:" .. tostring(arg))\n` +
 `            end\n` +
 `        end)\n` +
 `    elseif string.sub(cmd, 1, 11) == "SPAWN_ENEMY" then\n` +
@@ -964,23 +996,35 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `local function HookNoticeTable(tbl)\n` +
 `    if not tbl or type(tbl) ~= "table" or tbl._cmdHooked then return end\n` +
 `    tbl._cmdHooked = true\n` +
-`    local oldSync = tbl.SyncNotice\n` +
-`    local newSync = function(...)\n` +
-`        local allArgs = {...}\n` +
-`        for i = 1, #allArgs do\n` +
-`            if type(allArgs[i]) == "string" and string.sub(allArgs[i], 1, 4) == "CMD:" then\n` +
-`                ProcessDebugCommand(string.sub(allArgs[i], 5))\n` +
-`                return\n` +
+`    local function makeCmdWrapper(origFunc)\n` +
+`        return function(...)\n` +
+`            local allArgs = {...}\n` +
+`            for i = 1, #allArgs do\n` +
+`                local arg = allArgs[i]\n` +
+`                if type(arg) == "string" and string.sub(arg, 1, 4) == "CMD:" then\n` +
+`                    ProcessDebugCommand(string.sub(arg, 5))\n` +
+`                    return\n` +
+`                elseif type(arg) == "table" then\n` +
+`                    for _, val in pairs(arg) do\n` +
+`                        if type(val) == "string" and string.sub(val, 1, 4) == "CMD:" then\n` +
+`                            ProcessDebugCommand(string.sub(val, 5))\n` +
+`                            return\n` +
+`                        end\n` +
+`                    end\n` +
+`                end\n` +
 `            end\n` +
+`            if origFunc then return origFunc(...) end\n` +
 `        end\n` +
-`        if oldSync then return oldSync(...) end\n` +
 `    end\n` +
-`    if tbl._meta and type(tbl._meta) == "table" then\n` +
-`        tbl._meta.SyncNotice = newSync\n` +
+`    if tbl.SyncNotice then\n` +
+`        tbl.SyncNotice = makeCmdWrapper(tbl.SyncNotice)\n` +
 `    end\n` +
-`    tbl.SyncNotice = nil\n` +
-`    tbl.SyncNotice = newSync\n` +
-`    rawset(tbl, "SyncNotice", newSync)\n` +
+`    if tbl.SyncShowMessage then\n` +
+`        tbl.SyncShowMessage = makeCmdWrapper(tbl.SyncShowMessage)\n` +
+`    end\n` +
+`    if tbl.SyncShowTipMessage then\n` +
+`        tbl.SyncShowTipMessage = makeCmdWrapper(tbl.SyncShowTipMessage)\n` +
+`    end\n` +
 `end\n\n` +
 `local function HookDisplayMessageMgr()\n` +
 `    if gDisplayMessageMgr and not gDisplayMessageMgr._cmdHooked then\n` +
@@ -1000,9 +1044,33 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        if package and package.loaded then\n` +
 `            HookNoticeTable(package.loaded["LX6/Service/MasterToClientImpl"])\n` +
 `            HookNoticeTable(package.loaded["LX6/Service/GameToClientImpl"])\n` +
+`            HookNoticeTable(package.loaded["LX6/Service/GameSceneToClientImpl"])\n` +
+`            local autoLoaded = package.loaded["LuaGen/AutoGen/RPCDeserializeAuto"]\n` +
+`            if autoLoaded and autoLoaded.midToReader then\n` +
+`                autoLoaded.midToReader[45418774] = function(reader) return reader:ReadString() end\n` +
+`                autoLoaded.midToName[45418774] = "SyncNotice"\n` +
+`            end\n` +
+`            local baseLoaded = package.loaded["LX6/Service/RPCDeserializeBase"]\n` +
+`            if baseLoaded and not baseLoaded._cmdHooked then\n` +
+`                baseLoaded._cmdHooked = true\n` +
+`                local oldDisp = baseLoaded.Dispatcher\n` +
+`                baseLoaded.Dispatcher = function(ctx, br, mid)\n` +
+`                    if mid == 45418774 then\n` +
+`                        pcall(function()\n` +
+`                            local str = br:ReadString()\n` +
+`                            if type(str) == "string" and string.sub(str, 1, 4) == "CMD:" then\n` +
+`                                ProcessDebugCommand(string.sub(str, 5))\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        return true\n` +
+`                    end\n` +
+`                    return oldDisp(ctx, br, mid)\n` +
+`                end\n` +
+`            end\n` +
 `        end\n` +
 `        if MasterToClientImpl then HookNoticeTable(MasterToClientImpl) end\n` +
 `        if GameToClientImpl then HookNoticeTable(GameToClientImpl) end\n` +
+`        if GameSceneToClientImpl then HookNoticeTable(GameSceneToClientImpl) end\n` +
 `        HookDisplayMessageMgr()\n` +
 `    end)\n` +
 `end\n\n` +
@@ -1010,7 +1078,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `require = function(mod)\n` +
 `    local res = oldRequire(mod)\n` +
 `    pcall(ApplyAllGlobalHooks)\n` +
-`    if mod == "LX6/Service/MasterToClientImpl" or mod == "LX6/Service/GameToClientImpl" then\n` +
+`    if mod == "LX6/Service/MasterToClientImpl" or mod == "LX6/Service/GameToClientImpl" or mod == "LX6/Service/GameSceneToClientImpl" then\n` +
 `        if type(res) == "table" then HookNoticeTable(res) end\n` +
 `    end\n` +
 `    pcall(HookAllNotices)\n` +
