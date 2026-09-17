@@ -250,37 +250,6 @@
   <div class="muted" style="margin-top:6px">Immediately forces client transition reset, restores user input, and rolls back coordinates to before the glitch.</div>
 </div>
 
-<div class="card" style="border-color:#4caf50">
-  <h2 style="color:#81c784">🎬 Realtime 3D Cutscenes & Timelines (In-Engine 3D)</h2>
-  <div style="margin-bottom:8px">
-    Preset:
-    <select id="timelinepreset" onchange="onTimelinePresetChange()" style="min-width:380px">
-      <option value="SwitchChar_tafei_01">🐰 Taffy 3D Entrance (คัทซีนเปิดตัว Taffy ถือค้อนกระโดดลงมา)</option>
-      <option value="SwitchChar_nanzhujue_03">🗡️ Male MC 3D Entrance (คัทซีนเปิดตัวเอกชาย)</option>
-      <option value="SwitchChar_saimo_05">⚡ Seymour 3D Showcase (คัทซีนเปิดตัว Seymour)</option>
-      <option value="SwitchChar_character_13">🌸 Rin 3D Entrance (คัทซีนเปิดตัว Rin)</option>
-      <option value="SwitchChar_character_19">🎸 Bansy 3D Entrance (คัทซีนเปิดตัว Bansy)</option>
-      <option value="SwitchChar_character_20">🐺 Garm 3D Entrance (คัทซีนเปิดตัว Garm)</option>
-      <option value="SwitchChar_character_22">🎯 Aileen 3D Showcase (คัทซีนเปิดตัว Aileen)</option>
-      <option value="SwitchChar_common_12_SA1">💥 Ground Slam Action (คัทซีนกระโดดกระแทกพื้น)</option>
-      <option value="SwitchChar_common_20a_SA1">🪂 High Altitude Combat Drop A (ดิ่งพสุธาสู่สนามรบ A)</option>
-      <option value="SwitchChar_common_20b_SA1">🪂 High Altitude Combat Drop B (ดิ่งพสุธาสู่สนามรบ B)</option>
-      <option value="SwitchChar_common_24">🤸 Acrobatic Flip Entrance (คัทซีนตีลังกาลงสู่พื้น)</option>
-      <option value="SwitchChar_common_25_SA1">🌪️ Heavy Impact Shockwave (คัทซีนกระแทกพื้นคลื่นพลัง)</option>
-      <option value="TL_SEYM_010_Q010_S01">📜 Seymour Story Quest Scene 1 (คัทซีนเควสต์เนื้อเรื่อง Seymour)</option>
-      <option value="TL_NewMilk">🥛 Milk Delivery Mission (คัทซีนภารกิจส่งนม)</option>
-      <option value="custom">Custom Timeline Name...</option>
-    </select>
-  </div>
-  <div style="margin-bottom:8px">
-    Name / Path: <input id="timelineName" type="text" style="width:280px" value="SwitchChar_tafei_01">
-    <button style="background:#2e7d32;margin-left:8px" onclick="playTimeline()">▶️ Play 3D Timeline (Realtime)</button>
-    <button class="ghost" onclick="unstuckBlackScreen()">⏹️ Stop / Reset</button>
-  </div>
-  <div class="muted">💡 เรนเดอร์โมเดล 3D และมุมกล้อง Cinemachine สดๆ ใน Engine ไม่ต้องพึ่งพาไฟล์วิดีโอ หมดปัญหาไฟล์วิดีโอหาย</div>
-</div>
-
-
 <div class="card">
   <h2>Panel log</h2>
   <div id="log"></div>
@@ -720,21 +689,6 @@ async function setFog(density) {
 async function setCustomWeather() {
   const id = parseInt(document.getElementById('customWeatherId').value || '1', 10);
   await setWeather(id);
-}
-
-function onTimelinePresetChange() {
-  const sel = document.getElementById('timelinepreset').value;
-  if (sel !== 'custom') {
-    document.getElementById('timelineName').value = sel;
-  }
-}
-
-async function playTimeline() {
-  const body = {
-    name: document.getElementById('timelineName').value || 'SwitchChar_tafei_01'
-  };
-  const r = await api('/api/timeline/play', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-  log('play timeline: ' + JSON.stringify(r));
 }
 
 
