@@ -91,6 +91,14 @@ flowchart TD
 - NEAC anti-cheat driver suppression.
 - 📖 [Detailed Binary Patching Guide](./references/binary_patching_guide.md)
 
+### 8. Asset Decryption, UXRPC Protocol & Codebase Architecture
+- L50 VFS v8 index XOR decryption (`CF DD A2 4D 1E 83 96 4C 63 98 BB 3B 25 B6 3D C1`).
+- Media payload (MP4) XOR `0x76` recovery and Pse LZ4 128 KiB chunked texture streams.
+- Complete 25 UXRPC Service IDs, Method IDs, and ordered binary serialization schemas.
+- Map Fog removal via `PlayerClientInfoAchievement.SceneFogMaps` and `SyncSceneFogMapAllUnlock`.
+- Unlimited currency initialization in `PlayerClientInfoItem` (`Money`, `Gold`, `BindingGold`, `FreeGold`).
+- 📖 [Asset Decryption & Codebase Architecture Guide](./references/asset_decryption_and_architecture.md)
+
 ---
 
 ## Standard Runbook

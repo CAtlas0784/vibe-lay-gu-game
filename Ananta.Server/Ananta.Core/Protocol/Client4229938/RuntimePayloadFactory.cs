@@ -151,6 +151,22 @@ internal static class RuntimePayloadFactory
             });
         }
 
+        // Unlimited currency (Money, Gold, BindingGold, FreeGold)
+        root.InfoItem.Money = 999_999_999;
+        root.InfoItem.Gold = 999_999_999;
+        root.InfoItem.BindingGold = 999_999_999;
+        root.InfoItem.FreeGold = 999_999_999;
+
+        // Unlock all Map Fog of war across known scenes
+        root.InfoAchievement.SceneFogMaps = new Dictionary<uint, Auto.SceneFogMap>
+        {
+            [1] = new Auto.SceneFogMap { All = true },
+            [1001] = new Auto.SceneFogMap { All = true },
+            [10001] = new Auto.SceneFogMap { All = true }
+        };
+        // Unlock all Map POIs
+        root.InfoAchievement.SceneFogMapPoiIds = Enumerable.Range(1, 1000).Select(i => (uint)i).ToList();
+
         return root;
     }
 

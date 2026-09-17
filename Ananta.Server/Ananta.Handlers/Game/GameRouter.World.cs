@@ -367,12 +367,15 @@ internal sealed partial class GameRouter
         };
         await ctx.NotifyAsync(MethodId.SyncAllActivities, activitiesSync);
 
-        // Unlock all scene fog of war on the client
-        await ctx.NotifyAsync(MethodId.SyncSceneFogMapAllUnlock, new SceneMethods.SyncSceneFogMapAllUnlockInfo
+        // Unlock all scene fog of war on the client across all city/world scenes
+        foreach (var fogSceneId in new uint[] { 1, 1001, 10001, state.ActiveRaidId })
         {
-            SceneId = state.ActiveRaidId,
-            Unlocked = true
-        });
+            await ctx.NotifyAsync(MethodId.SyncSceneFogMapAllUnlock, new SceneMethods.SyncSceneFogMapAllUnlockInfo
+            {
+                SceneId = fogSceneId,
+                Unlocked = true
+            });
+        }
 
         // Initialize story task tracking
         await ctx.NotifyAsync(MethodId.SyncCurrentTask, new SceneMethods.SyncCurrentTaskInfo
