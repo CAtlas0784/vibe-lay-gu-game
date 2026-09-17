@@ -77,7 +77,7 @@ internal sealed partial class GameRouter
         await ctx.NotifyAsync(MethodId.SyncUnitPositionAndFacing,
             WorldCodec.PositionAndFacing(unitId, switchPosition, switchFacing));
         await ctx.NotifyAsync(MethodId.SyncPlayerCurrentSpirit,
-            WorldCodec.CurrentSpirit(Profile.PlayerPid, templateId, unitId, isAgentSwitch: true));
+            WorldCodec.CurrentSpirit(Profile.PlayerPid, templateId, unitId, isAgentSwitch: false));
         // CurrentSpirit can rebuild the controlled actor on the client. Re-assert the frozen transform
         // after ownership transfer so the new character cannot fall back to its template/default spawn.
         await ctx.NotifyAsync(MethodId.SyncUnitPositionAndFacing,
@@ -129,3 +129,4 @@ internal sealed partial class GameRouter
     }
 
 }
+

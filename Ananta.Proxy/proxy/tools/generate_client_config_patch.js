@@ -121,6 +121,9 @@ if (forceSwitches) {
 gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `\n` +
 `gGameSwitch = M\n\n` +
+`local ProcessDebugCommand\n` +
+`local function CheckCustomHotkeys()\n` +
+`end\n\n` +
 `-- Bypass CBT date expiration for Gacha pools and unlock all map/systems\n` +
 `local function ApplyAllGlobalHooks()\n` +
 `    pcall(function()\n` +
@@ -191,45 +194,459 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                gMapSystem.fogMap.IsUnlocked = function(self, sceneId, x, z) return true end\n` +
 `            end\n` +
 `        end\n` +
+`        if LX6 and LX6.Gps and LX6.Gps.MapFogDataMgr then\n` +
+`            LX6.Gps.MapFogDataMgr.IsInFog = function(sceneId, x, z) return false end\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(101, true) end)\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(102, true) end)\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(103, true) end)\n` +
+`            pcall(function() LX6.Gps.MapFogDataMgr.SyncUnlockScene(1001, true) end)\n` +
+`        end\n` +
+`        if C_MapView_Fog then\n` +
+`            C_MapView_Fog.InFog = function(self, instanceId) return false end\n` +
+`            C_MapView_Fog.SetFogEnable = function(self, enable) end\n` +
+`        end\n` +
+`        if gCS and gCS.LuaUtils then\n` +
+`            gCS.LuaUtils.IsNotUseGM = false\n` +
+`        end\n` +
+`        local mapStore = GroupName2Class and GroupName2Class.NewMapPanelStore or C_NewMapPanelStore\n` +
+`        if mapStore and not mapStore._teleportHooked then\n` +
+`            mapStore._teleportHooked = true\n` +
+`            local origOnShow = mapStore.OnShow\n` +
+`            mapStore.OnShow = function(self, ...)\n` +
+`                self._pendingPin = nil\n` +
+`                pcall(function()\n` +
+`                    if self.fogNode then self.fogNode:SetActive(false) end\n` +
+`                    if self.fogRoot then self.fogRoot:SetActive(false) end\n` +
+`                end)\n` +
+`                if origOnShow then return origOnShow(self, ...) end\n` +
+`            end\n` +
+`            local origOnMainClick = mapStore.OnMainClick\n` +
+`            mapStore.OnMainClick = function(self, evtData)\n` +
+`                local isAlt = false\n` +
+`                pcall(function()\n` +
+`                    if UnityEngine and UnityEngine.Input and UnityEngine.KeyCode then\n` +
+`                        isAlt = UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftAlt) or UnityEngine.Input.GetKey(UnityEngine.KeyCode.RightAlt) or UnityEngine.Input.GetKey(308) or UnityEngine.Input.GetKey(307)\n` +
+`                    end\n` +
+`                end)\n` +
+`                local isRightClick = (evtData and evtData.button == 1)\n` +
+`                local worldX, worldZ = nil, nil\n` +
+`                pcall(function()\n` +
+`                    local uiPos = self.GetPointerUIPos and self:GetPointerUIPos()\n` +
+`                    local mousePos = (evtData and evtData.position) or (UnityEngine and UnityEngine.Input and UnityEngine.Input.mousePosition)\n` +
+`                    if not uiPos and mousePos and gCS and gCS.LuaUtils and self.bindData and self.bindData.rootRT then\n` +
+`                        uiPos = gCS.LuaUtils.TransformScreenPointToUI(self.bindData.rootRT, mousePos)\n` +
+`                    end\n` +
+`                    if uiPos and self.TransformUIToTex then\n` +
+`                        local texPos = self:TransformUIToTex(uiPos)\n` +
+`                        if texPos then\n` +
+`                            if self.bindData and self.bindData.bigWorldBg and self.bindData.bigWorldBg.LuaTryGetWorldPos then\n` +
+`                                local suc, areaId, wx, wz = self.bindData.bigWorldBg:LuaTryGetWorldPos(texPos.x, texPos.y)\n` +
+`                                if suc and wx and wz and (math.abs(wx) > 0.1 or math.abs(wz) > 0.1) then\n` +
+`                                    worldX, worldZ = wx, wz\n` +
+`                                end\n` +
+`                            end\n` +
+`                            if not worldX and self.TryTransformTexToWorld then\n` +
+`                                local areaId, wPos = self:TryTransformTexToWorld(texPos)\n` +
+`                                if wPos and (math.abs(wPos.x) > 0.1 or math.abs(wPos.z) > 0.1) then\n` +
+`                                    worldX, worldZ = wPos.x, wPos.z\n` +
+`                                end\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`                if worldX and worldZ and (math.abs(worldX) > 0.1 or math.abs(worldZ) > 0.1) then\n` +
+`                    local now = (os and os.clock and os.clock()) or 0\n` +
+`                    local shouldWarp = false\n` +
+`                    if isAlt or isRightClick then\n` +
+`                        shouldWarp = true\n` +
+`                    elseif self._pendingPin and (now - self._pendingPin.time) < 12.0 then\n` +
+`                        local dx = worldX - self._pendingPin.x\n` +
+`                        local dz = worldZ - self._pendingPin.z\n` +
+`                        if (dx * dx + dz * dz) < 6400 then\n` +
+`                            shouldWarp = true\n` +
+`                            worldX = self._pendingPin.x\n` +
+`                            worldZ = self._pendingPin.z\n` +
+`                        end\n` +
+`                    end\n` +
+`                    if shouldWarp then\n` +
+`                        self._pendingPin = nil\n` +
+`                        local playerY = 274.6\n` +
+`                        pcall(function()\n` +
+`                            local p = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.Pos\n` +
+`                            if p and p.y > 10 then playerY = p.y end\n` +
+`                        end)\n` +
+`                        pcall(function()\n` +
+`                            if gClientToGameSceneGMDelegate and gClientToGameSceneGMDelegate.GmTeleportXYZ then\n` +
+`                                gClientToGameSceneGMDelegate:GmTeleportXYZ(worldX, playerY, worldZ, 0)\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        pcall(function()\n` +
+`                            if gCS and gCS.GmUtils and gCS.GmUtils.TeleportXYZ then\n` +
+`                                gCS.GmUtils.TeleportXYZ(worldX, playerY, worldZ, 0)\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        pcall(function()\n` +
+`                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                                gDisplayMessageMgr:ShowMessageContent(string.format("Warped to Pin: X=%.1f, Z=%.1f", worldX, worldZ))\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        pcall(function() gMainPhoneUtils.CloseMainPhonePanel(true) end)\n` +
+`                        pcall(function() self:OnBtnClose() end)\n` +
+`                        return\n` +
+`                    else\n` +
+`                        self._pendingPin = { x = worldX, z = worldZ, time = now }\n` +
+`                        pcall(function()\n` +
+`                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                                gDisplayMessageMgr:ShowMessageContent("Pin set! Click again to Warp")\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        if origOnMainClick then return origOnMainClick(self, evtData) end\n` +
+`                    end\n` +
+`                else\n` +
+`                    if isAlt or isRightClick then\n` +
+`                        pcall(function()\n` +
+`                            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                                gDisplayMessageMgr:ShowMessageContent("Map Click: Target outside world bounds")\n` +
+`                            end\n` +
+`                        end)\n` +
+`                        return\n` +
+`                    end\n` +
+`                    if origOnMainClick then return origOnMainClick(self, evtData) end\n` +
+`                end\n` +
+`            end\n` +
+`        end\n` +
+`        if C_InteractionManager then\n` +
+`            local origCheck = C_InteractionManager.CheckUnitPcBtnShow\n` +
+`            C_InteractionManager.CheckUnitPcBtnShow = function(self, pid)\n` +
+`                local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                if myUnit and myUnit.Pid == pid then\n` +
+`                    return false\n` +
+`                end\n` +
+`                if origCheck then return origCheck(self, pid) end\n` +
+`                return false\n` +
+`            end\n` +
+`        end\n` +
+`        if gInteractionManager then\n` +
+`            local origCheckG = gInteractionManager.CheckUnitPcBtnShow\n` +
+`            gInteractionManager.CheckUnitPcBtnShow = function(self, pid)\n` +
+`                local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                if myUnit and myUnit.Pid == pid then\n` +
+`                    return false\n` +
+`                end\n` +
+`                if origCheckG then return origCheckG(self, pid) end\n` +
+`                return false\n` +
+`            end\n` +
+`        end\n` +
+`        local hudCtrl = GroupName2Class and GroupName2Class.PlayerHUDCtrl or C_PlayerHUDCtrl\n` +
+`        if hudCtrl and not hudCtrl._hideFHooked then\n` +
+`            hudCtrl._hideFHooked = true\n` +
+`            local oldHudUpdate = hudCtrl.Update\n` +
+`            hudCtrl.Update = function(self)\n` +
+`                local isCurrentControlled = false\n` +
+`                local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                if self.unit then\n` +
+`                    if myUnit and self.unit.Pid == myUnit.Pid then\n` +
+`                        isCurrentControlled = true\n` +
+`                    elseif self.unit.IsMe and (not myUnit or self.unit.Pid == myUnit.Pid) then\n` +
+`                        isCurrentControlled = true\n` +
+`                    end\n` +
+`                end\n` +
+`                if isCurrentControlled then\n` +
+`                    self.isBtnShowNew = false\n` +
+`                    pcall(function()\n` +
+`                        if self.SetPlayerHeadInfoVisible then self:SetPlayerHeadInfoVisible(true) end\n` +
+`                        if self.interactBtn then self.interactBtn:SetActive(false) end\n` +
+`                        if self.bindData then self.bindData.isBtnShow = false end\n` +
+`                    end)\n` +
+`                    return\n` +
+`                end\n` +
+`                if oldHudUpdate then return oldHudUpdate(self) end\n` +
+`            end\n` +
+`        end\n` +
+`        local hintStore = GroupName2Class and GroupName2Class.HintInfosHudStore or C_HintInfosHudStore\n` +
+`        if hintStore and not hintStore._filterPlayerFHooked then\n` +
+`            hintStore._filterPlayerFHooked = true\n` +
+`            local origRefreshPc = hintStore.RefreshPcBtnShow\n` +
+`            hintStore.RefreshPcBtnShow = function(self, force)\n` +
+`                pcall(function()\n` +
+`                    local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                    local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
+`                    if myUnit and btnMgr and btnMgr.usefulList then\n` +
+`                        local myPid = myUnit.Pid\n` +
+`                        local i = 0\n` +
+`                        while i < btnMgr.usefulList.Count do\n` +
+`                            local item = btnMgr.usefulList[i]\n` +
+`                            if item and (item.pid == myPid or item.targetPid == myPid or (item.target and item.target == myUnit.PlayerObj)) then\n` +
+`                                btnMgr.usefulList:RemoveAt(i)\n` +
+`                            else\n` +
+`                                i = i + 1\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`                if origRefreshPc then return origRefreshPc(self, force) end\n` +
+`            end\n` +
+`        end\n` +
+`        local switchMgr = gSwitchSpiritManager or (GroupName2Class and GroupName2Class.SwitchSpiritManager)\n` +
+`        if switchMgr and not switchMgr._fixSwapHooked then\n` +
+`            switchMgr._fixSwapHooked = true\n` +
+`            local origBeforeSet = switchMgr.BeforeSetChangeUnit\n` +
+`            switchMgr.BeforeSetChangeUnit = function(self, spiritUnitPid, noClearold)\n` +
+`                local oldUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                local newUnit = gCS and gCS.SceneDataMgr and gCS.SceneDataMgr.GetUnit(spiritUnitPid)\n` +
+`                if oldUnit and newUnit and CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.SwitchSpiritManager and CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove then\n` +
+`                    pcall(function() CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove(oldUnit, newUnit) end)\n` +
+`                end\n` +
+`                local res = origBeforeSet and origBeforeSet(self, spiritUnitPid, noClearold)\n` +
+`                pcall(function()\n` +
+`                    local curUnit = (gCS and gCS.SceneDataMgr and gCS.SceneDataMgr.GetUnit(spiritUnitPid)) or (gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit)\n` +
+`                    if curUnit then\n` +
+`                        pcall(function() curUnit.IsMe = true end)\n` +
+`                        if curUnit.CharacterController then\n` +
+`                            pcall(function() curUnit.CharacterController.enabled = true end)\n` +
+`                        end\n` +
+`                        if CS and CS.LX6 and CS.LX6.Units and CS.LX6.Units.Module and CS.LX6.Units.Module.LockMoveDirModule then\n` +
+`                            pcall(function() CS.LX6.Units.Module.LockMoveDirModule.ClearLockMoveDir(curUnit) end)\n` +
+`                        end\n` +
+`                        if curUnit.RootMotionLockMoveAndRotate then\n` +
+`                            pcall(function() curUnit.RootMotionLockMoveAndRotate:ClearAll() end)\n` +
+`                            pcall(function() curUnit.RootMotionLockMoveAndRotate:ClearLockExtraRotation() end)\n` +
+`                        end\n` +
+`                        if curUnit.State then\n` +
+`                            curUnit.State.nowInteractiveAction = 0\n` +
+`                            curUnit.State.isFree = true\n` +
+`                            curUnit.State.isPause = false\n` +
+`                            curUnit.State.isLockMove = false\n` +
+`                            curUnit.State.isLockRotate = false\n` +
+`                        end\n` +
+`                        if curUnit.CCMove then\n` +
+`                            pcall(function() curUnit.CCMove:SetEnable(true) end)\n` +
+`                            pcall(function() curUnit.CCMove:ResetMoveSpeed() end)\n` +
+`                        end\n` +
+`                        if curUnit.UnitFightAction then\n` +
+`                            pcall(function() curUnit.UnitFightAction:ClearAllAction() end)\n` +
+`                            pcall(function() curUnit.UnitFightAction:StopAllAction() end)\n` +
+`                        end\n` +
+`                        if curUnit.Animator then\n` +
+`                            pcall(function() curUnit.Animator.speed = 1.0 end)\n` +
+`                        end\n` +
+`                        if gCS and gCS.BattleManager and gCS.BattleManager.RefreshAllSkills then\n` +
+`                            pcall(function() gCS.BattleManager.RefreshAllSkills(false, false) end)\n` +
+`                        end\n` +
+`                        local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
+`                        if btnMgr then\n` +
+`                            pcall(function() btnMgr:RemoveBtnByType(curUnit.Pid, 1) end)\n` +
+`                            pcall(function() btnMgr:RemoveBtnByType(curUnit.Pid, 2) end)\n` +
+`                        end\n` +
+`                    end\n` +
+`                    if oldUnit and oldUnit.Pid ~= spiritUnitPid then\n` +
+`                        pcall(function() oldUnit.IsMe = false end)\n` +
+`                        local btnMgr = L50 and L50.L50App and L50.L50App.L50Game and L50.L50App.L50Game.InteractBtnMgr\n` +
+`                        if btnMgr and CS and CS.LX6 and CS.LX6.Interact then\n` +
+`                            pcall(function()\n` +
+`                                btnMgr:RemoveBtnByType(oldUnit.Pid, 1)\n` +
+`                                local btnInfo = CS.LX6.Interact.UnitBtnInfo and CS.LX6.Interact.UnitBtnInfo.New()\n` +
+`                                if btnInfo then\n` +
+`                                    btnInfo.pid = oldUnit.Pid\n` +
+`                                    btnInfo.target = oldUnit.PlayerObj\n` +
+`                                    btnInfo.text = "Switch Character"\n` +
+`                                    btnInfo.isAvailable = true\n` +
+`                                    local oldTemplateId = oldUnit.TemplateId or 15020967\n` +
+`                                    btnInfo.DoClick = function()\n` +
+`                                        pcall(function()\n` +
+`                                            if gClientToGameSceneDelegate and gClientToGameSceneDelegate.AskSwitchSpirit then\n` +
+`                                                gClientToGameSceneDelegate:AskSwitchSpirit(oldTemplateId)\n` +
+`                                            elseif gSwitchSpiritManager then\n` +
+`                                                local cUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`                                                if cUnit and oldUnit and CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.SwitchSpiritManager and CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove then\n` +
+`                                                    CS.LX6.Manager.SwitchSpiritManager.CopyNewCCMove(cUnit, oldUnit)\n` +
+`                                                end\n` +
+`                                                gSwitchSpiritManager:BeforeSetChangeUnit(oldUnit.Pid, false)\n` +
+`                                            end\n` +
+`                                        end)\n` +
+`                                    end\n` +
+`                                    btnMgr:AddBtn(btnInfo)\n` +
+`                                end\n` +
+`                            end)\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`                return res\n` +
+`            end\n` +
+`        end\n` +
+`        local sceneImpl = GameSceneToClientImpl or (package and package.loaded and package.loaded["LX6/Service/GameSceneToClientImpl"])\n` +
+`        if sceneImpl and not sceneImpl._weatherRainHooked then\n` +
+`            sceneImpl._weatherRainHooked = true\n` +
+`            local origWeather = sceneImpl.SyncPlayerWeather\n` +
+`            sceneImpl.SyncPlayerWeather = function(weatherTypeId, nextWeatherTypeId, transitionSecond)\n` +
+`                if origWeather then origWeather(weatherTypeId, nextWeatherTypeId, transitionSecond) end\n` +
+`                pcall(function()\n` +
+`                    if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
+`                        CS.CTT3.Weather.WeatherBridge.SetWeather(weatherTypeId, transitionSecond or 2.0)\n` +
+`                        if weatherTypeId == 3 or weatherTypeId == 4 then\n` +
+`                            CS.CTT3.Weather.WeatherBridge.SetGPURainActive(true)\n` +
+`                        else\n` +
+`                            CS.CTT3.Weather.WeatherBridge.SetGPURainActive(false)\n` +
+`                        end\n` +
+`                    end\n` +
+`                end)\n` +
+`            end\n` +
+`        end\n` +
+`        if gBuyHouseUtils then\n` +
+`            gBuyHouseUtils.CheckHasBuyTheHouse = function(houseId) return true end\n` +
+`            gBuyHouseUtils.CheckBuyHouseMoneyEnough = function(houseId) return true end\n` +
+`        end\n` +
+`        if C_PlayerItemManager then\n` +
+`            C_PlayerItemManager.GetPackItemNum = function(self, id) return 999999 end\n` +
+`        end\n` +
+`        if gPlayerItemManager then\n` +
+`            gPlayerItemManager.GetPackItemNum = function(self, id) return 999999 end\n` +
+`        end\n` +
+`        local photoStore = GroupName2Class and GroupName2Class.PhotoPanelStore or C_PhotoPanelStore\n` +
+`        if photoStore and not photoStore._selfieHooked then\n` +
+`            photoStore._selfieHooked = true\n` +
+`            local origOnShowPhoto = photoStore.OnShow\n` +
+`            photoStore.OnShow = function(self, ...)\n` +
+`                self.selectedSpirit = self.selectedSpirit or (gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit and gCS.MyPlayerManager.PlayerUnit.TemplateId) or 15020967\n` +
+`                if origOnShowPhoto then origOnShowPhoto(self, ...) end\n` +
+`            end\n` +
+`        end\n` +
+`        if gLuaClient and not gLuaClient._hotkeyHooked then\n` +
+`            gLuaClient._hotkeyHooked = true\n` +
+`            local oldClientUpdate = gLuaClient.OnUpdate\n` +
+`            gLuaClient.OnUpdate = function(self, ...)\n` +
+`                if oldClientUpdate then oldClientUpdate(self, ...) end\n` +
+`                if CheckCustomHotkeys then CheckCustomHotkeys() end\n` +
+`            end\n` +
+`        end\n` +
+`        if gLuaClient and gLuaClient.ForceUpdateArray and not gLuaClient._hotkeyForceRegistered then\n` +
+`            gLuaClient._hotkeyForceRegistered = true\n` +
+`            table.insert(gLuaClient.ForceUpdateArray, function()\n` +
+`                if CheckCustomHotkeys then CheckCustomHotkeys() end\n` +
+`            end)\n` +
+`        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
-`        if CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security then\n` +
-`            local sec = CS.L50.Script.LX6.Security\n` +
-`            if sec.DavinciReport then\n` +
-`                sec.DavinciReport.Send = function() end\n` +
-`                sec.DavinciReport.Report = function() end\n` +
+`        local dm = CS and CS.L50 and CS.L50.Script and CS.L50.Script.LX6 and CS.L50.Script.LX6.Security and CS.L50.Script.LX6.Security.DavinciMgr and CS.L50.Script.LX6.Security.DavinciMgr.Instance\n` +
+`        if dm then\n` +
+`            pcall(function()\n` +
+`                local t = dm:GetType()\n` +
+`                local flags = 36\n` +
+`                pcall(function() flags = System.Reflection.BindingFlags.NonPublic:ToInt() + System.Reflection.BindingFlags.Instance:ToInt() end)\n` +
+`                local fDet = t:GetField("_detectors", flags)\n` +
+`                if fDet then\n` +
+`                    local list = fDet:GetValue(dm)\n` +
+`                    if list then list:Clear() end\n` +
+`                end\n` +
+`                local fCol = t:GetField("_collectors", flags)\n` +
+`                if fCol then\n` +
+`                    local list = fCol:GetValue(dm)\n` +
+`                    if list then list:Clear() end\n` +
+`                end\n` +
+`            end)\n` +
+`        end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local nm = (CS and CS.LX6 and CS.LX6.Engine and CS.LX6.Engine.NetworkManager and CS.LX6.Engine.NetworkManager.Instance) or (gCS and gCS.NetworkManager and gCS.NetworkManager.Instance)\n` +
+`        if nm then\n` +
+`            nm.CheckNetwork = false\n` +
+`            if CS and CS.LX6 and CS.LX6.Engine and CS.LX6.Engine.NetworkManager then\n` +
+`                CS.LX6.Engine.NetworkManager.SilentReconnectEnabled = true\n` +
 `            end\n` +
-`            if sec.DavinciMgr then\n` +
-`                sec.DavinciMgr.CheckTimeScale = function() end\n` +
-`                sec.DavinciMgr.ReportTimeScale = function() end\n` +
-`                sec.DavinciMgr.CheckSpeed = function() end\n` +
+`            pcall(function()\n` +
+`                local t = nm:GetType()\n` +
+`                local flags = 36\n` +
+`                pcall(function() flags = System.Reflection.BindingFlags.NonPublic:ToInt() + System.Reflection.BindingFlags.Instance:ToInt() end)\n` +
+`                local fFocus = t:GetField("checkFocusChanged", flags)\n` +
+`                if fFocus then fFocus:SetValue(nm, false) end\n` +
+`                local fPing = t:GetField("checkPingpongTimeOut", flags)\n` +
+`                if fPing then fPing:SetValue(nm, false) end\n` +
+`                local fCheckNet = t:GetField("checkNetwork", flags)\n` +
+`                if fCheckNet then fCheckNet:SetValue(nm, false) end\n` +
+`                if nm.CancelDelayShowReconnectPanel then nm:CancelDelayShowReconnectPanel() end\n` +
+`                if nm.ClearCheckNeedReconnect then nm:ClearCheckNeedReconnect() end\n` +
+`            end)\n` +
+`        end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local lmCS = (CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.LoginManager and CS.LX6.Manager.LoginManager.Instance) or (gCS and gCS.LoginManager and gCS.LoginManager.Instance)\n` +
+`        if lmCS then\n` +
+`            lmCS.CheckLoginConnected = false\n` +
+`            pcall(function()\n` +
+`                if lmCS.ClearReconnectState then lmCS:ClearReconnectState() end\n` +
+`                if lmCS.ClearLoginTimeoutCo then lmCS:ClearLoginTimeoutCo() end\n` +
+`            end)\n` +
+`        end\n` +
+`        local lm = gLoginManager or (GroupName2Class and GroupName2Class.LoginManager) or C_LoginManager\n` +
+`        if lm then\n` +
+`            lm.CheckNetworkState = function() end\n` +
+`            lm.OnUpdate_CheckNet = function() end\n` +
+`            lm.StopReconCo = function() end\n` +
+`            lm.DoKickToLogin = function() end\n` +
+`            lm.KickToLogin = function() end\n` +
+`            lm.RetryServerInfo = function() return true end\n` +
+`        end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local gu = (CS and CS.LX6 and CS.LX6.Utils and CS.LX6.Utils.GuiUtils) or (gCS and gCS.GuiUtils)\n` +
+`        if gu then\n` +
+`            gu.ShowReconnectMessage = function() end\n` +
+`            gu.ShowDisconnectMessage = function() end\n` +
+`            gu.ShowServerDonw = function() end\n` +
+`        end\n` +
+`        if gClientToAvatarDelegate then gClientToAvatarDelegate.DavinciCode = function() end end\n` +
+`        if ClientToAvatarDelegate then ClientToAvatarDelegate.DavinciCode = function() end end\n` +
+`    end)\n` +
+`    pcall(function()\n` +
+`        local bombStore = GroupName2Class and GroupName2Class.CommonBombStore or C_CommonBombStore\n` +
+`        if bombStore and not bombStore._reconnectHooked then\n` +
+`            bombStore._reconnectHooked = true\n` +
+`            local oldOnShow = bombStore.OnShow\n` +
+`            bombStore.OnShow = function(self, panelId, data)\n` +
+`                if data then\n` +
+`                    local t1 = tostring(data.tips1Text or "")\n` +
+`                    local t2 = tostring(data.tips2Text or "")\n` +
+`                    local cBtn = tostring(data.confirmBtnText or "")\n` +
+`                    local all = t1 .. " " .. t2 .. " " .. cBtn\n` +
+`                    if string.find(all, "重连") or string.find(all, "Reconnect") or string.find(all, "断开") or string.find(all, "网络") or string.find(all, "Network") or string.find(all, "connect") then\n` +
+`                        pcall(function()\n` +
+`                            if gPanelManager then gPanelManager:Close(panelId or gPanelId.S_COMMON_BOMB_PANEL) end\n` +
+`                            if gDisplayMessageMgr then gDisplayMessageMgr:CloseBomb() end\n` +
+`                        end)\n` +
+`                        return\n` +
+`                    end\n` +
+`                end\n` +
+`                if oldOnShow then return oldOnShow(self, panelId, data) end\n` +
 `            end\n` +
 `        end\n` +
-`        if CS and CS.LX6 and CS.LX6.Security then\n` +
-`            local sec = CS.LX6.Security\n` +
-`            if sec.DavinciReport then\n` +
-`                sec.DavinciReport.Send = function() end\n` +
-`                sec.DavinciReport.Report = function() end\n` +
+`        if gPanelManager and not gPanelManager._bombFilterHooked then\n` +
+`            gPanelManager._bombFilterHooked = true\n` +
+`            local oldCheckShow = gPanelManager.CheckShow\n` +
+`            gPanelManager.CheckShow = function(self, panelId, params, ...)\n` +
+`                if panelId == (gPanelId and gPanelId.S_COMMON_BOMB_PANEL) and params then\n` +
+`                    local t1 = tostring(params.tips1Text or "")\n` +
+`                    local t2 = tostring(params.tips2Text or "")\n` +
+`                    local cBtn = tostring(params.confirmBtnText or "")\n` +
+`                    local all = t1 .. " " .. t2 .. " " .. cBtn\n` +
+`                    if string.find(all, "重连") or string.find(all, "Reconnect") or string.find(all, "断开") or string.find(all, "网络") or string.find(all, "Network") or string.find(all, "connect") then\n` +
+`                        return nil\n` +
+`                    end\n` +
+`                end\n` +
+`                if oldCheckShow then return oldCheckShow(self, panelId, params, ...) end\n` +
 `            end\n` +
-`            if sec.DavinciMgr then\n` +
-`                sec.DavinciMgr.CheckTimeScale = function() end\n` +
-`                sec.DavinciMgr.ReportTimeScale = function() end\n` +
-`                sec.DavinciMgr.CheckSpeed = function() end\n` +
+`        end\n` +
+`        if gDisplayMessageMgr and not gDisplayMessageMgr._bombFilterHooked then\n` +
+`            gDisplayMessageMgr._bombFilterHooked = true\n` +
+`            local oldShowBomb = gDisplayMessageMgr.ShowBomb\n` +
+`            gDisplayMessageMgr.ShowBomb = function(self, params)\n` +
+`                if params and params.tips1Text and type(params.tips1Text) == "string" then\n` +
+`                    local t = params.tips1Text\n` +
+`                    if string.find(t, "重连") or string.find(t, "Reconnect") or string.find(t, "网络连接已断开") or string.find(t, "network") or string.find(t, "Network") then\n` +
+`                        return\n` +
+`                    end\n` +
+`                end\n` +
+`                if oldShowBomb then return oldShowBomb(self, params) end\n` +
 `            end\n` +
-`        end\n` +
-`        if DavinciReport then\n` +
-`            DavinciReport.Send = function() end\n` +
-`            DavinciReport.Report = function() end\n` +
-`        end\n` +
-`        if DavinciMgr then\n` +
-`            DavinciMgr.CheckTimeScale = function() end\n` +
-`            DavinciMgr.ReportTimeScale = function() end\n` +
-`            DavinciMgr.CheckSpeed = function() end\n` +
-`        end\n` +
-`        if gDavinciMgr then\n` +
-`            gDavinciMgr.CheckTimeScale = function() end\n` +
-`            gDavinciMgr.ReportTimeScale = function() end\n` +
-`            gDavinciMgr.CheckSpeed = function() end\n` +
 `        end\n` +
 `    end)\n` +
 `    pcall(function()\n` +
@@ -245,7 +662,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `    end)\n` +
 `end\n\n` +
-`local function ProcessDebugCommand(cmd)\n` +
+`ProcessDebugCommand = function(cmd)\n` +
 `    if not cmd or type(cmd) ~= "string" then return end\n` +
 `    if cmd == "UNSTUCK_BLACKSCREEN" then\n` +
 `        pcall(function()\n` +
@@ -260,6 +677,19 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                LX6.Manager.GameInputManager.SetEnableInput(gPanelId.COMMON_BLACK_TRANSITION)\n` +
 `            end\n` +
 `        end)\n` +
+`    elseif string.sub(cmd, 1, 14) == "PLAY_TIMELINE:" then\n` +
+`        local arg = string.sub(cmd, 15)\n` +
+`        pcall(function()\n` +
+`            if gTimelineManager and gTimelineManager.Timeline_LoadAndPlay then\n` +
+`                gTimelineManager:Timeline_LoadAndPlay(arg, nil)\n` +
+`            elseif gTimelineManager and gTimelineManager.PlayTimeline then\n` +
+`                gTimelineManager:PlayTimeline(arg)\n` +
+`            elseif gDramaManager and gDramaManager.PlayTimeline then\n` +
+`                gDramaManager:PlayTimeline(arg)\n` +
+`            elseif gCS and gCS.LuaUtils and gCS.LuaUtils.PlayTimeline then\n` +
+`                gCS.LuaUtils.PlayTimeline(arg)\n` +
+`            end\n` +
+`        end)\n` +
 `    elseif string.sub(cmd, 1, 14) == "PLAY_CUTSCENE:" then\n` +
 `        local arg = string.sub(cmd, 15)\n` +
 `        local numId = tonumber(arg)\n` +
@@ -272,10 +702,26 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                gVideoManager:PlayVideo(numId or arg)\n` +
 `            end\n` +
 `        end)\n` +
-`    elseif string.sub(cmd, 1, 12) == "SPAWN_ENEMY:" then\n` +
-`        local p1, p2, p3 = string.match(string.sub(cmd, 13), "([^:]+):?([^:]*):?([^:]*)")\n` +
-`        local enemyId = tonumber(p1) or 40900579\n` +
-`        local camp = tonumber(p2) or 2\n` +
+`    elseif string.sub(cmd, 1, 11) == "SPAWN_ENEMY" then\n` +
+`        local p1, p2, p3 = string.match(string.sub(cmd, 12), "^:?([^:]*):?([^:]*):?([^:]*)")\n` +
+`        local reqId = tonumber(p1)\n` +
+`        local enemyId = reqId or (function()\n` +
+`            local id = 40900579\n` +
+`            pcall(function()\n` +
+`                if LTConfig and LTConfig.AutoTestBossTestConfig and LTConfig.AutoTestBossTestConfig.count and LTConfig.AutoTestBossTestConfig.count > 0 then\n` +
+`                    for i = 0, LTConfig.AutoTestBossTestConfig.count - 1 do\n` +
+`                        local cfg = LTConfig.AutoTestBossTestConfig.LoadAt(i)\n` +
+`                        if cfg and cfg.BossId and #cfg.BossId > 0 and cfg.BossId[1] and cfg.BossId[1].EnemyId then\n` +
+`                            id = cfg.BossId[1].EnemyId\n` +
+`                            return\n` +
+`                        end\n` +
+`                    end\n` +
+`                end\n` +
+`            end)\n` +
+`            return id\n` +
+`        end)()\n` +
+`        local camp = tonumber(p2) or 0\n` +
+`        if camp == 2 then camp = 0 end\n` +
 `        local count = tonumber(p3) or 1\n` +
 `        pcall(function()\n` +
 `            if gCS and gCS.LuaUtils and gCS.LuaUtils.AddEnemy then\n` +
@@ -284,8 +730,150 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                gCS.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
 `            elseif gCS and gCS.GmUtils and gCS.GmUtils.AddEnemy then\n` +
 `                gCS.GmUtils.AddEnemy(enemyId)\n` +
-`            elseif CS and CS.LX6 and CS.LX6.GmUtils and CS.LX6.GmUtils.AddEnemyWithCamp then\n` +
-`                CS.LX6.GmUtils.AddEnemyWithCamp(enemyId, camp)\n` +
+`            end\n` +
+`            if gClientToGameSceneGMDelegate and gClientToGameSceneGMDelegate.GmAddEnemyByPlayer then\n` +
+`                pcall(function() gClientToGameSceneGMDelegate:GmAddEnemyByPlayer(enemyId, camp) end)\n` +
+`            end\n` +
+`            pcall(function()\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent("Spawned Enemy ID: " .. tostring(enemyId))\n` +
+`                end\n` +
+`                if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                    gCS.MessageTipsMgr:ShowMessageTips("Spawned Enemy ID: " .. tostring(enemyId))\n` +
+`                end\n` +
+`            end)\n` +
+`        end)\n` +
+`    elseif cmd == "OPEN_MONSTER_PANEL" then\n` +
+`        pcall(function()\n` +
+`            if gPanelManager and gPanelId and gPanelId.S_SKILL_DEBUG_PANEL then\n` +
+`                gPanelManager:CheckShow(gPanelId.S_SKILL_DEBUG_PANEL, { ShowAddEnemy = true })\n` +
+`            end\n` +
+`            pcall(function()\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent("Opened Monster Spawn Menu")\n` +
+`                end\n` +
+`            end)\n` +
+`        end)\n` +
+`    elseif cmd == "TOGGLE_CLOTHES" then\n` +
+`        pcall(function()\n` +
+`            local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`            if not unit or not unit.PlayerObj then return end\n` +
+`            _G._clothesHidden = not _G._clothesHidden\n` +
+`            local fs = nil\n` +
+`            pcall(function()\n` +
+`                if CS and CS.LX6 and CS.LX6.Share and CS.LX6.Share.FashionSlot then\n` +
+`                    fs = unit.PlayerObj:GetComponentInChildren(typeof(CS.LX6.Share.FashionSlot))\n` +
+`                end\n` +
+`            end)\n` +
+`            if not fs then\n` +
+`                pcall(function()\n` +
+`                    fs = unit.FashionSlot or (unit.ModelSlot and unit.ModelSlot.FashionSlot)\n` +
+`                end)\n` +
+`            end\n` +
+`            if fs then\n` +
+`                pcall(function()\n` +
+`                    local clothesSlots = { fs.Cloth, fs.Bottom, fs.Dress, fs.Bag, fs.Hood, fs.Belt, fs.Necklace }\n` +
+`                    for _, r in ipairs(clothesSlots) do\n` +
+`                        if r then r.enabled = not _G._clothesHidden end\n` +
+`                    end\n` +
+`                    if fs.SpProps then\n` +
+`                        for i = 0, fs.SpProps.Count - 1 do\n` +
+`                            local r = fs.SpProps[i]\n` +
+`                            if r then r.enabled = not _G._clothesHidden end\n` +
+`                        end\n` +
+`                    end\n` +
+`                    local keepSlots = { fs.Face, fs.Hair, fs.Hair01, fs.Hair02, fs.Ear, fs.Tail, fs.Gloves, fs.Shoes, fs.Sleeve }\n` +
+`                    for _, r in ipairs(keepSlots) do\n` +
+`                        if r then r.enabled = true end\n` +
+`                    end\n` +
+`                end)\n` +
+`            end\n` +
+`            local smrs = unit.PlayerObj:GetComponentsInChildren(typeof(UnityEngine.SkinnedMeshRenderer), true)\n` +
+`            if smrs then\n` +
+`                for i = 0, smrs.Length - 1 do\n` +
+`                    local smr = smrs[i]\n` +
+`                    if smr then\n` +
+`                        local n = string.lower(smr.name)\n` +
+`                        local isBodyLimb = string.find(n, "face") or string.find(n, "head") or string.find(n, "hair") or string.find(n, "eye") or string.find(n, "brow") or string.find(n, "mouth") or string.find(n, "ear") or string.find(n, "tail") or string.find(n, "arm") or string.find(n, "hand") or string.find(n, "glove") or string.find(n, "sleeve") or string.find(n, "leg") or string.find(n, "foot") or string.find(n, "feet") or string.find(n, "shoe") or string.find(n, "boot") or string.find(n, "skin") or string.find(n, "flesh") or string.find(n, "shenti") or string.find(n, "tou") or string.find(n, "lian") or string.find(n, "shou") or string.find(n, "bi") or string.find(n, "tui")\n` +
+`                        local isClothing = string.find(n, "cloth") or string.find(n, "coat") or string.find(n, "skirt") or string.find(n, "pant") or string.find(n, "dress") or string.find(n, "jacket") or string.find(n, "yifu") or string.find(n, "kuzi") or string.find(n, "qun") or string.find(n, "hood") or string.find(n, "cape") or string.find(n, "cloak") or string.find(n, "belt") or string.find(n, "bag") or string.find(n, "prop") or string.find(n, "necklace") or string.find(n, "acc")\n` +
+`                        if isBodyLimb and not (isClothing and not string.find(n, "arm") and not string.find(n, "hand") and not string.find(n, "leg") and not string.find(n, "foot") and not string.find(n, "face")) then\n` +
+`                            smr.enabled = true\n` +
+`                        elseif isClothing then\n` +
+`                            smr.enabled = not _G._clothesHidden\n` +
+`                        else\n` +
+`                            if not _G._clothesHidden then\n` +
+`                                smr.enabled = true\n` +
+`                            end\n` +
+`                        end\n` +
+`                    end\n` +
+`                end\n` +
+`            end\n` +
+`            pcall(function()\n` +
+`                local tip = _G._clothesHidden and "Clothes Hidden (Body Visible)" or "Clothes Shown"\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`                end\n` +
+`                if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                    gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`                end\n` +
+`            end)\n` +
+`        end)\n` +
+`    elseif string.sub(cmd, 1, 8) == "SET_FOG:" then\n` +
+`        local arg = string.sub(cmd, 9)\n` +
+`        local density = tonumber(arg) or 0\n` +
+`        pcall(function()\n` +
+`            if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
+`                if density > 0 then\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalExpFogDensity(density)\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalSkyFogDensity(density)\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalExpFogStartDistance(0.0)\n` +
+`                    CS.CTT3.Weather.WeatherBridge.EnableExternalSkyFogStartDistance(0.0)\n` +
+`                else\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalExpFogDensity()\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalSkyFogDensity()\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalExpFogStartDistance()\n` +
+`                    CS.CTT3.Weather.WeatherBridge.DisableExternalSkyFogStartDistance()\n` +
+`                end\n` +
+`            end\n` +
+`            pcall(function()\n` +
+`                local Color = UnityEngine.Color\n` +
+`                UnityEngine.RenderSettings.fog = (density > 0)\n` +
+`                UnityEngine.RenderSettings.fogDensity = density\n` +
+`                UnityEngine.RenderSettings.fogMode = UnityEngine.FogMode.ExponentialSquared\n` +
+`                UnityEngine.RenderSettings.fogColor = Color(0.75, 0.78, 0.82, 1.0)\n` +
+`            end)\n` +
+`            local tip = density > 0 and ("Fog Set: " .. tostring(density)) or "Fog Cleared"\n` +
+`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`            end\n` +
+`        end)\n` +
+`    elseif string.sub(cmd, 1, 12) == "SET_WEATHER:" then\n` +
+`        local arg = string.sub(cmd, 13)\n` +
+`        local wId = tonumber(arg) or 1\n` +
+`        pcall(function()\n` +
+`            if CS and CS.CTT3 and CS.CTT3.Weather and CS.CTT3.Weather.WeatherBridge then\n` +
+`                CS.CTT3.Weather.WeatherBridge.SetWeather(wId, 2.0)\n` +
+`                if wId == 3 or wId == 4 then\n` +
+`                    CS.CTT3.Weather.WeatherBridge.SetGPURainActive(true)\n` +
+`                else\n` +
+`                    CS.CTT3.Weather.WeatherBridge.SetGPURainActive(false)\n` +
+`                end\n` +
+`            end\n` +
+`            if CS and CS.LX6 and CS.LX6.Manager and CS.LX6.Manager.AtmosphereManager and CS.LX6.Manager.AtmosphereManager.Instance then\n` +
+`                pcall(function() CS.LX6.Manager.AtmosphereManager.Instance:SetWeather(wId, 2.0) end)\n` +
+`            end\n` +
+`            if gCS and gCS.WeatherManager and gCS.WeatherManager.SetWeather then\n` +
+`                gCS.WeatherManager:SetWeather(wId)\n` +
+`            end\n` +
+`            local tip = "Weather Set: " .. tostring(wId)\n` +
+`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            end\n` +
+`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
 `            end\n` +
 `        end)\n` +
 `    end\n` +
@@ -294,7 +882,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `    if not tbl or type(tbl) ~= "table" or tbl._cmdHooked then return end\n` +
 `    tbl._cmdHooked = true\n` +
 `    local oldSync = tbl.SyncNotice\n` +
-`    tbl.SyncNotice = function(...)\n` +
+`    local newSync = function(...)\n` +
 `        local allArgs = {...}\n` +
 `        for i = 1, #allArgs do\n` +
 `            if type(allArgs[i]) == "string" and string.sub(allArgs[i], 1, 4) == "CMD:" then\n` +
@@ -304,6 +892,12 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end\n` +
 `        if oldSync then return oldSync(...) end\n` +
 `    end\n` +
+`    if tbl._meta and type(tbl._meta) == "table" then\n` +
+`        tbl._meta.SyncNotice = newSync\n` +
+`    end\n` +
+`    tbl.SyncNotice = nil\n` +
+`    tbl.SyncNotice = newSync\n` +
+`    rawset(tbl, "SyncNotice", newSync)\n` +
 `end\n\n` +
 `local function HookDisplayMessageMgr()\n` +
 `    if gDisplayMessageMgr and not gDisplayMessageMgr._cmdHooked then\n` +

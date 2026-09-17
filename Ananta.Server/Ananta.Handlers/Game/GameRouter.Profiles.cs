@@ -18,6 +18,24 @@ internal sealed partial class GameRouter
         CombatWeaponDefinition weapon,
         CombatStyleDefinition style)
     {
+        if (weapon.SpiritTemplateId == 15020992) // Taffy (塔菲)
+        {
+            // Taffy signature skills:
+            // 51935209: 塔菲普攻1 (Hammer strikes)
+            // 51935213: 塔菲重击 (Heavy slam)
+            // 51935207: 通用闪避 (Dodge)
+            // 51935230: 塔菲主动技_上车A (Taffy Monowheel Mount!)
+            // 51935224: 塔菲大招 (超次元神速连打)
+            await ctx.NotifyAsync(MethodId.SyncChangeCommonSkill, WorldCodec.SkillBinding(unitId, 51935209));
+            await ctx.NotifyAsync(MethodId.SyncChangeHeavyAttack, WorldCodec.SkillBinding(unitId, 51935213));
+            await ctx.NotifyAsync(MethodId.SyncChangeDodgeSkill, WorldCodec.SkillBinding(unitId, 51935207));
+            await ctx.NotifyAsync(MethodId.SyncChangeControlSkill, CombatCodec.ControlBinding(unitId, style));
+            await ctx.NotifyAsync(MethodId.SyncChangeActiveSkill, WorldCodec.SkillBinding(unitId, 51935230));
+            await ctx.NotifyAsync(MethodId.SyncChangeUniqueSkill, WorldCodec.SkillBinding(unitId, 51935224));
+            ctx.Session.Log.Info($"[COMBAT] bound signature Taffy Monowheel skill profile for unit={unitId}");
+            return;
+        }
+
         await ctx.NotifyAsync(MethodId.SyncChangeCommonSkill, CombatCodec.CommonBinding(unitId, style));
         await ctx.NotifyAsync(MethodId.SyncChangeHeavyAttack, CombatCodec.HeavyAttackBinding(unitId, style));
         await ctx.NotifyAsync(MethodId.SyncChangeDodgeSkill, CombatCodec.DodgeBinding(unitId, style));
@@ -33,7 +51,7 @@ internal sealed partial class GameRouter
             await ctx.NotifyAsync(MethodId.SyncFightResource,
                 CombatCodec.FightResource(unitId, resourceId, maximum));
             await ctx.NotifyAsync(MethodId.SyncFightResourceFreeState,
-                CombatCodec.FightResourceFreeState(unitId, resourceId, true));
+                CombatCodec.FightResourceFreeState(unitId, resourceId, false));
         }
     }
 

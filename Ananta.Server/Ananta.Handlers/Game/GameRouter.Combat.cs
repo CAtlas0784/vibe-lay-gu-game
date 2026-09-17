@@ -387,7 +387,7 @@ internal sealed partial class GameRouter
         ctx.Session.Log.Info($"[ARMORY] slots committed operation={operation} spirit={spiritId} active={isActive} current={currentWeaponId} unique={slots.Where(x => x != 0).Distinct().Count()} slots={slots.Count}");
     }
 
-    private static bool IsEditableWeaponSlot(int index) => index >= 0 && index < 16;
+    private static bool IsEditableWeaponSlot(int index) => index >= 1 && index < 16;
 
     private static List<ulong> WeaponSlotIds(WorldEntryState state, uint spiritId)
     {
@@ -573,9 +573,6 @@ internal sealed partial class GameRouter
         CombatWeaponDefinition weapon,
         CombatStyleDefinition style)
     {
-        var state = GetWorldState(ctx);
-        state.CombatProfilePublished = true;
-
         // Switching/individually styling one weapon must never overwrite the character-wide
         // FightStyleInfo map. OnSwitchFightStyle publishes that map explicitly.
         await ctx.NotifyAsync(MethodId.SyncPlayerAllSkillChargeData,
@@ -584,7 +581,6 @@ internal sealed partial class GameRouter
         await PublishSkillBindings(ctx, unitId, weapon, style);
         await ctx.NotifyAsync(MethodId.SyncSpiritLastUsedWeapon,
             CombatCodec.SpiritLastUsedWeapon(templateId, weapon.InstanceId));
-        ctx.Session.Log.Info($"[COMBAT] profile published unit={unitId} template={templateId} weapon={weapon.TemplateId}/{weapon.InstanceId} style={style.Id} skills={style.CommonSkill},{style.HeavyCommonSkill},{style.DodgeSkill},{style.ControlSkill},{weapon.ActiveSkill(style)},{weapon.UniqueSkill(style)}");
     }
 
     private static CombatStyleDefinition ResolveWeaponStyle(WorldEntryState state, CombatWeaponDefinition weapon)
@@ -607,3 +603,4 @@ internal sealed partial class GameRouter
         return ResolveWeaponStyle(state, weapon);
     }
 }
+

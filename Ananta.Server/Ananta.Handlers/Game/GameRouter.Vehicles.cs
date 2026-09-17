@@ -371,6 +371,27 @@ internal sealed partial class GameRouter
     }
 
     [Handler(MethodId.AskPlayerStartEnterOrExitVehicle, HandlerPacketKind.Notify)]
+    private async Task AskPlayerStartEnterOrExitVehicle(Connection conn, UxRpcMessage msg)
+    {
+        try
+        {
+            var drive = msg.GetArgs<SceneMethods.PlayerVehicleDriveStateInfo>();
+            conn.Log.Info($"[VEHICLE] AskPlayerStartEnterOrExitVehicle vehicle={drive.VehicleEntityId} enter={drive.EnterOrLeave} seat={drive.SeatIndex}");
+            if (drive.EnterOrLeave)
+            {
+                await ForceEnterVehicleAsync(conn.Session, drive.VehicleEntityId);
+            }
+            else
+            {
+                await ForceExitVehicleAsync(conn.Session);
+            }
+        }
+        catch (Exception ex)
+        {
+            conn.Log.Warn($"[VEHICLE] AskPlayerStartEnterOrExitVehicle failed: {ex.Message}");
+        }
+    }
+
     [Handler(MethodId.AskPlayerFinishEnterOrExitVehicle, HandlerPacketKind.Notify)]
     [Handler(MethodId.AskVehicleStartMove, HandlerPacketKind.Notify)]
     [Handler(MethodId.AskVehicleStopMove, HandlerPacketKind.Notify)]
@@ -566,31 +587,54 @@ internal sealed partial class GameRouter
 
     // Taffy Moto / Monowheel Handlers
     [Handler(MethodId.AskTaffyMotoEnterRush, HandlerPacketKind.Invoke)]
+    [Handler(MethodId.AskTaffyMotoEnterRush, HandlerPacketKind.Notify)]
     private Task AskTaffyMotoEnterRush(Connection conn, UxRpcMessage msg)
     {
         conn.Log.Info("[TAFFY_MOTO] AskTaffyMotoEnterRush");
-        return conn.ReturnEmptyOkAsync(msg);
+        return msg.IsInvoke ? conn.ReturnEmptyOkAsync(msg) : Task.CompletedTask;
     }
 
     [Handler(MethodId.AskTaffyMotoLeaveRush, HandlerPacketKind.Invoke)]
+    [Handler(MethodId.AskTaffyMotoLeaveRush, HandlerPacketKind.Notify)]
     private Task AskTaffyMotoLeaveRush(Connection conn, UxRpcMessage msg)
     {
         conn.Log.Info("[TAFFY_MOTO] AskTaffyMotoLeaveRush");
-        return conn.ReturnEmptyOkAsync(msg);
+        return msg.IsInvoke ? conn.ReturnEmptyOkAsync(msg) : Task.CompletedTask;
     }
 
     [Handler(MethodId.OnTafeiMotorColliding, HandlerPacketKind.Invoke)]
+    [Handler(MethodId.OnTafeiMotorColliding, HandlerPacketKind.Notify)]
     private Task OnTafeiMotorColliding(Connection conn, UxRpcMessage msg)
     {
         conn.Log.Info("[TAFFY_MOTO] OnTafeiMotorColliding");
-        return conn.ReturnEmptyOkAsync(msg);
+        return msg.IsInvoke ? conn.ReturnEmptyOkAsync(msg) : Task.CompletedTask;
     }
 
     [Handler(MethodId.AskGetOffMotor, HandlerPacketKind.Invoke)]
+    [Handler(MethodId.AskGetOffMotor, HandlerPacketKind.Notify)]
     private Task AskGetOffMotor(Connection conn, UxRpcMessage msg)
     {
         conn.Log.Info("[TAFFY_MOTO] AskGetOffMotor");
-        return conn.ReturnEmptyOkAsync(msg);
+        return msg.IsInvoke ? conn.ReturnEmptyOkAsync(msg) : Task.CompletedTask;
+    }
+
+
+    [Handler(MethodId.AskReleaseVehicleSeat, HandlerPacketKind.Notify)]
+    [Handler(MethodId.AskReleaseVehicleSeat, HandlerPacketKind.Invoke)]
+    private async Task AskReleaseVehicleSeat(Connection conn, UxRpcMessage msg)
+    {
+        conn.Log.Info("[VEHICLE] AskReleaseVehicleSeat received");
+        if (msg.IsInvoke)
+            await conn.ReturnEmptyOkAsync(msg);
+        await ForceExitVehicleAsync(conn.Session);
+    }
+
+    [Handler(MethodId.AskChangeCanMoveToDriveSeat, HandlerPacketKind.Invoke)]
+    [Handler(MethodId.AskChangeCanMoveToDriveSeat, HandlerPacketKind.Notify)]
+    private Task AskChangeCanMoveToDriveSeat(Connection conn, UxRpcMessage msg)
+    {
+        conn.Log.Info("[VEHICLE] AskChangeCanMoveToDriveSeat");
+        return msg.IsInvoke ? conn.ReturnEmptyOkAsync(msg) : Task.CompletedTask;
     }
 }
 

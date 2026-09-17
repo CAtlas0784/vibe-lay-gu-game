@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Ananta.SDK.Network;
 using Ananta.SDK.Serialization;
+using Ananta.Server.ClientData.Client4229938;
 using Ananta.Server.Configuration;
 using Ananta.Server.Handlers.Game;
 using Ananta.Server.Protocol.Client4229938;
@@ -118,16 +119,30 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, TimeStatus(), token);
             else if (method == "POST" && path == "/api/time/set")
                 await WriteJsonAsync(ctx, await TimeSetAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/weather/set")
+                await WriteJsonAsync(ctx, await WeatherSetAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/weather/fog")
+                await WriteJsonAsync(ctx, await WeatherFogAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/world/switch-scene")
                 await WriteJsonAsync(ctx, await SwitchSceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/unstuck/blackscreen")
                 await WriteJsonAsync(ctx, await UnstuckBlackScreenAsync(token), token);
             else if (method == "POST" && path == "/api/player/rollback-10s")
                 await WriteJsonAsync(ctx, await RollbackPositionAsync(token), token);
+            else if (method == "POST" && path == "/api/player/toggle-clothes")
+                await WriteJsonAsync(ctx, await ToggleClothesAsync(token), token);
             else if (method == "POST" && path == "/api/enemy/spawn")
                 await WriteJsonAsync(ctx, await SpawnEnemyAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/cutscene/play")
                 await WriteJsonAsync(ctx, await PlayCutsceneAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/timeline/play")
+                await WriteJsonAsync(ctx, await PlayTimelineAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/npc/spawn")
+                await WriteJsonAsync(ctx, await NpcSpawnAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "GET" && path == "/api/scenes")
+                await WriteJsonAsync(ctx, Scenes(), token);
+            else if (method == "GET" && path == "/api/npc/catalog")
+                await WriteJsonAsync(ctx, NpcCatalog(ctx.Request), token);
             else
                 await WriteJsonAsync(ctx, new { ok = false, error = "unknown route" }, token, 404);
         }
@@ -543,6 +558,110 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         return await SendPlayerTeleportAsync(session, unitId, x, y, z, facing, "teleport", token);
     }
 
+    private static object Scenes()
+    {
+        return new
+        {
+            presets = SceneCatalog4229938.Presets.Select(p => new
+            {
+                key = p.Key,
+                label = p.Label,
+                raidId = p.RaidId,
+                instanceId = p.InstanceId,
+                universeId = p.UniverseId,
+                x = p.X,
+                y = p.Y,
+                z = p.Z,
+                facing = p.Facing,
+            }).ToList()
+        };
+    }
+
+    private static object NpcCatalog(HttpListenerRequest req)
+    {
+        var q = req.QueryString["q"];
+        var cat = req.QueryString["cat"];
+        int limit = 150;
+        if (int.TryParse(req.QueryString["limit"], out var l) && l > 0)
+            limit = Math.Clamp(l, 1, 300);
+
+        var entries = NpcCatalog4229938.Search(q, cat, limit);
+
+        return new
+        {
+            categories = new[]
+            {
+                new { id = "all", label = "🌟 All (ทั้งหมด)" },
+                new { id = "monster", label = "⚔️ Monsters & Bosses (มอนสเตอร์/บอส)" },
+                new { id = "citizen", label = "🚶 Citizens (ชาวเมือง/ประชาชน)" },
+                new { id = "police", label = "👮 Police & Security (ตำรวจ/ยาม)" },
+                new { id = "animal", label = "🐱 Animals & Pets (สัตว์/เป็ด/แมว)" },
+                new { id = "ally", label = "🤝 Allies & Story (พันธมิตร/ตัวละคร)" },
+            },
+            poiActions = new[]
+            {
+                new { id = 0, name = "🧍 Auto / None (ไม่ระบุท่า)" },
+                new { id = 2, name = "🧍 Idle (ยืนนิ่ง)" },
+                new { id = 1, name = "🚶 Walk (เดิน)" },
+                new { id = 4, name = "🏃 Run (วิ่ง)" },
+                new { id = 11, name = "📱 Phone / Camera (คุยโทรศัพท์/ถ่ายรูป)" },
+                new { id = 10, name = "🧱 Lean on Wall (พิงกำแพง)" },
+                new { id = 12, name = "🪑 Formal Sit (นั่งเก้าอี้เรียบร้อย)" },
+                new { id = 13, name = "🪑 Relaxed Sit (นั่งเก้าอี้ผ่อนคลาย)" },
+                new { id = 15, name = "💬 Sit & Talk (นั่งคุย)" },
+                new { id = 6, name = "👏 Clapping (ปรบมือ)" },
+                new { id = 5, name = "👀 Spectating (ยืนมุงดู)" },
+                new { id = 3, name = "😱 Scared / Panicking (ตกใจกลัว)" },
+                new { id = 8, name = "🥤 Vending Machine (กดตู้ขายน้ำ)" }
+            },
+            items = entries.Select(e => new
+            {
+                id = e.Id,
+                name = string.IsNullOrWhiteSpace(e.Name) ? $"Agent_{e.Id}" : e.Name,
+                category = e.Category,
+                model = e.GeneralModelId,
+                camp = e.Camp,
+                defaultPoi = e.Category == "monster" ? 0 : 2
+            }).ToList()
+        };
+    }
+
+    private sealed class NpcSpawnRequest
+    {
+        public List<AdminNpcSpawnItem>? Items { get; set; }
+        public float XSpacing { get; set; } = 1.5f;
+        public float ZSpacing { get; set; } = 1.5f;
+        public int MaxPerRow { get; set; } = 10;
+    }
+
+    private async Task<object> NpcSpawnAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, message = "no live game session (is the client in the world?)" };
+
+        NpcSpawnRequest? cmd;
+        try
+        {
+            cmd = JsonSerializer.Deserialize<NpcSpawnRequest>(json, JsonOptions);
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, message = "bad request: " + ex.Message };
+        }
+
+        if (cmd?.Items is not { Count: >= 1 } || cmd.Items.Any(i => i is null || i.NpcFormworkId == 0)
+            || !float.IsFinite(cmd.XSpacing) || cmd.XSpacing < 0f || !float.IsFinite(cmd.ZSpacing) || cmd.ZSpacing < 0f)
+        {
+            return new { ok = false, message = "provide at least one item with a non-zero npcFormworkId, finite non-negative X/Z spacing, and maxPerRow of at least 1" };
+        }
+        if (cmd.MaxPerRow < 1)
+            return new { ok = false, message = "maxPerRow must be at least 1" };
+
+        var result = await GameRouter.SpawnStaticNpcsAsync(session, cmd.Items, cmd.XSpacing, cmd.ZSpacing, cmd.MaxPerRow);
+        return new { ok = result.Ok, message = result.Message, ids = result.Ids.Select(id => id.ToString()).ToArray() };
+    }
+
     private async Task<object> SwitchSceneAsync(string json, CancellationToken token)
     {
         var session = hub.Current;
@@ -558,6 +677,22 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         {
             using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
             var root = doc.RootElement;
+            if (root.TryGetProperty("preset", out var pp) && pp.ValueKind == JsonValueKind.String)
+            {
+                var key = pp.GetString();
+                var preset = SceneCatalog4229938.Presets.FirstOrDefault(p =>
+                    string.Equals(p.Key, key, StringComparison.OrdinalIgnoreCase));
+                if (preset != null)
+                {
+                    raidId = preset.RaidId;
+                    instanceId = preset.InstanceId;
+                    universeId = preset.UniverseId;
+                    x = preset.X;
+                    y = preset.Y;
+                    z = preset.Z;
+                    facing = preset.Facing;
+                }
+            }
             if (root.TryGetProperty("raidId", out var pr) || root.TryGetProperty("raid", out pr))
                 raidId = pr.GetUInt32();
             if (root.TryGetProperty("instanceId", out var pi) || root.TryGetProperty("instance", out pi))
@@ -861,6 +996,69 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         return new { ok = true, hour, minute, fix };
     }
 
+    private async Task<object> WeatherSetAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        uint weatherId = 1, transition = 5;
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("weatherId", out var pw))
+                weatherId = pw.GetUInt32();
+            if (root.TryGetProperty("transition", out var pt))
+                transition = pt.GetUInt32();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var state = GameRouter.GetStateIfExists(session);
+        if (state is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+        lock (state.SyncRoot)
+        {
+            state.WeatherId = weatherId;
+            state.WeatherTransitionSeconds = transition;
+            state.HasExplicitWeather = true;
+        }
+        await GameRouter.PushSessionWeatherAsync(session);
+        var cmd = $"CMD:SET_WEATHER:{weatherId}";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+        session.Log.Info($"[DEBUG-API] weather set id={weatherId} transition={transition}s");
+        return new { ok = true, weatherId, transition };
+    }
+
+    private async Task<object> WeatherFogAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        float density = 0.08f;
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("density", out var pd))
+                density = pd.GetSingle();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var cmd = $"CMD:SET_FOG:{density.ToString(System.Globalization.CultureInfo.InvariantCulture)}";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info($"[DEBUG-API] fog set density={density}");
+        return new { ok = true, density };
+    }
+
     private async Task<object> UnstuckBlackScreenAsync(CancellationToken token)
     {
         var session = hub.Current;
@@ -1002,6 +1200,45 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
 
         session.Log.Info($"[DEBUG-API] play cutscene/video id={cutsceneId}");
         return new { ok = true, id = cutsceneId };
+    }
+
+    private async Task<object> PlayTimelineAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        string timeline = "SwitchChar_tafei_01";
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("name", out var pn)) timeline = pn.GetString() ?? pn.GetRawText();
+            else if (root.TryGetProperty("id", out var pi)) timeline = pi.GetString() ?? pi.GetRawText();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var cmd = $"CMD:PLAY_TIMELINE:{timeline}";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info($"[DEBUG-API] play realtime timeline={timeline}");
+        return new { ok = true, timeline };
+    }
+
+    private async Task<object> ToggleClothesAsync(CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        var cmd = "CMD:TOGGLE_CLOTHES";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info("[DEBUG-API] toggle clothes dispatched");
+        return new { ok = true };
     }
 
     private static async Task<string> ReadBodyAsync(HttpListenerRequest request, CancellationToken token)

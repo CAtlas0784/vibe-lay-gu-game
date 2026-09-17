@@ -1,5 +1,7 @@
 using Ananta.SDK.Rpc;
+using Ananta.Server.Configuration;
 using Ananta.Server.Protocol.Client4229938;
+using Ananta.Server.RpcTypes.Client4229938;
 using SceneMethods = Ananta.Server.RpcTypes.Client4229938.Methods.GameScene;
 
 namespace Ananta.Server.Handlers.Game;
@@ -54,11 +56,56 @@ internal sealed partial class GameRouter
     }
 
     [Handler(MethodId.GmTeleportXYZ, HandlerPacketKind.Invoke)]
-    private Task GmTeleportXYZ(Connection conn, UxRpcMessage msg)
+    private async Task GmTeleportXYZ(Connection conn, UxRpcMessage msg)
     {
         var args = msg.GetArgs<SceneMethods.GmTeleportXYZ>();
-        conn.Log.Info($"[GM] teleport to=({args.X:F1},{args.Y:F1},{args.Z:F1}) facing={args.Facing:F1} (client-side, accepted)");
-        return conn.ReturnEmptyOkAsync(msg);
+        if (MathF.Abs(args.X) < 0.1f && MathF.Abs(args.Z) < 0.1f)
+        {
+            conn.Session.Log.Warn($"[GM] reject teleport to origin (0, 0, 0)");
+            await conn.ReturnAsync(msg, 0);
+            return;
+        }
+        var state = GetWorldState(msg.Context);
+        var targetY = args.Y;
+        if (targetY <= 10f)
+        {
+            targetY = (state != null && state.LastReportedPlayerPosition.Y > 10f)
+                ? state.LastReportedPlayerPosition.Y
+                : 274.6f;
+        }
+        var targetPos = new Vec3(args.X, targetY, args.Z);
+        var facing = args.Facing;
+        var unitId = state?.ActiveSpiritUnitId ?? Profile.InitialUnitId;
+
+        if (state != null)
+        {
+            state.LastReportedPlayerPosition = targetPos;
+            state.PendingTeleportPosition = targetPos;
+            state.PendingTeleportFacing = facing;
+            state.PendingTeleportId = 1;
+        }
+
+        var sync = new SceneMethods.SyncTeleport
+        {
+            option = new SceneMethods.TeleportOption
+            {
+                teleportId = 1,
+                Position = new SceneMethods.UxVector3(targetPos.X, targetPos.Y, targetPos.Z),
+                Facing = facing,
+                IsSwitchScene = false,
+                WaitTaskResource = false,
+                MapEntranceId = 0
+            }
+        };
+        await conn.NotifyAsync(MethodId.SyncTeleport, sync);
+        if (unitId != 0)
+        {
+            await conn.NotifyAsync(MethodId.SyncUnitPositionAndFacing,
+                WorldCodec.PositionAndFacing(unitId, targetPos, facing));
+        }
+
+        conn.Log.Info($"[GM] teleport to=({targetPos.X:F1},{targetPos.Y:F1},{targetPos.Z:F1}) facing={facing:F1}");
+        await conn.ReturnEmptyOkAsync(msg);
     }
 
     [Handler(MethodId.DavinciCode, HandlerPacketKind.Notify)]

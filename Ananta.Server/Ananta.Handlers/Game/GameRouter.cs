@@ -73,6 +73,8 @@ internal sealed partial class GameRouter
         MethodId.AskGetUnlockedVehicles,
         MethodId.SyncStoryCoreClientInfo,
         MethodId.AskClaimVehicleSeat,
+        MethodId.AskReleaseVehicleSeat,
+        MethodId.AskChangeCanMoveToDriveSeat,
         MethodId.AskPlayerStartEnterOrExitVehicle,
         MethodId.AskPlayerFinishEnterOrExitVehicle,
         MethodId.AskVehicleMove,
@@ -122,6 +124,14 @@ internal sealed partial class GameRouter
         MethodId.AskDrawGacha,
         MethodId.AskClaimGachaMilestone,
         MethodId.AskChaosMasterGacha,
+
+        // Shop and Marketplace.
+        MethodId.AskNpcShopCommodityInfo,
+        MethodId.AskReadCommodities,
+        MethodId.AskBuyCommodity,
+        MethodId.AskBuyCommodities,
+        MethodId.AskBuyCommodityToBag,
+        MethodId.AskBuyCommoditiesToBag,
 
         // Activities.
         MethodId.AskActivityCancelRedPoint,
