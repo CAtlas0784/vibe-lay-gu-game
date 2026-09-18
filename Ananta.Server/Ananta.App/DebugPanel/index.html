@@ -234,39 +234,95 @@
 </div>
 
 <div class="card" style="border-color:#3b82f6">
-  <h2 style="color:#60a5fa">🚇 สถานีรถไฟ & รถไฟใต้ดิน (Subway & Metro Fast Travel)</h2>
-  <div style="font-weight:bold;margin-bottom:6px;color:#93c5fd">🏙️ Nova City Metro (12 สถานี):</div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-    <button onclick="warpSubway(2376.0, -1.1, 2729.6, 104.5)">Sunny Bay</button>
-    <button onclick="warpSubway(898.4, -1.1, 1558.2, 51)">Freshville</button>
-    <button onclick="warpSubway(1878.8, -1.1, 2250.5, 0)">Glimmergold</button>
-    <button onclick="warpSubway(2748.3, -1.1, 2046.6, 0)">Memorial Park</button>
-    <button onclick="warpSubway(3159.0, -1.1, 2643.0, 0)">Azure North</button>
-    <button onclick="warpSubway(3661.7, -1.0, 1286.9, 0)">Future Port</button>
-    <button onclick="warpSubway(2243.6, -1.1, 1616.9, 0)">Coastal Station</button>
-    <button onclick="warpSubway(3941.7, -1.1, 1974.1, 0)">Vista Station</button>
-    <button onclick="warpSubway(1232.9, -1.1, 2213.1, 0)">Veluxity Station</button>
-    <button onclick="warpSubway(620.2, -1.0, 2072.1, 0)">Paradox Plaza</button>
-    <button onclick="warpSubway(1383.1, -1.1, 1267.7, 0)">Marine MechWorks</button>
-    <button onclick="warpSubway(2947.4, -1.1, 1030.3, 0)">Rixxy Wonderland</button>
+  <h2 style="color:#60a5fa">🚇 ระบบขนส่งมวลชน & รถไฟใต้ดิน (Metro Transit & Live Train Tracker)</h2>
+  
+  <!-- Sub-Tabs Navigation -->
+  <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+    <button id="tabBtn_live" class="npc-tab active" onclick="switchTransitTab('live')">🚊 ติดตามขบวนรถไฟสด & สายรถไฟ (Live Train Lines)</button>
+    <button id="tabBtn_stations" class="npc-tab" onclick="switchTransitTab('stations')">📍 แผนผังจุดวาร์ปสถานีทั้งหมด (All Stations Grid)</button>
+    <button id="tabBtn_cinematic" class="npc-tab" onclick="switchTransitTab('cinematic')">🎬 ฉากคัทซีนรถไฟใต้ดิน (Metro Cutscenes)</button>
   </div>
-  <div style="font-weight:bold;margin-bottom:6px;color:#a78bfa">🏮 Longqi Metro (13 สถานี):</div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap">
-    <button class="ghost" onclick="warpSubway(-1638.0, 18.0, 1540.5, 0)">Dinglan North</button>
-    <button class="ghost" onclick="warpSubway(-1492.5, 17.6, 1107.9, 0)">Zhaohua Road</button>
-    <button class="ghost" onclick="warpSubway(-1431.7, 18.0, 565.0, 0)">Dinglan Road</button>
-    <button class="ghost" onclick="warpSubway(-1725.5, 17.5, 12.1, 0)">Lakeside Pedestrian</button>
-    <button class="ghost" onclick="warpSubway(-1002.5, 17.7, 115.3, 0)">Zenith Center</button>
-    <button class="ghost" onclick="warpSubway(-1788.4, 17.5, -574.6, 0)">Lakeside South</button>
-    <button class="ghost" onclick="warpSubway(-844.0, 17.5, 1133.7, 0)">Great Ferry Port</button>
-    <button class="ghost" onclick="warpSubway(-624.4, 17.6, 660.4, 0)">Xinfeng Road</button>
-    <button class="ghost" onclick="warpSubway(61.6, 17.5, 778.3, 0)">Yaojin Road</button>
-    <button class="ghost" onclick="warpSubway(375.8, 17.5, 98.4, 0)">Yaojin Pedestrian</button>
-    <button class="ghost" onclick="warpSubway(-427.6, 17.5, 354.0, 0)">Mingchun North</button>
-    <button class="ghost" onclick="warpSubway(-2442.7, 17.5, 1015.6, 0)">Lakefront Institute</button>
-    <button class="ghost" onclick="warpSubway(-1138.2, 17.7, -602.3, 0)">Cloudstream West</button>
+
+  <!-- TAB 1: Live Train Lines & Schedule -->
+  <div id="transitPane_live">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+      <span style="font-size:13px;font-weight:bold;color:#93c5fd">เลือกสายรถไฟ:</span>
+      <select id="railLineSelect" onchange="onSelectRailLine()" style="flex:1;min-width:240px;background:#1e293b;color:#f8fafc;border:1px solid #3b82f6;padding:6px;border-radius:4px">
+        <option value="1">🔵 Line 1: Bayshore Line (Inner Ring / ตามเข็มนาฬิกา)</option>
+        <option value="2">🔷 Line 2: Bayshore Line (Outer Ring / ทวนเข็มนาฬิกา)</option>
+        <option value="3">🟡 Line 3: Central Loop Line (สายวนรอบใจกลางเมือง)</option>
+        <option value="4">🟢 Line 4: East Loop Line (สายวนรอบเขตธุรกิจตะวันออก)</option>
+        <option value="9">🟣 Longqi Metro Line 9 (รถไฟใต้ดินเขตหลงฉี สาย 9)</option>
+      </select>
+      <button style="background:#0284c7;color:white;padding:6px 12px" onclick="refreshTransitTracker()">🔄 Refresh Live Trains</button>
+    </div>
+
+    <!-- Active Line Info Banner -->
+    <div id="lineInfoBanner" style="background:#0f172a;border-left:4px solid #38bdf8;padding:8px 12px;border-radius:4px;margin-bottom:10px;font-size:12px;color:#cbd5e1">
+    </div>
+
+    <!-- Live Trains on Line -->
+    <div style="font-weight:bold;margin-bottom:6px;color:#38bdf8;font-size:13px">🚆 ขบวนรถไฟที่กำลังวิ่งบนสายนี้ (Live Active Trains):</div>
+    <div id="activeTrainsContainer" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:8px;margin-bottom:12px">
+    </div>
+
+    <!-- Route Station Nodes -->
+    <div style="font-weight:bold;margin-bottom:6px;color:#60a5fa;font-size:13px">🚉 เส้นทางสถานี & จุดขึ้นขบวนรถ (Station Route & Boarding):</div>
+    <div id="routeStationsContainer" style="background:#1e222b;border:1px solid #334155;border-radius:6px;padding:8px;max-height:300px;overflow-y:auto">
+    </div>
+    <div class="muted" style="margin-top:6px">💡 คลิก <b>⚡ วาร์ปด่วน</b> เพื่อไปที่ชานชาลาทันที หรือคลิก <b>🎬 ขึ้นรถไฟ</b> เพื่อเล่นคัทซีนนั่งในตู้โดยสารก่อนวาร์ปไปถึง</div>
   </div>
-  <div class="muted" style="margin-top:6px">วาร์ปไปยังสถานีรถไฟใต้ดิน (Subway / Metro Stations) ทั่วทั้ง Nova City และ Longqi ทันที</div>
+
+  <!-- TAB 2: All Stations Grid -->
+  <div id="transitPane_stations" style="display:none">
+    <div style="font-weight:bold;margin-bottom:6px;color:#93c5fd">🏙️ Nova City Metro (12 สถานี):</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+      <button onclick="warpSubway(2376.0, -1.1, 2729.6, 104.5)">Sunny Bay</button>
+      <button onclick="warpSubway(898.4, -1.1, 1558.2, 51)">Freshville</button>
+      <button onclick="warpSubway(1878.8, -1.1, 2250.5, 0)">Glimmergold</button>
+      <button onclick="warpSubway(2748.3, -1.1, 2046.6, 0)">Memorial Park</button>
+      <button onclick="warpSubway(3159.0, -1.1, 2643.0, 0)">Azure North</button>
+      <button onclick="warpSubway(3661.7, -1.0, 1286.9, 0)">Future Port</button>
+      <button onclick="warpSubway(2243.6, -1.1, 1616.9, 0)">Coastal Station</button>
+      <button onclick="warpSubway(3941.7, -1.1, 1974.1, 0)">Vista Station</button>
+      <button onclick="warpSubway(1232.9, -1.1, 2213.1, 0)">Veluxity Station</button>
+      <button onclick="warpSubway(620.2, -1.0, 2072.1, 0)">Paradox Plaza</button>
+      <button onclick="warpSubway(1383.1, -1.1, 1267.7, 0)">Marine MechWorks</button>
+      <button onclick="warpSubway(2947.4, -1.1, 1030.3, 0)">Rixxy Wonderland</button>
+    </div>
+    <div style="font-weight:bold;margin-bottom:6px;color:#a78bfa">🏮 Longqi Metro (13 สถานี):</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="ghost" onclick="warpSubway(-1638.0, 18.0, 1540.5, 0)">Dinglan North</button>
+      <button class="ghost" onclick="warpSubway(-1492.5, 17.6, 1107.9, 0)">Zhaohua Road</button>
+      <button class="ghost" onclick="warpSubway(-1431.7, 18.0, 565.0, 0)">Dinglan Road</button>
+      <button class="ghost" onclick="warpSubway(-1725.5, 17.5, 12.1, 0)">Lakeside Pedestrian</button>
+      <button class="ghost" onclick="warpSubway(-1002.5, 17.7, 115.3, 0)">Zenith Center</button>
+      <button class="ghost" onclick="warpSubway(-1788.4, 17.5, -574.6, 0)">Lakeside South</button>
+      <button class="ghost" onclick="warpSubway(-844.0, 17.5, 1133.7, 0)">Great Ferry Port</button>
+      <button class="ghost" onclick="warpSubway(-624.4, 17.6, 660.4, 0)">Xinfeng Road</button>
+      <button class="ghost" onclick="warpSubway(61.6, 17.5, 778.3, 0)">Yaojin Road</button>
+      <button class="ghost" onclick="warpSubway(375.8, 17.5, 98.4, 0)">Yaojin Pedestrian</button>
+      <button class="ghost" onclick="warpSubway(-427.6, 17.5, 354.0, 0)">Mingchun North</button>
+      <button class="ghost" onclick="warpSubway(-2442.7, 17.5, 1015.6, 0)">Lakefront Institute</button>
+      <button class="ghost" onclick="warpSubway(-1138.2, 17.7, -602.3, 0)">Cloudstream West</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: Metro Transit Cutscenes -->
+  <div id="transitPane_cinematic" style="display:none">
+    <div style="font-size:13px;color:#e2e8f0;margin-bottom:8px">
+      ฉากคัทซีนเหล่านี้คือคัทซีนจริงของตัวเกม (Timeline Sequence) ที่เล่นระหว่างนั่งรถไฟข้ามเขตเมือง หรือตอนเทียบชานชาลาสถานี:
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button style="background:#2563eb;color:white" onclick="playCutsceneDirect('loading_metro_normal01_m')">🎬 Male MC Riding Metro (พระเอกนั่งในรถไฟ)</button>
+      <button style="background:#db2777;color:white" onclick="playCutsceneDirect('loading_metro_normal01_f')">🎬 Female MC Riding Metro (นางเอกนั่งในรถไฟ)</button>
+      <button style="background:#475569;color:white" onclick="playCutsceneDirect('loading_metro_normal02')">🎬 Passenger View (บรรยากาศตู้โดยสาร 2)</button>
+      <button style="background:#0284c7;color:white" onclick="playCutsceneDirect('loading_metro_high01')">🎬 High-Angle View (วิวมุมสูงหน้าต่างรถไฟ)</button>
+      <button style="background:#0284c7;color:white" onclick="playCutsceneDirect('loading_metro_middle01')">🎬 Middle-Angle View (วิวมุมระดับสายตา)</button>
+      <button style="background:#0284c7;color:white" onclick="playCutsceneDirect('loading_metro_low01')">🎬 Low-Angle Track View (วิวมุมต่ำรางรถไฟ)</button>
+      <button style="background:#16a34a;color:white" onclick="playCutsceneDirect('loading_metro_end_1')">🎬 Station Arrival & Exit (รถไฟเทียบชานชาลา & เดินออก)</button>
+    </div>
+  </div>
 </div>
 
 <div class="card" style="border-color:#00bcd4">
@@ -902,6 +958,247 @@ async function teleportToBowling() {
   log('🎳 Warped to Bowling Alley at (1090.8, 6.5, 2083.7)');
 }
 
+// --- TRANSIT & METRO TRACKER ---
+function switchTransitTab(tab) {
+  const tabs = ['live', 'stations', 'cinematic'];
+  tabs.forEach(t => {
+    const pane = document.getElementById('transitPane_' + t);
+    const btn = document.getElementById('tabBtn_' + t);
+    if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
+    if (btn) {
+      if (t === tab) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+}
+
+async function playCutsceneDirect(tlName) {
+  const r = await api('/api/timeline/play', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: tlName })
+  });
+  log(`🎬 Played Metro Cutscene (${tlName}): ` + JSON.stringify(r));
+}
+
+async function rideMetroWithCinematic(x, y, z, stationName) {
+  log(`🚇 กำลังขึ้นรถไฟเพื่อมุ่งหน้าไปยังสถานี ${stationName}... เริ่มเล่นคัทซีนเดินทาง`);
+  await api('/api/timeline/play', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'loading_metro_normal01_m' })
+  });
+  setTimeout(async () => {
+    await warpSubway(x, y, z, 0);
+    await api('/api/timeline/play', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'loading_metro_end_1' })
+    });
+    log(`🚇 เดินทางถึงสถานี ${stationName} เรียบร้อยแล้ว! (ชานชาลาเปิดประตู)`);
+  }, 2500);
+}
+
+const RAIL_LINES = [
+  {
+    id: 1,
+    name: "Line 1: Bayshore Line (Inner Ring / ตามเข็มนาฬิกา)",
+    color: "#38bdf8",
+    interval: 90,
+    speed: 12,
+    trainCount: 6,
+    totalDuration: 1120,
+    stations: [
+      { id: 1, name: "Ivory Cove", cn: "白帆湾", x: 539.6, y: 20.5, z: 1363.8, t: 0 },
+      { id: 2, name: "Paradox Plaza", cn: "狂悖街区", x: 777.0, y: 14.7, z: 2427.2, t: 150 },
+      { id: 3, name: "Sunny Bay", cn: "晴海", x: 1988.8, y: 19.9, z: 2779.2, t: 320 },
+      { id: 4, name: "City Link (Hub)", cn: "城关 (ชุมทาง)", x: 2968.2, y: 42.1, z: 2467.9, t: 490 },
+      { id: 5, name: "Legacy Hub", cn: "纪事区", x: 3469.2, y: -17.8, z: 1724.5, t: 660 },
+      { id: 6, name: "Floramoon Park", cn: "花月公园", x: 2560.1, y: 33.7, z: 1675.7, t: 820 },
+      { id: 7, name: "Freshville East", cn: "东新筑", x: 1088.4, y: 18.5, z: 1875.8, t: 980 }
+    ]
+  },
+  {
+    id: 2,
+    name: "Line 2: Bayshore Line (Outer Ring / ทวนเข็มนาฬิกา)",
+    color: "#06b6d4",
+    interval: 90,
+    speed: 12,
+    trainCount: 6,
+    totalDuration: 1120,
+    stations: [
+      { id: 1, name: "Ivory Cove", cn: "白帆湾", x: 539.6, y: 20.5, z: 1363.8, t: 0 },
+      { id: 7, name: "Freshville East", cn: "东新筑", x: 1088.4, y: 18.5, z: 1875.8, t: 140 },
+      { id: 6, name: "Floramoon Park", cn: "花月公园", x: 2560.1, y: 33.7, z: 1675.7, t: 300 },
+      { id: 5, name: "Legacy Hub", cn: "纪事区", x: 3469.2, y: -17.8, z: 1724.5, t: 460 },
+      { id: 4, name: "City Link (Hub)", cn: "城关 (ชุมทาง)", x: 2968.2, y: 42.1, z: 2467.9, t: 630 },
+      { id: 3, name: "Sunny Bay", cn: "晴海", x: 1988.8, y: 19.9, z: 2779.2, t: 800 },
+      { id: 2, name: "Paradox Plaza", cn: "狂悖街区", x: 777.0, y: 14.7, z: 2427.2, t: 970 }
+    ]
+  },
+  {
+    id: 3,
+    name: "Line 3: Central Loop Line (สายวนรอบใจกลางเมือง)",
+    color: "#eab308",
+    interval: 90,
+    speed: 12,
+    trainCount: 4,
+    totalDuration: 740,
+    stations: [
+      { id: 6, name: "Floramoon Park", cn: "花月公园", x: 2560.1, y: 33.7, z: 1675.7, t: 0 },
+      { id: 11, name: "Marine MechWorks", cn: "岸泊工业", x: 1739.0, y: 29.3, z: 1379.2, t: 130 },
+      { id: 12, name: "Union Square", cn: "统理院", x: 1397.0, y: -8.5, z: 2151.9, t: 280 },
+      { id: 13, name: "Sunny Bay Central", cn: "晴海中央", x: 2003.8, y: 10.3, z: 2712.8, t: 430 },
+      { id: 4, name: "City Link (Hub)", cn: "城关 (ชุมทาง)", x: 2968.2, y: 42.1, z: 2467.9, t: 590 }
+    ]
+  },
+  {
+    id: 4,
+    name: "Line 4: East Loop Line (สายวนรอบเขตธุรกิจตะวันออก)",
+    color: "#22c55e",
+    interval: 90,
+    speed: 10,
+    trainCount: 4,
+    totalDuration: 640,
+    stations: [
+      { id: 4, name: "City Link (Hub)", cn: "城关 (ชุมทาง)", x: 2968.2, y: 42.1, z: 2467.9, t: 0 },
+      { id: 21, name: "Aerie Bank", cn: "鹰庭银行", x: 3412.4, y: 25.0, z: 2244.6, t: 120 },
+      { id: 22, name: "Saturn Tower", cn: "土星塔", x: 3865.9, y: 45.2, z: 1738.3, t: 250 },
+      { id: 23, name: "Pop Cool City", cn: "砰酷中心", x: 3629.9, y: 47.6, z: 1302.7, t: 380 },
+      { id: 24, name: "Crystal Place", cn: "璃色", x: 3134.9, y: 42.0, z: 1460.4, t: 510 }
+    ]
+  },
+  {
+    id: 9,
+    name: "Longqi Metro Line 9 (รถไฟใต้ดินเขตหลงฉี สาย 9)",
+    color: "#a855f7",
+    interval: 100,
+    speed: 12,
+    trainCount: 4,
+    totalDuration: 700,
+    stations: [
+      { id: 41, name: "Mingchun North", cn: "明春北", x: -503.1, y: -9.1, z: -528.8, t: 0 },
+      { id: 42, name: "Cloudstream West", cn: "云河西路", x: -1302.9, y: -23.8, z: -642.3, t: 140 },
+      { id: 43, name: "Lakefront Promenade", cn: "临湖步行街", x: -1711.3, y: -24.0, z: -50.5, t: 280 },
+      { id: 44, name: "Dinglan Road", cn: "定澜路", x: -1474.2, y: -24.1, z: 785.7, t: 420 },
+      { id: 45, name: "Wulin Road", cn: "武林路", x: -1512.1, y: -14.2, z: 1095.9, t: 560 }
+    ]
+  }
+];
+
+function getSelectedRailLine() {
+  const sel = document.getElementById('railLineSelect');
+  const lineId = parseInt(sel?.value || '1', 10);
+  return RAIL_LINES.find(l => l.id === lineId) || RAIL_LINES[0];
+}
+
+function onSelectRailLine() {
+  const line = getSelectedRailLine();
+  const banner = document.getElementById('lineInfoBanner');
+  if (banner) {
+    banner.style.borderLeftColor = line.color;
+    banner.innerHTML = `
+      <div style="font-weight:bold;color:${line.color};font-size:13px">${line.name}</div>
+      <div style="margin-top:4px;display:flex;gap:14px;flex-wrap:wrap">
+        <span>⏱️ ความถี่ขบวนรถ: <b>${line.interval} วินาที</b></span>
+        <span>🚄 ความเร็วเฉลี่ย: <b>${line.speed} m/s (~${Math.round(line.speed * 3.6)} km/h)</b></span>
+        <span>🕒 รอบเวลาทั้งสาย: <b>${Math.round(line.totalDuration / 60)} นาที</b></span>
+        <span>🚆 จำนวนขบวนให้บริการ: <b>${line.trainCount} ขบวน</b></span>
+      </div>
+    `;
+  }
+
+  const routeBox = document.getElementById('routeStationsContainer');
+  if (routeBox) {
+    let html = '<div style="display:flex;flex-direction:column;gap:6px">';
+    line.stations.forEach((st, idx) => {
+      const isHub = st.name.includes('(Hub)');
+      html += `
+        <div style="display:flex;align-items:center;justify-content:space-between;background:#15181f;padding:6px 10px;border-radius:4px;border-left:3px solid ${isHub ? '#f59e0b' : line.color}">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="background:${line.color};color:#000;font-size:11px;font-weight:bold;padding:2px 6px;border-radius:3px">#${idx + 1}</span>
+            <span style="font-weight:600;color:#f1f5f9">${st.name}</span>
+            <span style="color:#94a3b8;font-size:12px">[${st.cn}]</span>
+            ${isHub ? '<span style="background:#b45309;color:#fef3c7;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:bold">GRAND INTERCHANGE</span>' : ''}
+          </div>
+          <div style="display:flex;gap:4px">
+            <button style="background:#2563eb;color:white;font-size:11px;padding:3px 8px" onclick="warpSubway(${st.x}, ${st.y}, ${st.z}, 0)">⚡ วาร์ปด่วน</button>
+            <button style="background:#059669;color:white;font-size:11px;padding:3px 8px" onclick="rideMetroWithCinematic(${st.x}, ${st.y}, ${st.z}, '${st.name}')">🎬 ขึ้นรถไฟ</button>
+          </div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    routeBox.innerHTML = html;
+  }
+
+  refreshTransitTracker();
+}
+
+function refreshTransitTracker() {
+  const line = getSelectedRailLine();
+  const container = document.getElementById('activeTrainsContainer');
+  if (!container) return;
+
+  const now = Math.floor(Date.now() / 1000);
+  let html = '';
+
+  for (let i = 0; i < line.trainCount; i++) {
+    const trainNum = (line.id * 100) + (i + 1);
+    const trainProgress = (now + (i * line.interval)) % line.totalDuration;
+    
+    let prevSt = line.stations[0];
+    let nextSt = line.stations[1];
+    let isAtStation = false;
+    let dwellLeft = 0;
+
+    for (let s = 0; s < line.stations.length; s++) {
+      const cur = line.stations[s];
+      const nxt = line.stations[(s + 1) % line.stations.length];
+      const curT = cur.t;
+      let nxtT = nxt.t;
+      if (nxtT <= curT) nxtT += line.totalDuration;
+
+      let p = trainProgress;
+      if (p < curT) p += line.totalDuration;
+
+      if (p >= curT && p < nxtT) {
+        prevSt = cur;
+        nextSt = nxt;
+        const dwellTime = 20;
+        if (p - curT < dwellTime) {
+          isAtStation = true;
+          dwellLeft = Math.max(1, Math.round(dwellTime - (p - curT)));
+        }
+        break;
+      }
+    }
+
+    const etaSeconds = Math.max(1, Math.round(
+      (nextSt.t <= prevSt.t ? nextSt.t + line.totalDuration : nextSt.t) - 
+      (trainProgress < prevSt.t ? trainProgress + line.totalDuration : trainProgress)
+    ));
+
+    html += `
+      <div style="background:#181d26;border:1px solid #334155;border-radius:6px;padding:8px 10px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-weight:bold;color:${line.color}">🚆 ขบวน #${trainNum}</span>
+          <span style="font-size:11px;color:#94a3b8">ความเร็ว: ${line.speed} m/s</span>
+        </div>
+        ${isAtStation ? `
+          <div style="color:#4ade80;font-size:12px;font-weight:600">🟢 จอดเทียบชานชาลาที่ ${prevSt.name}</div>
+          <div style="color:#cbd5e1;font-size:11px;margin-top:2px">ประตูชานชาลาเปิดอยู่ · ออกเดินทางใน <b>${dwellLeft}s</b></div>
+        ` : `
+          <div style="color:#38bdf8;font-size:12px;font-weight:600">⏩ กำลังมุ่งหน้าไป ${nextSt.name}</div>
+          <div style="color:#cbd5e1;font-size:11px;margin-top:2px">ออกจาก ${prevSt.name} · ถึงชานชาลาในอีก <b>${etaSeconds}s</b></div>
+        `}
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
 async function setTimePreset(hour, minute) {
   const slider = document.getElementById('timeslider');
   if (slider) {
@@ -1009,6 +1306,8 @@ refresh();
 setInterval(refresh, 2000);
 refreshTrafficStatus();
 setInterval(refreshTrafficStatus, 2500);
+onSelectRailLine();
+setInterval(refreshTransitTracker, 1000);
 document.getElementById('timeslider').addEventListener('input', e => {
   timeDragging = true;
   document.getElementById('clock').textContent = fmtClock(parseInt(e.target.value || '720', 10));

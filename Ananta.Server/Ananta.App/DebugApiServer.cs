@@ -1270,6 +1270,15 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         new("switchchar_common_26", 105u, "Polite Photo with NPC (ถ่ายรูปคู่กับ NPC อย่างสุภาพ)", "urban", 1889.75f, 0f, 2211.68f),
         new("switchchar_common_19", 56u, "Tossing Can in Trash Bin (โยนกระป๋องลงถังขยะลงเป๊ะ)", "urban", 1717.25f, 0.08f, 2271.25f),
         new("switchchar_character_1", 88u, "Buying Drink at Vending Machine (หยอดเหรียญกดตู้เครื่องดื่ม)", "urban", 3010.08f, 0f, 1656.21f),
+
+        // Metro & Transit Timelines
+        new("loading_metro_normal01_m", 0u, "Metro Transit: Male MC Riding Train (นั่งรถไฟใต้ดิน - ตัวละครชาย)", "transit"),
+        new("loading_metro_normal01_f", 0u, "Metro Transit: Female MC Riding Train (นั่งรถไฟใต้ดิน - ตัวละครหญิง)", "transit"),
+        new("loading_metro_normal02", 0u, "Metro Transit: Carriage Passengers (บรรยากาศผู้โดยสารบนขบวนรถ)", "transit"),
+        new("loading_metro_high01", 0u, "Metro Transit: High-Angle Window View (วิวมุมสูงบนรถไฟ)", "transit"),
+        new("loading_metro_middle01", 0u, "Metro Transit: Carriage Interior (บรรยากาศในตู้โดยสาร)", "transit"),
+        new("loading_metro_low01", 0u, "Metro Transit: Low-Angle Track View (วิวมุมมองรางรถไฟ)", "transit"),
+        new("loading_metro_end_1", 0u, "Metro Transit: Arrival at Station (รถไฟเทียบชานชาลาปลายทาง)", "transit"),
     ];
 
     private async Task<object> PlayTimelineAsync(string json, CancellationToken token)
