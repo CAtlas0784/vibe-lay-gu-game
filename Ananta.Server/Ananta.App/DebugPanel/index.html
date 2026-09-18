@@ -249,7 +249,6 @@
   <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
     <button id="tabBtn_live" class="npc-tab active" onclick="switchTransitTab('live')">🚊 ติดตามขบวนรถไฟสด & สายรถไฟ (Live Train Lines)</button>
     <button id="tabBtn_stations" class="npc-tab" onclick="switchTransitTab('stations')">📍 แผนผังจุดวาร์ปสถานีทั้งหมด (All Stations Grid)</button>
-    <button id="tabBtn_cinematic" class="npc-tab" onclick="switchTransitTab('cinematic')">🎬 ฉากคัทซีนรถไฟใต้ดิน (Metro Cutscenes)</button>
   </div>
 
   <!-- TAB 1: Live Train Lines & Schedule -->
@@ -316,50 +315,6 @@
       <button class="ghost" onclick="warpSubway(-1138.2, 17.7, -602.3, 0, 'Cloudstream West', 'loading_metro_end_1')">Cloudstream West</button>
     </div>
   </div>
-
-  <!-- TAB 3: Metro Transit Cutscenes -->
-  <div id="transitPane_cinematic" style="display:none">
-    <div style="font-size:13px;color:#e2e8f0;margin-bottom:8px">
-      ฉากคัทซีนเหล่านี้คือคัทซีนจริงของตัวเกม (Timeline Sequence) ที่เล่นระหว่างนั่งรถไฟข้ามเขตเมือง หรือตอนเทียบชานชาลาสถานี:
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button style="background:#2563eb;color:white" onclick="playCutsceneDirect('loading_metro_normal01_m')">🎬 Male MC Riding Metro (พระเอกนั่งในรถไฟ)</button>
-      <button style="background:#db2777;color:white" onclick="playCutsceneDirect('loading_metro_normal01_f')">🎬 Female MC Riding Metro (นางเอกนั่งในรถไฟ)</button>
-      <button style="background:#475569;color:white" onclick="playCutsceneDirect('loading_metro_normal02')">🎬 Passenger View (บรรยากาศตู้โดยสาร 2)</button>
-      <button style="background:#0284c7;color:white" onclick="playCutsceneDirect('loading_metro_high01')">🎬 High-Angle View (วิวมุมสูงหน้าต่างรถไฟ)</button>
-      <button style="background:#0284c7;color:white" onclick="playCutsceneDirect('loading_metro_middle01')">🎬 Middle-Angle View (วิวมุมระดับสายตา)</button>
-      <button style="background:#0284c7;color:white" onclick="playCutsceneDirect('loading_metro_low01')">🎬 Low-Angle Track View (วิวมุมต่ำรางรถไฟ)</button>
-      <button style="background:#16a34a;color:white" onclick="playCutsceneDirect('loading_metro_end_1')">🎬 Station Arrival & Exit (รถไฟเทียบชานชาลา & เดินออก)</button>
-    </div>
-  </div>
-</div>
-
-<div class="card" style="border-color:#00bcd4">
-  <h2 style="color:#4dd0e1">🎬 3D Cinematics & Story Timelines (ฉากคัทซีนเนื้อเรื่อง)</h2>
-  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <select id="cutsceneSelect" style="flex:1;min-width:260px;background:#263238;color:#eee;border:1px solid #37474f;border-radius:4px;padding:6px">
-      <option value="tl_seymour01">Seymour Story Chapter 1 (赛默 - 计划外响应 01)</option>
-      <option value="tl_seymour02">Seymour Story Chapter 2 (赛默 - 计划外响应 02)</option>
-      <option value="tl_seymour03">Seymour Story Chapter 3 (赛默 - 计划外响应 03)</option>
-      <option value="tl_seym_010_q010_s01">Seymour Story Quest S01 (面具之下，监视之中)</option>
-      <option value="tl_taffy01">Taffy Story: High-Speed Moment 01 (塔菲 - 极速时刻 01)</option>
-      <option value="tl_taffy02">Taffy Story: High-Speed Moment 02 (塔菲 - 极速时刻 02)</option>
-      <option value="tl_richiet01">Richie Story: Holiday Syndrome 01 (里希 - 假期综合征 01)</option>
-      <option value="switchchar_tafei_01">Taffy Cinematic Arrival (ทาฟี่ โดดจากตึก)</option>
-      <option value="switchchar_dila_03">Dila Combat Cinematic (ดิลา แอกชันสตรีท)</option>
-      <option value="switchchar_saimo_05">Seymour Street Arrival (เซย์มัวร์ สไตล์คูล)</option>
-      <option value="switchchar_lixi_04">Richie Motorcycle Rush (ริชชี่ ซิ่งมอเตอร์ไซค์)</option>
-      <option value="switchchar_nanzhujue_02">Male MC Arrival A (พระเอก สลับตัว A)</option>
-      <option value="switchchar_nanzhujue_03">Male MC Arrival B (พระเอก สลับตัว B)</option>
-      <option value="switchchar_common_01">Metropolis Skyline Overview (มุมกล้องเมือง 1)</option>
-      <option value="switchchar_common_04">Street Parkour Traverse (มุมกล้องฟรีรันนิง 4)</option>
-      <option value="switchchar_common_10">Night Neon Lights (มุมกล้องวิวกลางคืน 10)</option>
-      <option value="ananta_openning">Ananta Main Opening Cinematic (ฉากเปิดตัว Ananta โลกใหม่)</option>
-      <option value="alienfight">Alien Combat Cinematic (ฉากต่อสู้เอเลี่ยนสุดอลังการ)</option>
-    </select>
-    <button style="background:#00838f;color:white" onclick="playSelectedCutscene()">Play Cinematic / เล่นคัทซีน</button>
-  </div>
-  <div class="muted" style="margin-top:6px">สั่งเล่นฉาก Cinematic Timeline 3D ภายใน Engine ของเกมทันทีแบบเรียลไทม์</div>
 </div>
 
 <div class="card" style="border-color:#ff9800">
@@ -910,53 +865,6 @@ async function toggleClothes() {
   log('toggle clothes: ' + JSON.stringify(r));
 }
 
-async function loadCutsceneCatalog() {
-  const sel = document.getElementById('cutsceneSelect');
-  if (!sel) return;
-  try {
-    const res = await api('/api/cutscene/catalog');
-    if (res && res.items && res.items.length > 0) {
-      const groups = {
-        story: { label: '🎬 เนื้อเรื่องหลัก & เควสต์ (Main Story & Quests)', items: [] },
-        character: { label: '🌟 แอนิเมชันเปิดตัวตัวละคร (Character Entrances & Specials)', items: [] },
-        urban: { label: '🏙️ ฉากชีวิตเมือง & กิจกรรม (Urban Life & Activities)', items: [] },
-        transit: { label: '✈️ ทรานซิชันโลก & ยานพาหนะ (World & Vehicle Transitions)', items: [] }
-      };
-      res.items.forEach(it => {
-        const cat = groups[it.category] ? it.category : 'character';
-        groups[cat].items.push(it);
-      });
-      let html = '';
-      for (const k in groups) {
-        const g = groups[k];
-        if (g.items.length > 0) {
-          html += `<optgroup label="${g.label}">`;
-          g.items.forEach(it => {
-            html += `<option value="${it.id}" data-config-id="${it.configId || 0}">${it.name}</option>`;
-          });
-          html += `</optgroup>`;
-        }
-      }
-      sel.innerHTML = html;
-    }
-  } catch (err) {
-    console.error('Failed to load cutscene catalog:', err);
-  }
-}
-
-async function playSelectedCutscene() {
-  const sel = document.getElementById('cutsceneSelect');
-  const opt = sel ? sel.options[sel.selectedIndex] : null;
-  const name = sel ? sel.value : 'TL_SEYM_010_Q010_S01';
-  const configId = opt ? parseInt(opt.getAttribute('data-config-id') || '0', 10) : 0;
-  const r = await api('/api/timeline/play', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, configId })
-  });
-  log('play cutscene: ' + JSON.stringify(r));
-}
-
 async function launchSelectedMinigame() {
   const sel = document.getElementById('minigameSelect');
   const game = sel ? sel.value : 'KOF97';
@@ -986,24 +894,49 @@ async function launchArcadeMinigame() {
   await launchSelectedMinigame();
 }
 
-async function warpSubway(x, y, z, facing) {
+async function warpSubway(x, y, z, facing, stationName, endTimeline) {
+  const autoCutscene = document.getElementById('autoSubwayCutscene')?.checked ?? true;
+  if (autoCutscene) {
+    const sName = stationName || 'สถานีปลายทาง';
+    log(`🚇 กำลังเดินทางด้วยรถไฟไปยัง ${sName}... (ระบบกำลังเล่นคัทซีนรถไฟอัตโนมัติ)`);
+    await api('/api/timeline/play', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'loading_metro_normal01_m' })
+    });
+    setTimeout(async () => {
+      await api('/api/player/teleport', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), facing: parseFloat(facing || 0) })
+      });
+      await api('/api/timeline/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: endTimeline || 'loading_metro_end_1' })
+      });
+      log(`🚇 รถไฟเทียบชานชาลาสถานี ${sName} และเดินออกจากอุโมงค์เรียบร้อยแล้ว`);
+      refresh();
+    }, 1800);
+    return;
+  }
   const r = await api('/api/player/teleport', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), facing: parseFloat(facing || 0) })
   });
-  log(`🚇 Warp to Subway (${x}, ${y}, ${z}): ` + JSON.stringify(r));
+  log(`🚇 วาร์ปไปยังสถานี (${x}, ${y}, ${z}): ` + JSON.stringify(r));
   refresh();
 }
 
 async function teleportToBowling() {
-  await warpSubway(1090.8, 6.5, 2083.7, 0);
+  await warpSubway(1090.8, 6.5, 2083.7, 0, 'Bowling Alley');
   log('🎳 Warped to Bowling Alley at (1090.8, 6.5, 2083.7)');
 }
 
 // --- TRANSIT & METRO TRACKER ---
 function switchTransitTab(tab) {
-  const tabs = ['live', 'stations', 'cinematic'];
+  const tabs = ['live', 'stations'];
   tabs.forEach(t => {
     const pane = document.getElementById('transitPane_' + t);
     const btn = document.getElementById('tabBtn_' + t);
@@ -1013,33 +946,6 @@ function switchTransitTab(tab) {
       else btn.classList.remove('active');
     }
   });
-}
-
-async function playCutsceneDirect(tlName) {
-  const r = await api('/api/timeline/play', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: tlName })
-  });
-  log(`🎬 Played Metro Cutscene (${tlName}): ` + JSON.stringify(r));
-}
-
-async function rideMetroWithCinematic(x, y, z, stationName) {
-  log(`🚇 กำลังขึ้นรถไฟเพื่อมุ่งหน้าไปยังสถานี ${stationName}... เริ่มเล่นคัทซีนเดินทาง`);
-  await api('/api/timeline/play', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name: 'loading_metro_normal01_m' })
-  });
-  setTimeout(async () => {
-    await warpSubway(x, y, z, 0);
-    await api('/api/timeline/play', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'loading_metro_end_1' })
-    });
-    log(`🚇 เดินทางถึงสถานี ${stationName} เรียบร้อยแล้ว! (ชานชาลาเปิดประตู)`);
-  }, 2500);
 }
 
 const RAIL_LINES = [
@@ -1165,8 +1071,7 @@ function onSelectRailLine() {
             ${isHub ? '<span style="background:#b45309;color:#fef3c7;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:bold">GRAND INTERCHANGE</span>' : ''}
           </div>
           <div style="display:flex;gap:4px">
-            <button style="background:#2563eb;color:white;font-size:11px;padding:3px 8px" onclick="warpSubway(${st.x}, ${st.y}, ${st.z}, 0)">⚡ วาร์ปด่วน</button>
-            <button style="background:#059669;color:white;font-size:11px;padding:3px 8px" onclick="rideMetroWithCinematic(${st.x}, ${st.y}, ${st.z}, '${st.name}')">🎬 ขึ้นรถไฟ</button>
+            <button style="background:#0284c7;color:white;font-size:11px;padding:3px 8px" onclick="warpSubway(${st.x}, ${st.y}, ${st.z}, 0, '${st.name}', 'loading_metro_end_1')">🚇 ไปยังสถานีนี้</button>
           </div>
         </div>
       `;
@@ -1448,7 +1353,6 @@ async function equipSelected() {
 loadFleet();
 loadScenes();
 loadNpcCatalog();
-loadCutsceneCatalog();
 loadCatalogs();
 refresh();
 setInterval(refresh, 2000);
