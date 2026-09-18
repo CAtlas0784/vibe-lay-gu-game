@@ -379,6 +379,7 @@ internal sealed partial class GameRouter
             conn.Log.Info($"[VEHICLE] AskPlayerStartEnterOrExitVehicle vehicle={drive.VehicleEntityId} enter={drive.EnterOrLeave} seat={drive.SeatIndex}");
             if (drive.EnterOrLeave)
             {
+                Ananta.Server.Gameplay.Traffic.CityTrafficEngine.Instance.NotifyVehicleBoarding(drive.VehicleEntityId);
                 await ForceEnterVehicleAsync(conn.Session, drive.VehicleEntityId);
             }
             else

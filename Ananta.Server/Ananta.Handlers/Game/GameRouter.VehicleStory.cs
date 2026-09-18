@@ -487,7 +487,6 @@ internal sealed partial class GameRouter
                 new SceneMethods.SyncChangeVehicleController { VehicleInstanceId = vehicleId, ControllerPid = pid }), ct);
             await session.NotifyAsync(MethodId.SyncPlayerFinishEnterOrExitVehic, UxSerializer.Serialize(drive), ct);
             await SendStoryAsync(session, StoryS011Codec4229938.BuildEnterChildBootstrap(VehicleStoryEnterNid, vehicleId, seat));
-            await SendStoryAsync(session, StoryS011Codec4229938.BuildDeleteNode(VehicleStoryEnterNid));
             session.Log.Info($"[VEHICLE-STORY] force enter vehicle={vehicleId} seat={seat} unit={unitId} status=4");
             return (true, $"seated in vehicle {vehicleId} (seat 0) — drive with normal keys, exit with F or the Exit button");
         }

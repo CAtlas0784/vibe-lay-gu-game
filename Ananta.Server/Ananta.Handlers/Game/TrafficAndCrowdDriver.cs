@@ -25,9 +25,12 @@ internal sealed class TrafficAndCrowdDriver : ITrafficVehicleDriver, IUrbanCrowd
         await GameRouter.DestroyDirectAsync(session, entityId, "traffic-despawn");
     }
 
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<ulong, int> _moveTokens = new();
+
     public async Task SendVehicleMoveAsync(
         TcpSession session, ulong entityId, float x, float y, float z, float yaw, float vx, float vz)
     {
+        var token = _moveTokens.AddOrUpdate(entityId, 1, (_, cur) => unchecked(cur + 1));
         var moveData = new SceneMethods.RaidVehicleSyncData
         {
             Id = entityId,
@@ -35,8 +38,8 @@ internal sealed class TrafficAndCrowdDriver : ITrafficVehicleDriver, IUrbanCrowd
             FacingDirection = yaw,
             EulerAngles = new SceneMethods.UxVector3(0f, yaw, 0f),
             Velocity = new SceneMethods.UxVector3(vx, 0f, vz),
-            Bits = [],
-            MoveToken = 0,
+            Bits = [1, 0, 0, 0],
+            MoveToken = token,
         };
         await session.NotifyAsync(MethodId.SyncVehicleMove, UxSerializer.Serialize(moveData), CancellationToken.None);
         GameRouter.TrackVehicleMove(entityId, x, y, z, yaw);

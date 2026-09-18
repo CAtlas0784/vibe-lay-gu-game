@@ -26,18 +26,27 @@ public sealed class CityTrafficEngine
     public float MaxSpawnDistance { get; set; } = 160f;
     public float DespawnDistance { get; set; } = 220f;
 
-    // Pool of verified vehicle configs with full models and multi-seat support
+    // Pool of verified vehicle configs with full models and multi-seat support (no damaged/wrecked models)
     private static readonly uint[] TrafficVehiclePool =
     [
         81001001, // Sunset Skywing (Sedan)
         81001002, // Korou RV6 (SUV)
         81001003, // Kazama Voyage (Sedan)
         81000007, // Sunset GT-X Specter (Sports Car)
-        81000002, // Korou Transporter M (Truck)
-        81000005, // Erebos Black Box (Van)
+        81004001, // Kazama CRN6 (Taxi)
+        81004027, // Kazama Sandstorm (Police Cruiser)
     ];
 
     private readonly Random _rng = new();
+
+    public void NotifyVehicleBoarding(ulong entityId)
+    {
+        if (_simulatedVehicles.TryRemove(entityId, out var v))
+        {
+            v.HijackedByPlayer = true;
+            Console.WriteLine($"[TRAFFIC] Vehicle entity={entityId} boarded by player. Detached from traffic loop.");
+        }
+    }
 
     public sealed class SimulatedVehicle
     {

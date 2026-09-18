@@ -97,12 +97,23 @@ public sealed class UrbanCrowdEngine
     public int TargetPedestrianDensity { get; set; } = 15;
     public bool PopulateShops { get; set; } = true;
 
-    // Verified civilian NPCs from Camp 2 with models
+    // Verified authentic civilian, shopkeeper, barista, and bar patron NPCs
     private static readonly uint[] CitizenFormworkPool =
     [
-        40120883, 40120884, 40120885, 40120886, 40120887,
-        40120888, 40120889, 40120890, 40120891, 40120892,
-        40120893, 40120894, 40120895, 40120896, 40120897
+        40130101, // Emily Sato - Lively female shopkeeper
+        40130102, // Sato Saori - Gentle female shopkeeper
+        40130117, // Emma - Store greeter
+        40130118, // Owen King - Store manager
+        40130121, // Hunter Davis - Store clerk
+        40130122, // Linda Wilson - Professional female clerk
+        40130128, // Eiko Anderson - Boutique clerk
+        40131542, // Yang Zhiyuan - Cafe Barista
+        40131591, // Cheng Mosheng - Kiosk clerk
+        40130852, // Mizuki Mei - Bar & Nightclub patron
+        40650080, // Mizuki Mei - Bar patron
+        40651232, // Eugene Price - Cafe patron/customer
+        40969501, // Daphne Shelby - Fashion blogger pedestrian
+        40968790, // Kaneko Mei - Pedestrian
     ];
 
     // Common idle / chatter / phone POI action IDs
@@ -234,6 +245,10 @@ public sealed class UrbanCrowdEngine
                                 var sy = shop.Pos[1];
                                 var sz = shop.Pos[2];
 
+                                // Ground elevation clamping: align indoor floor Y with player elevation to prevent falling into void
+                                if (MathF.Abs(sy - py) > 2.5f)
+                                    sy = py;
+
                                 var dx = sx - px;
                                 var dz = sz - pz;
                                 var distSq = dx * dx + dz * dz;
@@ -313,12 +328,14 @@ public sealed class UrbanCrowdEngine
             if (candidateWaypoints.Count > 0)
             {
                 var wp = candidateWaypoints[_rng.Next(candidateWaypoints.Count)];
+                // Ground elevation clamping: ensure sidewalk pedestrian Y is on mesh floor
+                var spawnY = MathF.Abs(wp.Y - py) > 2.5f ? py : wp.Y;
                 var formworkId = CitizenFormworkPool[_rng.Next(CitizenFormworkPool.Length)];
                 var poiAction = AmbientPoiActions[_rng.Next(AmbientPoiActions.Length)];
                 var facing = _rng.Next(0, 360);
 
                 var (ok, ids) = await _driver.SpawnCrowdPedestriansAsync(
-                    session, formworkId, poiAction, wp.X, wp.Y, wp.Z, facing);
+                    session, formworkId, poiAction, wp.X, spawnY, wp.Z, facing);
 
                 if (ok && ids.Length > 0)
                 {
@@ -327,7 +344,7 @@ public sealed class UrbanCrowdEngine
                         EntityId = ids[0],
                         FormworkId = formworkId,
                         X = wp.X,
-                        Y = wp.Y,
+                        Y = spawnY,
                         Z = wp.Z,
                         SpawnedAt = DateTime.UtcNow
                     };

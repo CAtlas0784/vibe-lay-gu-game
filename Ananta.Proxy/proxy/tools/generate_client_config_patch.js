@@ -718,6 +718,7 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `        end)\n` +
 `    elseif string.sub(cmd, 1, 14) == "PLAY_TIMELINE:" then\n` +
 `        local arg = string.sub(cmd, 15)\n` +
+`        local tlName = string.lower(tostring(arg or ""))\n` +
 `        pcall(function()\n` +
 `            local unit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
 `            local myPos = (unit and unit.Position) or (UnityEngine and UnityEngine.Vector3 and UnityEngine.Vector3.zero)\n` +
@@ -731,31 +732,46 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                local tlData = nil\n` +
 `                if gTimelineManager.Timeline_CreateTimelineData then\n` +
 `                    tlData = gTimelineManager:Timeline_CreateTimelineData()\n` +
-`                    if tlData and myPos then\n` +
-`                        tlData.pos = myPos\n` +
-`                        tlData.rot = myRot\n` +
+`                    if tlData then\n` +
+`                        if myPos then tlData.pos = myPos end\n` +
+`                        if myRot then tlData.rot = myRot end\n` +
+`                        pcall(function() tlData.ignoreLoadingState = true end)\n` +
+`                        pcall(function() tlData.owner = unit end)\n` +
+`                        pcall(function() tlData.loadFromLocal = true end)\n` +
 `                    end\n` +
 `                end\n` +
 `                if gTimelineManager.Timeline_LoadAndPlay then\n` +
-`                    pcall(function() gTimelineManager:Timeline_LoadAndPlay(arg, tlData) played = true end)\n` +
+`                    pcall(function() gTimelineManager:Timeline_LoadAndPlay(tlName, tlData) played = true end)\n` +
+`                    if not played and tlName ~= arg then\n` +
+`                        pcall(function() gTimelineManager:Timeline_LoadAndPlay(arg, tlData) played = true end)\n` +
+`                    end\n` +
 `                end\n` +
 `                if not played and gTimelineManager.PlayTimeline then\n` +
-`                    pcall(function() gTimelineManager:PlayTimeline(arg) played = true end)\n` +
+`                    pcall(function() gTimelineManager:PlayTimeline(tlName) played = true end)\n` +
+`                    if not played and tlName ~= arg then\n` +
+`                        pcall(function() gTimelineManager:PlayTimeline(arg) played = true end)\n` +
+`                    end\n` +
 `                end\n` +
 `            end\n` +
 `            if not played and CS and CS.LX6 and CS.LX6.TimelineScript and CS.LX6.TimelineScript.CutsceneManager and CS.LX6.TimelineScript.CutsceneManager.Instance then\n` +
 `                local cm = CS.LX6.TimelineScript.CutsceneManager.Instance\n` +
 `                local tlData = cm:CreateTimelineData()\n` +
-`                if tlData and myPos then\n` +
-`                    tlData.pos = myPos\n` +
-`                    tlData.rot = myRot\n` +
+`                if tlData then\n` +
+`                    if myPos then tlData.pos = myPos end\n` +
+`                    if myRot then tlData.rot = myRot end\n` +
+`                    pcall(function() tlData.ignoreLoadingState = true end)\n` +
+`                    pcall(function() tlData.owner = unit end)\n` +
+`                    pcall(function() tlData.loadFromLocal = true end)\n` +
 `                end\n` +
-`                pcall(function() cm:LoadAndPlay(arg, tlData) played = true end)\n` +
+`                pcall(function() cm:LoadAndPlay(tlName, tlData) played = true end)\n` +
+`                if not played and tlName ~= arg then\n` +
+`                    pcall(function() cm:LoadAndPlay(arg, tlData) played = true end)\n` +
+`                end\n` +
 `            end\n` +
 `            if not played and gCS and gCS.LuaUtils and gCS.LuaUtils.PlayTimeline then\n` +
-`                pcall(function() gCS.LuaUtils.PlayTimeline(arg) end)\n` +
+`                pcall(function() gCS.LuaUtils.PlayTimeline(tlName) end)\n` +
 `            end\n` +
-`            local tip = "Playing Timeline: " .. tostring(arg)\n` +
+`            local tip = "Playing Timeline: " .. tostring(tlName)\n` +
 `            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
 `                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
 `            end\n` +

@@ -233,30 +233,64 @@
   </div>
 </div>
 
-<div class="card" style="border-color:#ab47bc">
-  <h2 style="color:#ce93d8">👗 Outfit / Appearance (สลับชุด / ซ่อนเสื้อผ้า)</h2>
-  <div style="display:flex;gap:8px;align-items:center">
-    <button style="background:#8e24aa;color:white" onclick="toggleClothes()">Toggle Clothes / ซ่อน-แสดงชุด (F8)</button>
-    <span class="badge" style="background:#4a148c;color:#e1bee7">กดปุ่ม F8 ในเกมได้</span>
+<div class="card" style="border-color:#3b82f6">
+  <h2 style="color:#60a5fa">🚇 สถานีรถไฟ & รถไฟใต้ดิน (Subway & Metro Fast Travel)</h2>
+  <div style="font-weight:bold;margin-bottom:6px;color:#93c5fd">🏙️ Nova City Metro (12 สถานี):</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+    <button onclick="warpSubway(2376.0, -1.1, 2729.6, 104.5)">Sunny Bay</button>
+    <button onclick="warpSubway(898.4, -1.1, 1558.2, 51)">Freshville</button>
+    <button onclick="warpSubway(1878.8, -1.1, 2250.5, 0)">Glimmergold</button>
+    <button onclick="warpSubway(2748.3, -1.1, 2046.6, 0)">Memorial Park</button>
+    <button onclick="warpSubway(3159.0, -1.1, 2643.0, 0)">Azure North</button>
+    <button onclick="warpSubway(3661.7, -1.0, 1286.9, 0)">Future Port</button>
+    <button onclick="warpSubway(2243.6, -1.1, 1616.9, 0)">Coastal Station</button>
+    <button onclick="warpSubway(3941.7, -1.1, 1974.1, 0)">Vista Station</button>
+    <button onclick="warpSubway(1232.9, -1.1, 2213.1, 0)">Veluxity Station</button>
+    <button onclick="warpSubway(620.2, -1.0, 2072.1, 0)">Paradox Plaza</button>
+    <button onclick="warpSubway(1383.1, -1.1, 1267.7, 0)">Marine MechWorks</button>
+    <button onclick="warpSubway(2947.4, -1.1, 1030.3, 0)">Rixxy Wonderland</button>
   </div>
-  <div class="muted" style="margin-top:6px">สลับการแสดงผลเสื้อผ้าและ Dynamic Bone ของชุดชั้นนอกอย่างหมดจด โดยยังคงโมเดลบอดี้เดิมไว้ 100% ไร้ชิ้นส่วนลอยค้าง</div>
+  <div style="font-weight:bold;margin-bottom:6px;color:#a78bfa">🏮 Longqi Metro (13 สถานี):</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <button class="ghost" onclick="warpSubway(-1638.0, 18.0, 1540.5, 0)">Dinglan North</button>
+    <button class="ghost" onclick="warpSubway(-1492.5, 17.6, 1107.9, 0)">Zhaohua Road</button>
+    <button class="ghost" onclick="warpSubway(-1431.7, 18.0, 565.0, 0)">Dinglan Road</button>
+    <button class="ghost" onclick="warpSubway(-1725.5, 17.5, 12.1, 0)">Lakeside Pedestrian</button>
+    <button class="ghost" onclick="warpSubway(-1002.5, 17.7, 115.3, 0)">Zenith Center</button>
+    <button class="ghost" onclick="warpSubway(-1788.4, 17.5, -574.6, 0)">Lakeside South</button>
+    <button class="ghost" onclick="warpSubway(-844.0, 17.5, 1133.7, 0)">Great Ferry Port</button>
+    <button class="ghost" onclick="warpSubway(-624.4, 17.6, 660.4, 0)">Xinfeng Road</button>
+    <button class="ghost" onclick="warpSubway(61.6, 17.5, 778.3, 0)">Yaojin Road</button>
+    <button class="ghost" onclick="warpSubway(375.8, 17.5, 98.4, 0)">Yaojin Pedestrian</button>
+    <button class="ghost" onclick="warpSubway(-427.6, 17.5, 354.0, 0)">Mingchun North</button>
+    <button class="ghost" onclick="warpSubway(-2442.7, 17.5, 1015.6, 0)">Lakefront Institute</button>
+    <button class="ghost" onclick="warpSubway(-1138.2, 17.7, -602.3, 0)">Cloudstream West</button>
+  </div>
+  <div class="muted" style="margin-top:6px">วาร์ปไปยังสถานีรถไฟใต้ดิน (Subway / Metro Stations) ทั่วทั้ง Nova City และ Longqi ทันที</div>
 </div>
 
 <div class="card" style="border-color:#00bcd4">
   <h2 style="color:#4dd0e1">🎬 3D Cinematics & Story Timelines (ฉากคัทซีนเนื้อเรื่อง)</h2>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <select id="cutsceneSelect" style="flex:1;min-width:260px;background:#263238;color:#eee;border:1px solid #37474f;border-radius:4px;padding:6px">
-      <option value="TL_SEYM_010_Q010_S01">Seymour Story Quest: Chapter 1 S01 (เนื้อเรื่องหลัก)</option>
-      <option value="SwitchChar_tafei_01">Taffy Cinematic Arrival (ทาฟี่ โดดจากตึก)</option>
-      <option value="SwitchChar_dila_03">Dila Combat Cinematic (ดิลา แอกชันสตรีท)</option>
-      <option value="SwitchChar_saimo_05">Seymour Street Arrival (เซย์มัวร์ สไตล์คูล)</option>
-      <option value="SwitchChar_lixi_04">Richie Motorcycle Rush (ริชชี่ ซิ่งมอเตอร์ไซค์)</option>
-      <option value="SwitchChar_nanzhujue_02">Male MC Arrival A (พระเอก สลับตัว A)</option>
-      <option value="SwitchChar_nanzhujue_03">Male MC Arrival B (พระเอก สลับตัว B)</option>
-      <option value="SwitchChar_common_01">Metropolis Skyline Overview (มุมกล้องเมือง 1)</option>
-      <option value="SwitchChar_common_04">Street Parkour Traverse (มุมกล้องฟรีรันนิง 4)</option>
-      <option value="SwitchChar_common_10">Night Neon Lights (มุมกล้องวิวกลางคืน 10)</option>
-      <option value="SwitchChar_common_27">Dynamic Roof Drop (แอกชันดรอป 27)</option>
+      <option value="tl_seymour01">Seymour Story Chapter 1 (赛默 - 计划外响应 01)</option>
+      <option value="tl_seymour02">Seymour Story Chapter 2 (赛默 - 计划外响应 02)</option>
+      <option value="tl_seymour03">Seymour Story Chapter 3 (赛默 - 计划外响应 03)</option>
+      <option value="tl_seym_010_q010_s01">Seymour Story Quest S01 (面具之下，监视之中)</option>
+      <option value="tl_taffy01">Taffy Story: High-Speed Moment 01 (塔菲 - 极速时刻 01)</option>
+      <option value="tl_taffy02">Taffy Story: High-Speed Moment 02 (塔菲 - 极速时刻 02)</option>
+      <option value="tl_richiet01">Richie Story: Holiday Syndrome 01 (里希 - 假期综合征 01)</option>
+      <option value="switchchar_tafei_01">Taffy Cinematic Arrival (ทาฟี่ โดดจากตึก)</option>
+      <option value="switchchar_dila_03">Dila Combat Cinematic (ดิลา แอกชันสตรีท)</option>
+      <option value="switchchar_saimo_05">Seymour Street Arrival (เซย์มัวร์ สไตล์คูล)</option>
+      <option value="switchchar_lixi_04">Richie Motorcycle Rush (ริชชี่ ซิ่งมอเตอร์ไซค์)</option>
+      <option value="switchchar_nanzhujue_02">Male MC Arrival A (พระเอก สลับตัว A)</option>
+      <option value="switchchar_nanzhujue_03">Male MC Arrival B (พระเอก สลับตัว B)</option>
+      <option value="switchchar_common_01">Metropolis Skyline Overview (มุมกล้องเมือง 1)</option>
+      <option value="switchchar_common_04">Street Parkour Traverse (มุมกล้องฟรีรันนิง 4)</option>
+      <option value="switchchar_common_10">Night Neon Lights (มุมกล้องวิวกลางคืน 10)</option>
+      <option value="ananta_openning">Ananta Main Opening Cinematic (ฉากเปิดตัว Ananta โลกใหม่)</option>
+      <option value="alienfight">Alien Combat Cinematic (ฉากต่อสู้เอเลี่ยนสุดอลังการ)</option>
     </select>
     <button style="background:#00838f;color:white" onclick="playSelectedCutscene()">Play Cinematic / เล่นคัทซีน</button>
   </div>
@@ -270,29 +304,28 @@
       <optgroup label="🕹️ ตู้เกมอาร์เคด (Arcade Cabinets)">
         <option value="KOF97" selected>🕹️ Arcade: The King of Fighters '97 (ตู้เกม KOF '97)</option>
         <option value="METALSLUG">🕹️ Arcade: Metal Slug (ตู้เกม Metal Slug ลุยด่าน)</option>
-        <option value="FIGHTER">🥊 3D Arcade Fighter (มินิเกมต่อสู้ 3D)</option>
       </optgroup>
       <optgroup label="🎵 ดนตรีสด (Live Musical Instruments)">
-        <option value="PIANO">🎹 Grand Piano (เล่นเปียโนสด)</option>
+        <option value="PIANO">🎹 Grand Piano (เล่นเปียโนสด - เสกตู้เปียโนตรงหน้า)</option>
         <option value="DRUMKIT">🥁 Drumkit Set (ตีกลองชุดสด)</option>
       </optgroup>
       <optgroup label="🏆 กิจกรรมกีฬา (Sports & Leisure)">
-        <option value="BOWLING">🎳 Bowling Alley (โยนโบว์ลิ่ง)</option>
         <option value="BASKETBALL">🏀 Street Basketball (ชูตบาสเกตบอล)</option>
       </optgroup>
     </select>
     <button style="background:#e65100;color:white;font-weight:600;padding:8px 16px" onclick="launchSelectedMinigame()">Launch / เปิดมินิเกม</button>
     <button style="background:#4a5568;color:#cbd5e0;padding:8px 14px" onclick="closeActiveMinigame()">Close / ปิดมินิเกม</button>
+    <button style="background:#059669;color:white;font-weight:600;padding:8px 14px" onclick="teleportToBowling()">🎳 Warp to Bowling Alley (วาร์ปไปลานโบว์ลิ่ง)</button>
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
     <button style="background:#d97706;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('KOF97')">🕹️ KOF '97</button>
     <button style="background:#d97706;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('METALSLUG')">🕹️ Metal Slug</button>
     <button style="background:#2563eb;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('PIANO')">🎹 Piano</button>
     <button style="background:#2563eb;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('DRUMKIT')">🥁 Drumkit</button>
-    <button style="background:#059669;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('BOWLING')">🎳 Bowling</button>
+    <button style="background:#059669;color:white;font-size:12px;padding:4px 8px" onclick="teleportToBowling()">🎳 Bowling Alley</button>
     <button style="background:#059669;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('BASKETBALL')">🏀 Basketball</button>
   </div>
-  <div class="muted" style="margin-top:6px">เปิดตู้เกมอาร์เคด (KOF '97, Metal Slug) หรือมินิเกมดนตรี/กีฬาในโลกได้ทันที พร้อมปุ่มควบคุมแบบเต็มหน้าจอ</div>
+  <div class="muted" style="margin-top:6px">เปิดตู้เกมอาร์เคด (KOF '97, Metal Slug), มินิเกมดนตรีสด (เสกโมเดลเปียโนตรงหน้า), หรือวาร์ปไปลานโบว์ลิ่งจริงใน Nova City</div>
 </div>
 
 <div class="card" style="border-color:#10b981">
@@ -852,6 +885,21 @@ async function closeActiveMinigame() {
 
 async function launchArcadeMinigame() {
   await launchSelectedMinigame();
+}
+
+async function warpSubway(x, y, z, facing) {
+  const r = await api('/api/player/teleport', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ x: parseFloat(x), y: parseFloat(y), z: parseFloat(z), facing: parseFloat(facing || 0) })
+  });
+  log(`🚇 Warp to Subway (${x}, ${y}, ${z}): ` + JSON.stringify(r));
+  refresh();
+}
+
+async function teleportToBowling() {
+  await warpSubway(1090.8, 6.5, 2083.7, 0);
+  log('🎳 Warped to Bowling Alley at (1090.8, 6.5, 2083.7)');
 }
 
 async function setTimePreset(hour, minute) {
