@@ -5,6 +5,8 @@ using Ananta.Server.Configuration;
 using Ananta.Server.Handlers.Game;
 using Ananta.Server.Handlers.LoginGate;
 using Ananta.Server.Protocol.Client4229938;
+using Ananta.Server.Gameplay.Traffic;
+using Ananta.Server.Gameplay.Crowd;
 using Ananta.Server.Network;
 
 namespace Ananta.Server.App;
@@ -31,6 +33,20 @@ internal sealed class PrivateServerApplication(PrivateServerConfig config)
             CreateServer("login-1", bindHost, loginPortB, loginRouter),
             CreateServer("game", bindHost, config.Network.GamePort, gameRouter, gameSessions),
         };
+
+        // Initialize Autonomous City Traffic Engine and Living Urban Crowd Engine
+        var clientDataFolder = Path.GetDirectoryName(PrivateServerConfigStore.ResolveProjectPath(config.Paths.ClientConfigs))
+            ?? PrivateServerConfigStore.ResolveProjectPath(config.Paths.ClientConfigs);
+
+        CityTrafficEngine.Instance.Initialize(
+            clientDataFolder,
+            TrafficAndCrowdDriver.Instance,
+            () => gameSessions.Current is not null ? [gameSessions.Current] : Array.Empty<TcpSession>());
+
+        UrbanCrowdEngine.Instance.Initialize(
+            clientDataFolder,
+            TrafficAndCrowdDriver.Instance,
+            () => gameSessions.Current is not null ? [gameSessions.Current] : Array.Empty<TcpSession>());
 
         // Localhost debug API for debug-panel.py (optional, never blocks the game stack).
         using var debugApi = config.Debug.Enabled ? new DebugApiServer(config, gameSessions) : null;

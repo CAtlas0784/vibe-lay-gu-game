@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Ananta.SDK\Ananta.SDK.csproj" />
     <ProjectReference Include="..\Ananta.Core\Ananta.Core.csproj" />
+    <ProjectReference Include="..\Ananta.Gameplay\Ananta.Gameplay.csproj" />
     <ProjectReference Include="..\Ananta.Handlers\Ananta.Handlers.csproj" />
     <ProjectReference Include="..\Ananta.Network\Ananta.Network.csproj" />
   </ItemGroup>

@@ -156,6 +156,94 @@ internal sealed partial class GameRouter
         return (true, $"sent spawn for {ids.Count} static NPC(s) in front of you", ids.ToArray());
     }
 
+    internal static async Task<(bool Ok, string Message, ulong[] Ids)> SpawnStaticNpcAtAsync(
+        TcpSession session, uint npcFormworkId, uint poiActionId, float x, float y, float z, float facing)
+    {
+        if (npcFormworkId > int.MaxValue || !NpcCatalog4229938.TryGet(npcFormworkId, out var npc))
+            return (false, $"unknown NPC formwork {npcFormworkId}", []);
+        if (poiActionId != 0 && !PoiActionCatalog4229938.TryGet(poiActionId, out _))
+            return (false, $"unknown NPC POI action {poiActionId}", []);
+
+        var state = GetStateIfExists(session);
+        if (state is null)
+            return (false, "no player world state", []);
+
+        var id = unchecked((ulong)Interlocked.Increment(ref s_nextStaticNpcId));
+        PoiActionCatalog4229938.TryGet(poiActionId, out var poi);
+        var mainActionId = poi?.SelectMainAction(id) ?? 0;
+        var position = new SceneMethods.UxVector3(x, y, z);
+        var item = new AdminNpcSpawnItem(npcFormworkId, poiActionId);
+        var agentSyncClientInfo = CreateStaticNpcSyncInfo(item, npc, poi, mainActionId);
+
+        try
+        {
+            await SendAetherInitForNpcAsync(session);
+            await session.NotifyAsync(MethodId.SyncAetherAIStaticNpcAddData,
+                UxSerializer.Serialize(new GameMethods.ClientStaticNpcInitData4229938
+                {
+                    StaticNpcInfoId = npcFormworkId,
+                    NpcFormworkId = npcFormworkId,
+                    AgentPersonaId = npc.AgentPersonaId,
+                    SPoiActionId = 0,
+                    CPoiActionId = poiActionId,
+                    UrbanDiversityId = 88888000,
+                    IgnoreAllStim = false,
+                    TaskRelated = false,
+                    NpcPid = (int)npcFormworkId,
+                    AgentSyncClientInfo = agentSyncClientInfo,
+                    ForceGo = true,
+                    SourceType = 1,
+                    Id = id,
+                    Position = position,
+                    Facing = facing,
+                    EulerAngles = new SceneMethods.UxVector3(0, facing, 0),
+                }), CancellationToken.None);
+
+            lock (state.SyncRoot)
+                state.StaticNpcPreparedPlotEvents[id] = 0;
+
+            await session.NotifyAsync(MethodId.SyncManagedLogicAgent,
+                UxSerializer.Serialize(WorldCodec.ManagedLogicAgent(id, Profile.PlayerPid, 0)), CancellationToken.None);
+
+            if (poi is { UsageId: not 0 })
+            {
+                await session.NotifyAsync(MethodId.SyncAgentBelongings,
+                    UxSerializer.Serialize(new GameMethods.SyncNpcBelongings4229938
+                    {
+                        Id = id,
+                        Items = poi.BelongingSceneItems.Select(configId => new GameMethods.NpcBelongingItem4229938
+                        {
+                            InstanceId = unchecked((ulong)Interlocked.Increment(ref s_nextNpcBelongingId)),
+                            ConfigId = configId,
+                        }).ToList(),
+                        DebugAgentId = npcFormworkId,
+                    }), CancellationToken.None);
+                await session.NotifyAsync(MethodId.SyncAgentUseBelongingChanged,
+                    UxSerializer.Serialize(new GameMethods.SyncNpcBelongingUsage4229938
+                    {
+                        Id = id,
+                        UsageIds = [poi.UsageId],
+                    }), CancellationToken.None);
+            }
+
+            if (poiActionId != 0)
+                await session.NotifyAsync(MethodId.IGameSceneToClient_SyncAgentPlayPOIAction,
+                    UxSerializer.Serialize(new GameMethods.ClientNpcPoiActionData4229938
+                    {
+                        Id = id,
+                        CPoiActionId = poiActionId,
+                        IsActive = true,
+                        PlayPoiSpeed = 1f,
+                    }), CancellationToken.None);
+
+            return (true, "spawned", [id]);
+        }
+        catch (Exception ex)
+        {
+            return (false, ex.Message, []);
+        }
+    }
+
     private static async Task SendAetherInitForNpcAsync(TcpSession session)
     {
         var settings = PrivateServerConfigStore.Current.Gameplay.Vehicles;

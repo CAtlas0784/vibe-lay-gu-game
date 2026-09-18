@@ -6,6 +6,8 @@ using Ananta.SDK.Serialization;
 using Ananta.Server.ClientData.Client4229938;
 using Ananta.Server.Configuration;
 using Ananta.Server.Handlers.Game;
+using Ananta.Server.Gameplay.Traffic;
+using Ananta.Server.Gameplay.Crowd;
 using Ananta.Server.Protocol.Client4229938;
 using Ananta.Server.RpcTypes.Client4229938;
 using SceneMethods = Ananta.Server.RpcTypes.Client4229938.Methods.GameScene;
@@ -151,6 +153,18 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, Scenes(), token);
             else if (method == "GET" && path == "/api/npc/catalog")
                 await WriteJsonAsync(ctx, NpcCatalog(ctx.Request), token);
+            else if (method == "GET" && path == "/api/traffic/status")
+                await WriteJsonAsync(ctx, TrafficStatus(), token);
+            else if (method == "POST" && path == "/api/traffic/config")
+                await WriteJsonAsync(ctx, await TrafficConfigAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/traffic/clear")
+                await WriteJsonAsync(ctx, await TrafficClearAsync(token), token);
+            else if (method == "POST" && path == "/api/traffic/spawn-wave")
+                await WriteJsonAsync(ctx, await TrafficSpawnWaveAsync(token), token);
+            else if (method == "GET" && path == "/api/crowd/status")
+                await WriteJsonAsync(ctx, CrowdStatus(), token);
+            else if (method == "POST" && path == "/api/crowd/config")
+                await WriteJsonAsync(ctx, await CrowdConfigAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else
                 await WriteJsonAsync(ctx, new { ok = false, error = "unknown route" }, token, 404);
         }
@@ -1399,6 +1413,83 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 new { id = "BASKETBALL", name = "🏀 Street Basketball (ชูตบาสเกตบอล)", category = "sports" },
             }
         };
+    }
+
+    private object TrafficStatus()
+    {
+        return new
+        {
+            ok = true,
+            traffic = CityTrafficEngine.Instance.GetStatus(),
+            crowd = UrbanCrowdEngine.Instance.GetStatus()
+        };
+    }
+
+    private Task<object> TrafficConfigAsync(string body, CancellationToken token)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(body) ? "{}" : body);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("enabled", out var en))
+                CityTrafficEngine.Instance.Enabled = en.GetBoolean();
+            if (root.TryGetProperty("density", out var den))
+                CityTrafficEngine.Instance.TargetDensity = Math.Clamp(den.GetInt32(), 0, 100);
+            if (root.TryGetProperty("speedScale", out var spd))
+                CityTrafficEngine.Instance.SpeedScale = Math.Clamp((float)spd.GetDouble(), 0.1f, 5.0f);
+            return Task.FromResult<object>(new { ok = true, status = CityTrafficEngine.Instance.GetStatus() });
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult<object>(new { ok = false, error = ex.Message });
+        }
+    }
+
+    private async Task<object> TrafficClearAsync(CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no active game session" };
+        await CityTrafficEngine.Instance.ClearAllTrafficAsync(session);
+        return new { ok = true, message = "traffic cleared" };
+    }
+
+    private async Task<object> TrafficSpawnWaveAsync(CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no active game session" };
+        var spawned = await CityTrafficEngine.Instance.SpawnWaveAheadAsync(session, 5);
+        return new { ok = true, spawned };
+    }
+
+    private object CrowdStatus()
+    {
+        return new
+        {
+            ok = true,
+            crowd = UrbanCrowdEngine.Instance.GetStatus()
+        };
+    }
+
+    private Task<object> CrowdConfigAsync(string body, CancellationToken token)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(body) ? "{}" : body);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("enabled", out var en))
+                UrbanCrowdEngine.Instance.Enabled = en.GetBoolean();
+            if (root.TryGetProperty("density", out var den))
+                UrbanCrowdEngine.Instance.TargetPedestrianDensity = Math.Clamp(den.GetInt32(), 0, 100);
+            if (root.TryGetProperty("populateShops", out var pop))
+                UrbanCrowdEngine.Instance.PopulateShops = pop.GetBoolean();
+            return Task.FromResult<object>(new { ok = true, status = UrbanCrowdEngine.Instance.GetStatus() });
+        }
+        catch (Exception ex)
+        {
+            return Task.FromResult<object>(new { ok = false, error = ex.Message });
+        }
     }
 
     private static async Task<string> ReadBodyAsync(HttpListenerRequest request, CancellationToken token)

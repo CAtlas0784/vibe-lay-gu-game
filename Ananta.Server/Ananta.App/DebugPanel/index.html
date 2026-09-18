@@ -295,6 +295,69 @@
   <div class="muted" style="margin-top:6px">เปิดตู้เกมอาร์เคด (KOF '97, Metal Slug) หรือมินิเกมดนตรี/กีฬาในโลกได้ทันที พร้อมปุ่มควบคุมแบบเต็มหน้าจอ</div>
 </div>
 
+<div class="card" style="border-color:#10b981">
+  <h2 style="color:#34d399">🚗 City Traffic & Urban Crowd Controller (ระบบจราจรและชาวเมือง)</h2>
+  
+  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+    <div style="background:#1e293b;padding:8px 14px;border-radius:6px;border:1px solid #334155;flex:1;min-width:140px">
+      <div style="font-size:12px;color:#94a3b8">Active Traffic Cars</div>
+      <div style="font-size:20px;font-weight:bold;color:#38bdf8" id="trafficActiveCount">0</div>
+      <div style="font-size:11px;color:#64748b" id="trafficRoadCount">42,128 road lanes</div>
+    </div>
+    <div style="background:#1e293b;padding:8px 14px;border-radius:6px;border:1px solid #334155;flex:1;min-width:140px">
+      <div style="font-size:12px;color:#94a3b8">Living Citizens / Crowd</div>
+      <div style="font-size:20px;font-weight:bold;color:#a78bfa" id="crowdActiveCount">0</div>
+      <div style="font-size:11px;color:#64748b" id="crowdShopsCount">1,207 shops registered</div>
+    </div>
+    <div style="background:#1e293b;padding:8px 14px;border-radius:6px;border:1px solid #334155;flex:1;min-width:140px">
+      <div style="font-size:12px;color:#94a3b8">Engine Status</div>
+      <div style="font-size:16px;font-weight:bold;color:#4ade80" id="trafficEngineStatus">Running 🟢</div>
+      <div style="font-size:11px;color:#64748b">10 ticks/sec real-time</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+    <div style="flex:1;min-width:220px">
+      <label style="font-weight:600;font-size:13px;display:flex;justify-content:space-between">
+        <span>🚗 Traffic Density (ความหนาแน่นรถยนต์):</span>
+        <span id="trafficDensityLabel" style="color:#38bdf8;font-weight:bold">20 cars</span>
+      </label>
+      <input type="range" id="trafficDensitySlider" min="0" max="50" value="20" style="width:100%" oninput="onTrafficDensitySlider(this.value)" onchange="applyTrafficConfig()">
+      <div style="display:flex;gap:6px;margin-top:4px">
+        <button style="background:#334155;color:#e2e8f0;font-size:11px;padding:3px 8px" onclick="setTrafficDensityPreset(0)">Off (0)</button>
+        <button style="background:#334155;color:#e2e8f0;font-size:11px;padding:3px 8px" onclick="setTrafficDensityPreset(10)">Light (10)</button>
+        <button style="background:#0284c7;color:white;font-size:11px;padding:3px 8px" onclick="setTrafficDensityPreset(20)">Normal (20)</button>
+        <button style="background:#b91c1c;color:white;font-size:11px;padding:3px 8px" onclick="setTrafficDensityPreset(40)">Rush Hour (40)</button>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:220px">
+      <label style="font-weight:600;font-size:13px;display:flex;justify-content:space-between">
+        <span>🚶 Pedestrian Density (คนเดินถนนและร้านค้า):</span>
+        <span id="crowdDensityLabel" style="color:#a78bfa;font-weight:bold">15 npcs</span>
+      </label>
+      <input type="range" id="crowdDensitySlider" min="0" max="40" value="15" style="width:100%" oninput="onCrowdDensitySlider(this.value)" onchange="applyCrowdConfig()">
+      <div style="display:flex;gap:6px;margin-top:4px">
+        <button style="background:#334155;color:#e2e8f0;font-size:11px;padding:3px 8px" onclick="setCrowdDensityPreset(0)">Off (0)</button>
+        <button style="background:#334155;color:#e2e8f0;font-size:11px;padding:3px 8px" onclick="setCrowdDensityPreset(10)">Quiet (10)</button>
+        <button style="background:#7c3aed;color:white;font-size:11px;padding:3px 8px" onclick="setCrowdDensityPreset(20)">Lively (20)</button>
+        <label style="display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#cbd5e1;margin-left:auto">
+          <input type="checkbox" id="populateShopsCheck" checked onchange="applyCrowdConfig()"> Populate Shops
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px">
+    <button style="background:#059669;color:white;font-weight:600;padding:8px 14px" onclick="spawnTrafficWave()">⚡ Spawn Wave Ahead (ปล่อยรถ 5 คันข้างหน้าทันที)</button>
+    <button style="background:#dc2626;color:white;padding:8px 14px" onclick="clearAllTraffic()">🧹 Clear All Traffic (ล้างรถทั้งหมด)</button>
+    <button style="background:#475569;color:#e2e8f0;padding:8px 14px" onclick="refreshTrafficStatus()">🔄 Refresh Status</button>
+  </div>
+  <div class="muted" style="margin-top:6px">
+    จำลองการจราจรอัจฉริยะแบบเรียลไทม์บนเส้นทาง 42,128 เลนตามแผนผังเมืองจริง รถจะวิ่งตามเลน เลี้ยวตามทางแยก และผู้เล่นสามารถกด <strong>[F]</strong> เพื่อเปิดประตูขึ้นไปขับได้ทันทีแบบ GTA
+  </div>
+</div>
+
 <div class="card" style="border-color:#e53935">
   <h2 style="color:#ff8a80">Emergency Unstuck & Black Screen Recovery</h2>
   <div>
@@ -821,6 +884,74 @@ async function setCustomWeather() {
   await setWeather(id);
 }
 
+function onTrafficDensitySlider(val) {
+  document.getElementById('trafficDensityLabel').textContent = val + ' cars';
+}
+
+function onCrowdDensitySlider(val) {
+  document.getElementById('crowdDensityLabel').textContent = val + ' npcs';
+}
+
+async function setTrafficDensityPreset(val) {
+  document.getElementById('trafficDensitySlider').value = val;
+  onTrafficDensitySlider(val);
+  await applyTrafficConfig();
+}
+
+async function setCrowdDensityPreset(val) {
+  document.getElementById('crowdDensitySlider').value = val;
+  onCrowdDensitySlider(val);
+  await applyCrowdConfig();
+}
+
+async function applyTrafficConfig() {
+  const density = parseInt(document.getElementById('trafficDensitySlider')?.value || '20', 10);
+  const enabled = density > 0;
+  const body = { enabled, density, speedScale: 1.0 };
+  const r = await api('/api/traffic/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('traffic config: ' + JSON.stringify(r));
+  await refreshTrafficStatus();
+}
+
+async function applyCrowdConfig() {
+  const density = parseInt(document.getElementById('crowdDensitySlider')?.value || '15', 10);
+  const populateShops = document.getElementById('populateShopsCheck')?.checked ?? true;
+  const enabled = density > 0 || populateShops;
+  const body = { enabled, density, populateShops };
+  const r = await api('/api/crowd/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  log('crowd config: ' + JSON.stringify(r));
+  await refreshTrafficStatus();
+}
+
+async function spawnTrafficWave() {
+  const r = await api('/api/traffic/spawn-wave', { method: 'POST' });
+  log('spawn wave: ' + JSON.stringify(r));
+  await refreshTrafficStatus();
+}
+
+async function clearAllTraffic() {
+  const r = await api('/api/traffic/clear', { method: 'POST' });
+  log('clear traffic: ' + JSON.stringify(r));
+  await refreshTrafficStatus();
+}
+
+async function refreshTrafficStatus() {
+  try {
+    const s = await api('/api/traffic/status');
+    if (s && s.ok) {
+      if (s.traffic) {
+        document.getElementById('trafficActiveCount').textContent = s.traffic.activeVehicles;
+        document.getElementById('trafficRoadCount').textContent = (s.traffic.totalRoadLanes || 42128).toLocaleString() + ' road lanes';
+        document.getElementById('trafficEngineStatus').textContent = s.traffic.enabled ? 'Running 🟢' : 'Disabled 🔴';
+        document.getElementById('trafficEngineStatus').style.color = s.traffic.enabled ? '#4ade80' : '#f87171';
+      }
+      if (s.crowd) {
+        document.getElementById('crowdActiveCount').textContent = s.crowd.activeCrowdCount;
+        document.getElementById('crowdShopsCount').textContent = s.crowd.populatedShopsCount + ' / 1,207 shops populated';
+      }
+    }
+  } catch (e) { }
+}
 
 loadFleet();
 loadScenes();
@@ -828,6 +959,8 @@ loadNpcCatalog();
 loadCutsceneCatalog();
 refresh();
 setInterval(refresh, 2000);
+refreshTrafficStatus();
+setInterval(refreshTrafficStatus, 2500);
 document.getElementById('timeslider').addEventListener('input', e => {
   timeDragging = true;
   document.getElementById('clock').textContent = fmtClock(parseInt(e.target.value || '720', 10));
