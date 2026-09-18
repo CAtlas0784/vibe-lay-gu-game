@@ -53,18 +53,28 @@ internal static class WorldCodec
     internal static SceneMethods.SyncSceneLoadCompleted SceneLoadCompleted(ulong sceneId)
         => new() { sceneId = sceneId };
 
-    internal static SceneMethods.SyncUnitPositionAndFacing PositionAndFacing(ulong unitId, Vec3 position, float facing, byte setPositionType = 3)
+    internal static SceneMethods.SyncUnitPositionAndFacing PositionAndFacing(
+        ulong unitId, Vec3 position, float facing, byte setPositionType, bool continueMove, byte moveId)
         => new()
         {
             unitId = unitId,
             position = new SceneMethods.UxVector3(position.X, position.Y, position.Z),
             facing = facing,
-            moveId = 0,
-            continueMove = false,
+            moveId = moveId,
+            continueMove = continueMove,
             setPositionType = setPositionType,
             moveGroundInfo = null,
             loadingInfo = null,
         };
+
+    internal static SceneMethods.SyncUnitPositionAndFacing PositionAndFacing(
+        ulong unitId, Vec3 position, float facing, byte setPositionType = 3)
+        => PositionAndFacing(unitId, position, facing, setPositionType, continueMove: false, moveId: MoveAction.Unknown);
+
+    internal static SceneMethods.SyncUnitPositionAndFacing Walking(
+        ulong unitId, Vec3 position, float facing, byte moveId = MoveAction.WalkFront,
+        byte setPositionType = SetPositionType.Gm, bool continueMove = true)
+        => PositionAndFacing(unitId, position, facing, setPositionType, continueMove, moveId);
 
     internal static SceneMethods.SyncUnitPositionAndFacing PositionAndFacing(Vec3 position, float facing, byte setPositionType = 3)
         => PositionAndFacing(Profile.InitialUnitId, position, facing, setPositionType);
@@ -161,4 +171,29 @@ internal static class WorldCodec
 
     internal static SceneMethods.SyncRemoveUnitState RemoveUnitState(uint state)
         => RemoveUnitState(Profile.InitialUnitId, state);
+
+    internal static class MoveAction
+    {
+        internal const byte Unknown = 0;
+        internal const byte Idle = 1;
+        internal const byte WalkFront = 2;
+        internal const byte WalkBack = 3;
+        internal const byte WalkLeft = 4;
+        internal const byte WalkRight = 5;
+        internal const byte Run = 6;
+    }
+
+    internal static class SetPositionType
+    {
+        internal const byte Force = 0;
+        internal const byte RejectSync = 1;
+        internal const byte Revive = 2;
+        internal const byte SwitchSpirit = 3;
+        internal const byte SpoonNoLoading = 4;
+        internal const byte FallGround = 5;
+        internal const byte Teleport = 6;
+        internal const byte Gm = 7;
+        internal const byte Portal = 8;
+        internal const byte OutOfStuck = 9;
+    }
 }

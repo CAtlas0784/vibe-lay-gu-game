@@ -27,10 +27,12 @@ internal sealed partial class GameRouter
             return;
         }
 
+        state.SkillByInstanceId[req.SkillInstanceId] = req.SkillId;
+
         var style = ActiveStyle(state);
         var weapon = CombatCodec.Weapon(state.ActiveSpiritTemplateId, state.ActiveWeaponInstanceId)
             ?? CombatCodec.DefaultWeapon(state.ActiveSpiritTemplateId);
-        if (weapon.IsReloadSkill(req.SkillId))
+        if (weapon.IsReloadSkill(req.SkillId) || CombatCatalogRepository.SkillCastTag(req.SkillId) == 19u)
             await ReloadWeapon4229938(ctx, state, weapon);
         if (!weapon.AllowsSkill(style, req.SkillId))
         {
@@ -406,25 +408,68 @@ internal sealed partial class GameRouter
                 ?? throw new InvalidDataException($"Missing runtime view for spirit {spiritId}, weapon {instanceId}."))
             .ToArray();
 
-    Task OnSkillUseWeaponDurability(RpcContext ctx, int skillInstanceId, int triggerIndex)
+    async Task OnSkillUseWeaponDurability(RpcContext ctx, int skillInstanceId, int triggerIndex)
     {
         var state = GetWorldState(ctx);
         if (!state.Ready)
-            return Task.CompletedTask;
+            return;
         var weapon = CombatCodec.Weapon(state.ActiveSpiritTemplateId, state.ActiveWeaponInstanceId)
             ?? CombatCodec.DefaultWeapon(state.ActiveSpiritTemplateId);
         if (!weapon.IsShootWeapon || weapon.MagazineAmmo == 0)
-            return Task.CompletedTask;
+            return;
+
+        uint skillId = 0;
+        if (state.SkillByInstanceId.TryGetValue(skillInstanceId, out var mappedSkillId))
+            skillId = mappedSkillId;
+        else if (skillInstanceId > 0)
+            skillId = (uint)skillInstanceId;
+        else if (state.ActiveSkillId != 0)
+            skillId = state.ActiveSkillId;
+
+        // If this durability event belongs to a reload skill, it represents the reload trigger in the animation,
+        // not a bullet shot. Never decrement ammunition for a reload event!
+        if (weapon.IsReloadSkill(skillId) || CombatCatalogRepository.SkillCastTag(skillId) == 19u)
+        {
+            ctx.Session.Log.Info($"[AMMO] reload-trigger detected token={skillInstanceId} skill={skillId} weapon={weapon.TemplateId}/{weapon.InstanceId}");
+            await ReloadWeapon4229938(ctx, state, weapon);
+            return;
+        }
 
         var current = EnsureMagazine4229938(state, weapon);
-        if (current > 0)
+        var infiniteAmmo = InfiniteAmmoEnabled4229938() && weapon.MagazineAmmo > 0;
+        if (infiniteAmmo)
+        {
+            // Infinite ammo: restate the magazine at full capacity so the client never reaches
+            // the dry state (the one that stops firing and waits for an incomplete reload).
+            current = weapon.MagazineAmmo;
+            state.WeaponMagazineAmmo[weapon.InstanceId] = current;
+        }
+        else if (current > 0)
+        {
             state.WeaponMagazineAmmo[weapon.InstanceId] = --current;
+        }
 
         // Separate-bullet firearms consume only the loaded magazine; their reserve is an ordinary
         // backpack item. Other firearms use Durability as total remaining ammunition, so decrement
         // total and magazine together. Infinite (-1) values stay infinite.
         var durability = CurrentDurability4229938(state, weapon, current);
-        if (!weapon.SeparateBullets && durability > 0)
+        if (infiniteAmmo)
+        {
+            // Infinite ammo: freeze the total pool for non-separate guns as well.
+            if (!weapon.SeparateBullets)
+            {
+                if (durability < current)
+                {
+                    durability = current;
+                    state.WeaponDurabilityAmmo[weapon.InstanceId] = durability;
+                }
+            }
+            else
+            {
+                durability = current;
+            }
+        }
+        else if (!weapon.SeparateBullets && durability > 0)
         {
             durability--;
             state.WeaponDurabilityAmmo[weapon.InstanceId] = durability;
@@ -439,7 +484,7 @@ internal sealed partial class GameRouter
             ? EnsureReserve4229938(state, bulletId)
             : NonSeparateReserve4229938(durability, current);
         ctx.Session.Log.Info($"[AMMO] shot weapon={weapon.TemplateId}/{weapon.InstanceId} token={skillInstanceId} trigger={triggerIndex} mag={current}/{weapon.MagazineAmmo} reserve={reserve} bullet={bulletId} total={durability}");
-        return ctx.NotifyAsync(MethodId.SyncSpiritWeaponDurabilityChangedAction,
+        await ctx.NotifyAsync(MethodId.SyncSpiritWeaponDurabilityChangedAction,
             CombatCodec.WeaponDurabilityChanged(state.ActiveSpiritTemplateId, state.ActiveSpiritUnitId, weapon, durability, current, bulletId));
     }
 
@@ -601,6 +646,27 @@ internal sealed partial class GameRouter
         var weapon = CombatCodec.Weapon(state.ActiveSpiritTemplateId, state.ActiveWeaponInstanceId)
             ?? CombatCodec.DefaultWeapon(state.ActiveSpiritTemplateId);
         return ResolveWeaponStyle(state, weapon);
+    }
+
+    private static long _infiniteAmmoCheckTicks4229938;
+    private static bool _infiniteAmmoCached4229938 = true;
+
+    internal static bool InfiniteAmmoEnabled4229938()
+    {
+        var now = System.Environment.TickCount64;
+        if (now - _infiniteAmmoCheckTicks4229938 < 2000)
+            return _infiniteAmmoCached4229938;
+        _infiniteAmmoCheckTicks4229938 = now;
+        try
+        {
+            _infiniteAmmoCached4229938 = !System.IO.File.Exists(
+                System.IO.Path.Combine(System.AppContext.BaseDirectory, "infinite-ammo.disabled"));
+        }
+        catch
+        {
+            _infiniteAmmoCached4229938 = true;
+        }
+        return _infiniteAmmoCached4229938;
     }
 }
 

@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Ananta.SDK.Network;
+using Ananta.Server.Protocol.Client4229938;
 
 namespace Ananta.Server.Gameplay.Crowd;
 
@@ -94,12 +95,16 @@ public sealed class UrbanCrowdEngine
     private Task? _crowdLoopTask;
 
     public bool Enabled { get; set; } = true;
-    public int TargetPedestrianDensity { get; set; } = 15;
+    public int TargetPedestrianDensity { get; set; } = 25;
     public bool PopulateShops { get; set; } = true;
 
-    // Verified authentic civilian, shopkeeper, barista, and bar patron NPCs
+    // Verified authentic civilian models from AgentConfig (4013xxxx)
     private static readonly uint[] CitizenFormworkPool =
     [
+        40130003, // Generic Young Woman (少女)
+        40130017, // Generic Young Boy (少男)
+        40130020, // Generic Adult Female (成女)
+        40130035, // Generic Adult Male (成男)
         40130101, // Emily Sato - Lively female shopkeeper
         40130102, // Sato Saori - Gentle female shopkeeper
         40130117, // Emma - Store greeter
@@ -128,6 +133,12 @@ public sealed class UrbanCrowdEngine
         public float X { get; set; }
         public float Y { get; set; }
         public float Z { get; set; }
+        public float Facing { get; set; }
+        public float Speed { get; set; } = 1.3f;
+        public bool IsWalking { get; set; }
+        public List<(float X, float Y, float Z)> Waypoints { get; } = [];
+        public int CurrentWpIndex { get; set; }
+        public bool WalkForwardDirection { get; set; } = true;
         public DateTime SpawnedAt { get; set; }
     }
 
@@ -163,6 +174,8 @@ public sealed class UrbanCrowdEngine
         Start();
     }
 
+    private Task? _motionLoopTask;
+
     public void Start()
     {
         if (_crowdLoopTask is not null && !_crowdLoopTask.IsCompleted)
@@ -170,7 +183,8 @@ public sealed class UrbanCrowdEngine
 
         _cts = new CancellationTokenSource();
         _crowdLoopTask = Task.Run(() => CrowdLoopAsync(_cts.Token));
-        Console.WriteLine("[CROWD] Living Urban Crowd Engine started.");
+        _motionLoopTask = Task.Run(() => CrowdMotionLoopAsync(_cts.Token));
+        Console.WriteLine("[CROWD] Living Urban Crowd Engine started (Spawn & Locomotion loops).");
     }
 
     public void Stop()
@@ -200,13 +214,101 @@ public sealed class UrbanCrowdEngine
 
             try
             {
-                // Run crowd checks every 2.5 seconds (crowd spawns do not require high frequency updates)
                 await Task.Delay(2500, token);
             }
             catch (OperationCanceledException)
             {
                 break;
             }
+        }
+    }
+
+    private async Task CrowdMotionLoopAsync(CancellationToken token)
+    {
+        const int motionIntervalMs = 125; // 8 Hz locomotion push
+        const float dt = motionIntervalMs / 1000f;
+
+        while (!token.IsCancellationRequested)
+        {
+            try
+            {
+                if (Enabled && _driver is not null && _sessionProvider is not null)
+                {
+                    var sessions = _sessionProvider().ToList();
+                    foreach (var session in sessions)
+                    {
+                        await TickSessionCrowdMotionAsync(session, dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[CROWD-MOTION-ERROR] {ex.Message}");
+            }
+
+            try
+            {
+                await Task.Delay(motionIntervalMs, token);
+            }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
+        }
+    }
+
+    private async Task TickSessionCrowdMotionAsync(TcpSession session, float dt)
+    {
+        if (_driver is null) return;
+        var (hasPlayer, px, py, pz, _, _) = _driver.GetPlayerPosition(session);
+        if (!hasPlayer) return;
+
+        foreach (var npc in _activeCrowd.Values)
+        {
+            if (!npc.IsWalking || npc.Waypoints.Count < 2)
+                continue;
+
+            var dx = npc.X - px;
+            var dz = npc.Z - pz;
+            if (dx * dx + dz * dz > 90f * 90f)
+                continue;
+
+            var targetIdx = npc.CurrentWpIndex;
+            if (targetIdx >= npc.Waypoints.Count)
+            {
+                npc.WalkForwardDirection = false;
+                npc.CurrentWpIndex = Math.Max(0, npc.Waypoints.Count - 2);
+                targetIdx = npc.CurrentWpIndex;
+            }
+            else if (targetIdx < 0)
+            {
+                npc.WalkForwardDirection = true;
+                npc.CurrentWpIndex = Math.Min(1, npc.Waypoints.Count - 1);
+                targetIdx = npc.CurrentWpIndex;
+            }
+
+            var target = npc.Waypoints[targetIdx];
+            var toTargetX = target.X - npc.X;
+            var toTargetZ = target.Z - npc.Z;
+            var distToTarget = MathF.Sqrt(toTargetX * toTargetX + toTargetZ * toTargetZ);
+
+            if (distToTarget < 0.6f)
+            {
+                npc.CurrentWpIndex += npc.WalkForwardDirection ? 1 : -1;
+                continue;
+            }
+
+            var step = MathF.Min(distToTarget, npc.Speed * dt);
+            var dirX = toTargetX / distToTarget;
+            var dirZ = toTargetZ / distToTarget;
+            npc.X += dirX * step;
+            npc.Z += dirZ * step;
+
+            var yawDeg = MathF.Atan2(dirX, dirZ) * (180f / MathF.PI);
+            npc.Facing = yawDeg;
+
+            await _driver.SendPedestrianMoveAsync(
+                session, npc.EntityId, npc.X, npc.Y, npc.Z, npc.Facing, WorldCodec.MoveAction.WalkFront);
         }
     }
 
@@ -218,6 +320,45 @@ public sealed class UrbanCrowdEngine
         var (hasPlayer, px, py, pz, pyaw, _) = _driver.GetPlayerPosition(session);
         if (!hasPlayer || !float.IsFinite(px) || !float.IsFinite(pz))
             return;
+
+        // 0. Prune distant pedestrians (> 120m) to continuously recycle population
+        var toRemove = new List<ulong>();
+        foreach (var npc in _activeCrowd.Values)
+        {
+            var dx = npc.X - px;
+            var dz = npc.Z - pz;
+            if (dx * dx + dz * dz > 120f * 120f)
+            {
+                toRemove.Add(npc.EntityId);
+            }
+        }
+
+        foreach (var id in toRemove)
+        {
+            if (_activeCrowd.TryRemove(id, out _))
+            {
+                await _driver.DespawnCrowdPedestrianAsync(session, id);
+            }
+        }
+
+        // Also prune distant interior records (> 100m)
+        if (_interiorsData is not null && _populatedInteriors.Count > 0)
+        {
+            var distantShops = new List<int>();
+            foreach (var (shopId, _) in _populatedInteriors)
+            {
+                var shop = _interiorsData.Interiors.FirstOrDefault(s => s.Id == shopId);
+                if (shop is not null && shop.Pos.Count >= 3)
+                {
+                    var sdx = shop.Pos[0] - px;
+                    var sdz = shop.Pos[2] - pz;
+                    if (sdx * sdx + sdz * sdz > 100f * 100f)
+                        distantShops.Add(shopId);
+                }
+            }
+            foreach (var sId in distantShops)
+                _populatedInteriors.TryRemove(sId, out _);
+        }
 
         // 1. Populate nearby shops and cafes (within 60m)
         if (PopulateShops && _interiorsData is not null)
@@ -274,6 +415,8 @@ public sealed class UrbanCrowdEngine
                                             X = sx,
                                             Y = sy,
                                             Z = sz,
+                                            Facing = facing,
+                                            IsWalking = false,
                                             SpawnedAt = DateTime.UtcNow
                                         };
                                         Console.WriteLine($"[CROWD] Populated shop '{shop.Name}' with citizen NPC {formworkId}!");
@@ -294,7 +437,7 @@ public sealed class UrbanCrowdEngine
             var centerCx = (int)MathF.Floor(px / pGridSize);
             var centerCz = (int)MathF.Floor(pz / pGridSize);
 
-            var candidateWaypoints = new List<(float X, float Y, float Z)>();
+            var candidateLanes = new List<PedestrianLaneEntry>();
 
             for (var cx = centerCx - 1; cx <= centerCx + 1; cx++)
             {
@@ -308,15 +451,15 @@ public sealed class UrbanCrowdEngine
                             if (laneId >= 0 && laneId < _pedestrianData.Lanes.Count)
                             {
                                 var lane = _pedestrianData.Lanes[laneId];
-                                foreach (var pt in lane.Pts)
+                                if (lane.Pts.Count >= 2)
                                 {
-                                    if (pt.Count < 3) continue;
-                                    var ldx = pt[0] - px;
-                                    var ldz = pt[2] - pz;
+                                    var pt0 = lane.Pts[0];
+                                    var ldx = pt0[0] - px;
+                                    var ldz = pt0[2] - pz;
                                     var dSq = ldx * ldx + ldz * ldz;
-                                    if (dSq >= 25f * 25f && dSq <= 80f * 80f)
+                                    if (dSq >= 20f * 20f && dSq <= 85f * 85f)
                                     {
-                                        candidateWaypoints.Add((pt[0], pt[1], pt[2]));
+                                        candidateLanes.Add(lane);
                                     }
                                 }
                             }
@@ -325,29 +468,45 @@ public sealed class UrbanCrowdEngine
                 }
             }
 
-            if (candidateWaypoints.Count > 0)
+            if (candidateLanes.Count > 0)
             {
-                var wp = candidateWaypoints[_rng.Next(candidateWaypoints.Count)];
-                // Ground elevation clamping: ensure sidewalk pedestrian Y is on mesh floor
-                var spawnY = MathF.Abs(wp.Y - py) > 2.5f ? py : wp.Y;
+                var chosenLane = candidateLanes[_rng.Next(candidateLanes.Count)];
+                var pt0 = chosenLane.Pts[0];
+                var spawnY = MathF.Abs(pt0[1] - py) > 2.5f ? py : pt0[1];
                 var formworkId = CitizenFormworkPool[_rng.Next(CitizenFormworkPool.Length)];
-                var poiAction = AmbientPoiActions[_rng.Next(AmbientPoiActions.Length)];
+                var isWalker = _rng.Next(100) < 60; // 60% walkers, 40% ambient idle/talkers
+                var poiAction = isWalker ? 0u : AmbientPoiActions[_rng.Next(AmbientPoiActions.Length)];
                 var facing = _rng.Next(0, 360);
 
                 var (ok, ids) = await _driver.SpawnCrowdPedestriansAsync(
-                    session, formworkId, poiAction, wp.X, spawnY, wp.Z, facing);
+                    session, formworkId, poiAction, pt0[0], spawnY, pt0[2], facing);
 
                 if (ok && ids.Length > 0)
                 {
-                    _activeCrowd[ids[0]] = new ActiveCrowdNpc
+                    var npc = new ActiveCrowdNpc
                     {
                         EntityId = ids[0],
                         FormworkId = formworkId,
-                        X = wp.X,
+                        X = pt0[0],
                         Y = spawnY,
-                        Z = wp.Z,
+                        Z = pt0[2],
+                        Facing = facing,
+                        IsWalking = isWalker,
+                        CurrentWpIndex = 1,
+                        WalkForwardDirection = true,
                         SpawnedAt = DateTime.UtcNow
                     };
+
+                    if (isWalker)
+                    {
+                        foreach (var pt in chosenLane.Pts)
+                        {
+                            if (pt.Count >= 3)
+                                npc.Waypoints.Add((pt[0], MathF.Abs(pt[1] - py) > 2.5f ? py : pt[1], pt[2]));
+                        }
+                    }
+
+                    _activeCrowd[ids[0]] = npc;
                 }
             }
         }

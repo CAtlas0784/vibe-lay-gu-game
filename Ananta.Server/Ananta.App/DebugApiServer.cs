@@ -105,6 +105,8 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await GarageUnlockAllAsync(token), token);
             else if (method == "POST" && path == "/api/player/teleport")
                 await WriteJsonAsync(ctx, await TeleportAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/subway/travel")
+                await WriteJsonAsync(ctx, await SubwayTravelAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/vehicle/spawn")
                 await WriteJsonAsync(ctx, await VehicleSpawnAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/vehicle/to-me")
@@ -165,6 +167,16 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, CrowdStatus(), token);
             else if (method == "POST" && path == "/api/crowd/config")
                 await WriteJsonAsync(ctx, await CrowdConfigAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "GET" && path == "/api/catalog/spirits")
+                await WriteJsonAsync(ctx, SpiritCatalogList(), token);
+            else if (method == "GET" && path == "/api/catalog/weapons")
+                await WriteJsonAsync(ctx, WeaponCatalogList(), token);
+            else if (method == "GET" && path == "/api/catalog/items")
+                await WriteJsonAsync(ctx, ItemCatalogList(ctx.Request.QueryString), token);
+            else if (method == "POST" && (path == "/api/item/give" || path == "/api/player/give-item"))
+                await WriteJsonAsync(ctx, await GiveItemAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && (path == "/api/armory/equip" || path == "/api/weapon/equip"))
+                await WriteJsonAsync(ctx, await WeaponEquipAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else
                 await WriteJsonAsync(ctx, new { ok = false, error = "unknown route" }, token, 404);
         }
@@ -578,6 +590,80 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         }
 
         return await SendPlayerTeleportAsync(session, unitId, x, y, z, facing, "teleport", token);
+    }
+
+    private async Task<object> SubwayTravelAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        float x, y, z, facing;
+        string stationName = "Subway Station";
+        string startTl = "loading_metro_normal01_m";
+        string endTl = "loading_metro_end_1";
+        bool withCutscene = true;
+
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            x = root.TryGetProperty("x", out var px) ? (float)px.GetDouble() : throw new InvalidDataException("missing numeric 'x'");
+            y = root.TryGetProperty("y", out var py) ? (float)py.GetDouble() : throw new InvalidDataException("missing numeric 'y'");
+            z = root.TryGetProperty("z", out var pz) ? (float)pz.GetDouble() : throw new InvalidDataException("missing numeric 'z'");
+            facing = root.TryGetProperty("facing", out var pf) ? (float)pf.GetDouble() : Profile.WorldFacing;
+            if (root.TryGetProperty("name", out var pn)) stationName = pn.GetString() ?? stationName;
+            if (root.TryGetProperty("startTl", out var ps)) startTl = ps.GetString() ?? startTl;
+            if (root.TryGetProperty("endTl", out var pe)) endTl = pe.GetString() ?? endTl;
+            if (root.TryGetProperty("cutscene", out var pc)) withCutscene = pc.GetBoolean();
+            if (!float.IsFinite(x) || !float.IsFinite(y) || !float.IsFinite(z) || !float.IsFinite(facing))
+                throw new InvalidDataException("coordinates must be finite numbers");
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        ulong unitId = Profile.InitialUnitId;
+        if (session.Items.TryGetValue(GameRouter.WorldStateKey, out var raw) && raw is WorldEntryState state)
+        {
+            lock (state.SyncRoot)
+            {
+                if (state.ActiveSpiritUnitId != 0)
+                    unitId = state.ActiveSpiritUnitId;
+                state.LastReportedPlayerPosition = new Vec3(x, y, z);
+                state.LastReportedPlayerRotation = new Vec3(0f, facing, 0f);
+                state.HasLastReportedPlayerTransform = true;
+            }
+        }
+
+        if (withCutscene)
+        {
+            session.Log.Info($"[SUBWAY] Boarding train towards {stationName}... playing {startTl}");
+            var cmdStart = $"CMD:PLAY_TIMELINE:{startTl}";
+            await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmdStart), token);
+
+            // Wait for carriage transit simulation (2.2s)
+            await Task.Delay(2200, token);
+
+            // Teleport player to destination station tunnel exit
+            await SendPlayerTeleportAsync(session, unitId, x, y, z, facing, "subway-teleport", token);
+            await Task.Delay(300, token);
+
+            // Play destination station tunnel exit timeline
+            if (!string.IsNullOrEmpty(endTl))
+            {
+                var cmdEnd = $"CMD:PLAY_TIMELINE:{endTl}";
+                await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmdEnd), token);
+            }
+
+            session.Log.Info($"[SUBWAY] Exited tunnel at {stationName} ({x}, {y}, {z}): played {endTl}");
+            return new { ok = true, station = stationName, x, y, z, facing, cutscene = true };
+        }
+        else
+        {
+            return await SendPlayerTeleportAsync(session, unitId, x, y, z, facing, "subway-teleport", token);
+        }
     }
 
     private static object Scenes()
@@ -1524,6 +1610,99 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
             return string.Empty;
         using var reader = new StreamReader(request.InputStream, request.ContentEncoding);
         return await reader.ReadToEndAsync(token);
+    }
+
+    private object SpiritCatalogList()
+        => ClientConfigRepository.Characters()
+            .Select(c => new { templateId = c.TemplateId, unitId = c.UnitId, name = c.Name })
+            .ToList();
+
+    private object WeaponCatalogList()
+        => CombatCatalogRepository.AccountWeapons
+            .Select(w => new { templateId = w.TemplateId, instanceId = w.InstanceId, name = w.Name, isShoot = w.IsShootWeapon, isPrivate = w.IsPrivate, fightStyleTypeId = w.WeaponFightSkillTypeId })
+            .ToList();
+
+    private object ItemCatalogList(System.Collections.Specialized.NameValueCollection query)
+    {
+        var limit = 200;
+        if (uint.TryParse(query["limit"], out var parsed) && parsed is > 0 and <= 5000)
+            limit = (int)parsed;
+
+        var items = EconomyConfigRepository.SearchConsumableItems(query["q"], limit);
+        return new
+        {
+            hasItemTable = EconomyConfigRepository.HasConsumableItems,
+            count = items.Count,
+            items = items
+                .Select(x => new { templateId = x.Id, name = x.Name, subType = x.SubType, quality = x.Quality })
+                .ToList(),
+        };
+    }
+
+    private async Task<object> GiveItemAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        uint templateId;
+        var count = 1u;
+        var bind = false;
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (!root.TryGetProperty("templateId", out var pt) || !pt.TryGetUInt32(out templateId) || templateId == 0)
+            {
+                if (!root.TryGetProperty("itemId", out var pi) || !pi.TryGetUInt32(out templateId) || templateId == 0)
+                    return new { ok = false, error = "missing numeric 'templateId' or 'itemId' (Item ID in 36xxxxxx)" };
+            }
+            if (root.TryGetProperty("count", out var pc) && pc.TryGetUInt32(out var parsedCount))
+                count = Math.Clamp(parsedCount == 0 ? 1u : parsedCount, 1u, 99999u);
+            if (root.TryGetProperty("bind", out var pb) && pb.ValueKind is JsonValueKind.True or JsonValueKind.False)
+                bind = pb.GetBoolean();
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var result = await GameRouter.PanelGiveItemAsync(session, templateId, count, bind);
+        return result.Ok ? new { ok = true, message = result.Message } : new { ok = false, error = result.Message };
+    }
+
+    private async Task<object> WeaponEquipAsync(string json, CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        uint? spiritId = null;
+        uint? templateId = null;
+        ulong? instanceId = null;
+        int slotIndex;
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("spiritId", out var ps) && ps.TryGetUInt32(out var sid))
+                spiritId = sid;
+            if (root.TryGetProperty("templateId", out var pt) && pt.TryGetUInt32(out var tid))
+                templateId = tid;
+            if (root.TryGetProperty("instanceId", out var pi) && pi.TryGetUInt64(out var iid))
+                instanceId = iid;
+            if (!root.TryGetProperty("slotIndex", out var psl) || !psl.TryGetInt32(out slotIndex))
+                return new { ok = false, error = "missing numeric 'slotIndex' (1..15)" };
+        }
+        catch (Exception ex)
+        {
+            return new { ok = false, error = $"bad request: {ex.Message}" };
+        }
+
+        var result = await GameRouter.PanelEquipWeaponAsync(session, spiritId, slotIndex, templateId, instanceId);
+        if (result.Ok)
+            return new { ok = true, message = result.Message };
+        return new { ok = false, error = result.Message };
     }
 
     private static async Task WriteHtmlAsync(HttpListenerContext ctx, CancellationToken token)

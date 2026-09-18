@@ -32,6 +32,8 @@
   .badge-police { background: #3e2723; color: #ffcc80; border: 1px solid #795548; }
   .badge-animal { background: #1b4332; color: #95d5b2; border: 1px solid #2d6a4f; }
   .badge-ally { background: #4a148c; color: #e1bee7; border: 1px solid #8e24aa; }
+  .picklist { max-height: 180px; overflow-y: auto; border: 1px solid #333; border-radius: 6px; padding: 6px; margin-top: 6px; background: #101215; }
+  .picklist label { display: block; padding: 3px 0; font-size: 12px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -236,6 +238,13 @@
 <div class="card" style="border-color:#3b82f6">
   <h2 style="color:#60a5fa">🚇 ระบบขนส่งมวลชน & รถไฟใต้ดิน (Metro Transit & Live Train Tracker)</h2>
   
+  <div style="margin-bottom:12px;padding:8px 12px;background:#1e293b;border-radius:6px;display:flex;align-items:center;gap:10px;border:1px solid #3b82f6">
+    <input id="autoSubwayCutscene" type="checkbox" checked style="width:18px;height:18px;accent-color:#38bdf8;cursor:pointer">
+    <label for="autoSubwayCutscene" style="font-size:13px;color:#f0f9ff;cursor:pointer;font-weight:600">
+      🎬 เล่นคัทซีนรถไฟลอดอุโมงค์อัตโนมัติ (เล่นฉากนั่งรถไฟ -> ลอดอุโมงค์ -> โผล่ออกที่อุโมงค์สถานีปลายทาง)
+    </label>
+  </div>
+
   <!-- Sub-Tabs Navigation -->
   <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
     <button id="tabBtn_live" class="npc-tab active" onclick="switchTransitTab('live')">🚊 ติดตามขบวนรถไฟสด & สายรถไฟ (Live Train Lines)</button>
@@ -270,41 +279,41 @@
     <div style="font-weight:bold;margin-bottom:6px;color:#60a5fa;font-size:13px">🚉 เส้นทางสถานี & จุดขึ้นขบวนรถ (Station Route & Boarding):</div>
     <div id="routeStationsContainer" style="background:#1e222b;border:1px solid #334155;border-radius:6px;padding:8px;max-height:300px;overflow-y:auto">
     </div>
-    <div class="muted" style="margin-top:6px">💡 คลิก <b>⚡ วาร์ปด่วน</b> เพื่อไปที่ชานชาลาทันที หรือคลิก <b>🎬 ขึ้นรถไฟ</b> เพื่อเล่นคัทซีนนั่งในตู้โดยสารก่อนวาร์ปไปถึง</div>
+    <div class="muted" style="margin-top:6px">💡 เมื่อเปิดเช็คบ็อกซ์ด้านบน ระบบจะเล่นคัทซีนนั่งรถไฟลอดอุโมงค์และไปโผล่ออกที่อุโมงค์สถานีปลายทางให้อัตโนมัติ</div>
   </div>
 
   <!-- TAB 2: All Stations Grid -->
   <div id="transitPane_stations" style="display:none">
     <div style="font-weight:bold;margin-bottom:6px;color:#93c5fd">🏙️ Nova City Metro (12 สถานี):</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-      <button onclick="warpSubway(2376.0, -1.1, 2729.6, 104.5)">Sunny Bay</button>
-      <button onclick="warpSubway(898.4, -1.1, 1558.2, 51)">Freshville</button>
-      <button onclick="warpSubway(1878.8, -1.1, 2250.5, 0)">Glimmergold</button>
-      <button onclick="warpSubway(2748.3, -1.1, 2046.6, 0)">Memorial Park</button>
-      <button onclick="warpSubway(3159.0, -1.1, 2643.0, 0)">Azure North</button>
-      <button onclick="warpSubway(3661.7, -1.0, 1286.9, 0)">Future Port</button>
-      <button onclick="warpSubway(2243.6, -1.1, 1616.9, 0)">Coastal Station</button>
-      <button onclick="warpSubway(3941.7, -1.1, 1974.1, 0)">Vista Station</button>
-      <button onclick="warpSubway(1232.9, -1.1, 2213.1, 0)">Veluxity Station</button>
-      <button onclick="warpSubway(620.2, -1.0, 2072.1, 0)">Paradox Plaza</button>
-      <button onclick="warpSubway(1383.1, -1.1, 1267.7, 0)">Marine MechWorks</button>
-      <button onclick="warpSubway(2947.4, -1.1, 1030.3, 0)">Rixxy Wonderland</button>
+      <button onclick="warpSubway(2376.0, -1.1, 2729.6, 104.5, 'Sunny Bay Station', 'loading_metro_end_1')">Sunny Bay</button>
+      <button onclick="warpSubway(898.4, -1.1, 1558.2, 51, 'Freshville Station', 'loading_metro_end_1')">Freshville</button>
+      <button onclick="warpSubway(1878.8, -1.1, 2250.5, 0, 'Glimmergold Station', 'loading_metro_end_1')">Glimmergold</button>
+      <button onclick="warpSubway(2748.3, -1.1, 2046.6, 0, 'Memorial Park Station', 'loading_metro_end_1')">Memorial Park</button>
+      <button onclick="warpSubway(3159.0, -1.1, 2643.0, 0, 'Azure North Station', 'loading_metro_end_1')">Azure North</button>
+      <button onclick="warpSubway(3661.7, -1.0, 1286.9, 0, 'Future Port Station', 'loading_metro_end_1')">Future Port</button>
+      <button onclick="warpSubway(2243.6, -1.1, 1616.9, 0, 'Coastal Station', 'loading_metro_end_1')">Coastal Station</button>
+      <button onclick="warpSubway(3941.7, -1.1, 1974.1, 0, 'Vista Station', 'loading_metro_end_1')">Vista Station</button>
+      <button onclick="warpSubway(1232.9, -1.1, 2213.1, 0, 'Veluxity Station', 'loading_metro_end_1')">Veluxity Station</button>
+      <button onclick="warpSubway(620.2, -1.0, 2072.1, 0, 'Paradox Plaza Station', 'loading_metro_end_1')">Paradox Plaza</button>
+      <button onclick="warpSubway(1383.1, -1.1, 1267.7, 0, 'Marine MechWorks Station', 'loading_metro_end_1')">Marine MechWorks</button>
+      <button onclick="warpSubway(2947.4, -1.1, 1030.3, 0, 'Rixxy Wonderland Station', 'loading_metro_end_1')">Rixxy Wonderland</button>
     </div>
     <div style="font-weight:bold;margin-bottom:6px;color:#a78bfa">🏮 Longqi Metro (13 สถานี):</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="ghost" onclick="warpSubway(-1638.0, 18.0, 1540.5, 0)">Dinglan North</button>
-      <button class="ghost" onclick="warpSubway(-1492.5, 17.6, 1107.9, 0)">Zhaohua Road</button>
-      <button class="ghost" onclick="warpSubway(-1431.7, 18.0, 565.0, 0)">Dinglan Road</button>
-      <button class="ghost" onclick="warpSubway(-1725.5, 17.5, 12.1, 0)">Lakeside Pedestrian</button>
-      <button class="ghost" onclick="warpSubway(-1002.5, 17.7, 115.3, 0)">Zenith Center</button>
-      <button class="ghost" onclick="warpSubway(-1788.4, 17.5, -574.6, 0)">Lakeside South</button>
-      <button class="ghost" onclick="warpSubway(-844.0, 17.5, 1133.7, 0)">Great Ferry Port</button>
-      <button class="ghost" onclick="warpSubway(-624.4, 17.6, 660.4, 0)">Xinfeng Road</button>
-      <button class="ghost" onclick="warpSubway(61.6, 17.5, 778.3, 0)">Yaojin Road</button>
-      <button class="ghost" onclick="warpSubway(375.8, 17.5, 98.4, 0)">Yaojin Pedestrian</button>
-      <button class="ghost" onclick="warpSubway(-427.6, 17.5, 354.0, 0)">Mingchun North</button>
-      <button class="ghost" onclick="warpSubway(-2442.7, 17.5, 1015.6, 0)">Lakefront Institute</button>
-      <button class="ghost" onclick="warpSubway(-1138.2, 17.7, -602.3, 0)">Cloudstream West</button>
+      <button class="ghost" onclick="warpSubway(-1638.0, 18.0, 1540.5, 0, 'Dinglan North', 'loading_general_end')">Dinglan North</button>
+      <button class="ghost" onclick="warpSubway(-1492.5, 17.6, 1107.9, 0, 'Zhaohua Road', 'loading_metro_end_1')">Zhaohua Road</button>
+      <button class="ghost" onclick="warpSubway(-1431.7, 18.0, 565.0, 0, 'Dinglan Road', 'loading_general_end')">Dinglan Road</button>
+      <button class="ghost" onclick="warpSubway(-1725.5, 17.5, 12.1, 0, 'Lakeside Pedestrian', 'loading_metro_end_1')">Lakeside Pedestrian</button>
+      <button class="ghost" onclick="warpSubway(-1002.5, 17.7, 115.3, 0, 'Zenith Center', 'loading_metro_end_1')">Zenith Center</button>
+      <button class="ghost" onclick="warpSubway(-1788.4, 17.5, -574.6, 0, 'Lakeside South', 'loading_metro_end_1')">Lakeside South</button>
+      <button class="ghost" onclick="warpSubway(-844.0, 17.5, 1133.7, 0, 'Great Ferry Port', 'loading_metro_end_1')">Great Ferry Port</button>
+      <button class="ghost" onclick="warpSubway(-624.4, 17.6, 660.4, 0, 'Xinfeng Road', 'loading_metro_end_1')">Xinfeng Road</button>
+      <button class="ghost" onclick="warpSubway(61.6, 17.5, 778.3, 0, 'Yaojin Road', 'loading_metro_end_1')">Yaojin Road</button>
+      <button class="ghost" onclick="warpSubway(375.8, 17.5, 98.4, 0, 'Yaojin Pedestrian', 'loading_metro_end_1')">Yaojin Pedestrian</button>
+      <button class="ghost" onclick="warpSubway(-427.6, 17.5, 354.0, 0, 'Mingchun North', 'loading_metro_end_1')">Mingchun North</button>
+      <button class="ghost" onclick="warpSubway(-2442.7, 17.5, 1015.6, 0, 'Lakefront Institute', 'loading_metro_end_1')">Lakefront Institute</button>
+      <button class="ghost" onclick="warpSubway(-1138.2, 17.7, -602.3, 0, 'Cloudstream West', 'loading_metro_end_1')">Cloudstream West</button>
     </div>
   </div>
 
@@ -445,6 +454,40 @@
   <div class="muted" style="margin-top:6px">
     จำลองการจราจรอัจฉริยะแบบเรียลไทม์บนเส้นทาง 42,128 เลนตามแผนผังเมืองจริง รถจะวิ่งตามเลน เลี้ยวตามทางแยก และผู้เล่นสามารถกด <strong>[F]</strong> เพื่อเปิดประตูขึ้นไปขับได้ทันทีแบบ GTA
   </div>
+</div>
+
+<div class="card" id="card-weapon" style="border-left: 4px solid #00bcd4;">
+  <h2 style="color:#4dd0e1">⚔️ Armory Wheel Customizer (ปรับแต่งอาวุธในวงล้อช่อง 1–15)</h2>
+  <div class="muted">ติดตั้งอาวุธ 634 ชิ้นในเกมลงในช่องวงล้ออาวุธ 1–15 ของตัวละครใดก็ได้ (ช่อง 0 คือหมัด) ซิงค์สไตล์การต่อสู้ แอนิเมชัน และกระสุนเข้าเกมทันที</div>
+  <div style="margin-top:8px">
+    ตัวละคร: <select id="wpnSpirit" style="min-width:200px"></select>
+    ช่องวงล้อ (Slot 1–15): <input id="wpnSlot" type="number" min="1" max="15" value="1" style="width:70px">
+  </div>
+  <div style="margin-top:6px">
+    ค้นหาอาวุธ: <input id="wpnFilter" placeholder="พิมพ์ชื่อ หรือ templateId เช่น 98003001" style="width:250px" onkeydown="if(event.key==='Enter')renderWeapons()">
+    <button class="ghost" onclick="renderWeapons()">ค้นหา</button>
+  </div>
+  <div class="picklist" id="wpnList">กำลังโหลดรายชื่ออาวุธ...</div>
+  <div style="margin-top:8px">
+    <button style="background:#00838f;color:#fff;font-weight:bold" onclick="equipSelected()">⚔️ สวมใส่อาวุธลงในช่อง (Equip Weapon)</button>
+  </div>
+</div>
+
+<div class="card" id="card-give-item" style="border-left: 4px solid #ffca28;">
+  <h2 style="color:#ffd54f">🎒 Universal Item Spawner (ระบบเสกไอเทมเข้ากระเป๋าเป้)</h2>
+  <div class="muted">ส่งไอเทมตรงเข้ากระเป๋าตัวละครผู้เล่นแบบ Real-time ผ่าน MethodId.SyncBackpackItemChanged โดยไม่ต้องเปิด GM คอนโซลหรือรีเซ็ตเกม</div>
+  <div style="margin-top:8px">
+    Item Template ID: <input id="giveId" type="number" placeholder="36012003" style="width:140px">
+    จำนวน (Count): <input id="giveCount" type="number" value="1" min="1" max="99999" style="width:90px">
+    <label class="muted" style="margin-left:6px"><input id="giveBind" type="checkbox"> ผูกมัด (Bind)</label>
+    <button style="background:#f57f17;color:#fff;font-weight:bold" onclick="giveItem()">🎁 เสกไอเทม / Grant</button>
+  </div>
+  <div style="margin-top:6px">
+    ค้นหาไอเทม: <input id="itemFilter" placeholder="ชื่อไอเทม หรือ ID" style="width:250px" onkeydown="if(event.key==='Enter')renderItems()">
+    <button class="ghost" onclick="renderItems()">ค้นหา</button>
+  </div>
+  <div class="picklist" id="itemList">กำลังโหลดรายการไอเทม...</div>
+  <div class="muted" style="margin-top:4px">คลิกที่รายการเพื่อใส่ ID ลงในช่อง หรือคลิกปุ่ม "ส่ง" เพื่อเสกไอเทมทันที 1 ชิ้น</div>
 </div>
 
 <div class="card" style="border-color:#e53935">
@@ -1298,10 +1341,115 @@ async function refreshTrafficStatus() {
   } catch (e) { }
 }
 
+let weaponData = [];
+let itemData = [];
+
+async function loadCatalogs() {
+  try {
+    const roster = await api('/api/catalog/spirits');
+    if (Array.isArray(roster)) {
+      document.getElementById('wpnSpirit').innerHTML =
+        roster.map(s => `<option value="${s.templateId}">${s.templateId} - ${s.name}</option>`).join('');
+    }
+    weaponData = await api('/api/catalog/weapons');
+    if (Array.isArray(weaponData)) renderWeapons();
+    const itemsRes = await api('/api/catalog/items?limit=5000');
+    itemData = (itemsRes && itemsRes.items) ? itemsRes.items : [];
+    renderItems();
+  } catch (e) {
+    log('catalog load error: ' + e);
+  }
+}
+
+function renderWeapons() {
+  const q = (document.getElementById('wpnFilter').value || '').toLowerCase();
+  const list = (weaponData || []).filter(w => !q || (w.name || '').toLowerCase().includes(q) || String(w.templateId).includes(q)).slice(0, 400);
+  document.getElementById('wpnList').innerHTML = list.length
+    ? list.map(w => `<label><input type="radio" name="wpn" value="${w.templateId}"> ` +
+        `${w.templateId} - ${w.name}` +
+        (w.isPrivate ? ' <span class="muted">[Exclusive]</span>' : '') +
+        (w.isShoot ? ' <span class="muted">[Firearm]</span>' : '') + `</label>`).join('')
+    : '<span class="muted">ไม่พบอาวุธที่ค้นหา</span>';
+}
+
+function itemLabel(i) {
+  const n = (i.name || '').trim();
+  return (n.length ? n : '(Unnamed Item)').replace(/</g, '&lt;');
+}
+
+function filterItemCache(q) {
+  const k = (q || '').toLowerCase();
+  return (itemData || []).filter(i =>
+    !k || (i.name || '').toLowerCase().includes(k) || String(i.templateId).includes(k)).slice(0, 300);
+}
+
+function renderItems() {
+  const q = (document.getElementById('itemFilter').value || '').trim();
+  const box = document.getElementById('itemList');
+  const paint = list => {
+    box.innerHTML = (list && list.length)
+      ? list.map(i => `<label style="cursor:pointer">` +
+          `<button class="ghost" style="padding:1px 7px;margin-right:6px" ` +
+          `onclick="event.preventDefault();giveItem(${i.templateId})">ส่ง</button>` +
+          `<span onclick="pickItemId(${i.templateId})">${i.templateId} - ${itemLabel(i)}</span></label>`).join('')
+      : '<span class="muted">ไม่พบไอเทมที่ค้นหา</span>';
+  };
+  if (q) {
+    api('/api/catalog/items?limit=300&q=' + encodeURIComponent(q))
+      .then(r => paint((r && r.items) ? r.items : []))
+      .catch(() => paint(filterItemCache(q)));
+    return;
+  }
+  paint(filterItemCache(''));
+}
+
+function pickItemId(id) {
+  document.getElementById('giveId').value = id;
+  log('เลือกไอเทม ID: ' + id);
+}
+
+async function giveItem(id) {
+  const templateId = id || parseInt(document.getElementById('giveId').value || '0', 10);
+  if (!templateId) { log('กรุณาระบุ Item Template ID'); return; }
+  const count = Math.max(1, parseInt(document.getElementById('giveCount').value || '1', 10) || 1);
+  const bind = document.getElementById('giveBind').checked;
+  try {
+    const r = await api('/api/item/give', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ templateId, count, bind })
+    });
+    log('🎁 เสกไอเทม ' + templateId + ' x' + count + ': ' + (r.ok ? r.message : 'ล้มเหลว - ' + (r.error || '')));
+  } catch (e) {
+    log('เสกไอเทมล้มเหลว: ' + e);
+  }
+}
+
+async function equipSelected() {
+  const pick = document.querySelector('input[name=wpn]:checked');
+  if (!pick) { log('กรุณาเลือกอาวุธก่อนกดสวมใส่'); return; }
+  const body = {
+    spiritId: parseInt(document.getElementById('wpnSpirit').value || '0', 10),
+    slotIndex: parseInt(document.getElementById('wpnSlot').value || '1', 10),
+    templateId: parseInt(pick.value, 10)
+  };
+  try {
+    const r = await api('/api/armory/equip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    log('⚔️ สวมใส่อาวุธ: ' + (r.ok ? r.message : 'ล้มเหลว - ' + (r.error || '')));
+  } catch (e) {
+    log('สวมใส่อาวุธล้มเหลว: ' + e);
+  }
+}
+
 loadFleet();
 loadScenes();
 loadNpcCatalog();
 loadCutsceneCatalog();
+loadCatalogs();
 refresh();
 setInterval(refresh, 2000);
 refreshTrafficStatus();

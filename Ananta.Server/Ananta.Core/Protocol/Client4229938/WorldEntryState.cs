@@ -86,7 +86,17 @@ internal sealed class WorldEntryState
     // (loaded magazine + reserve). Keep it instance-persistent for the same reason as the magazine.
     internal Dictionary<ulong, int> WeaponDurabilityAmmo { get; } = [];
     internal Dictionary<ulong, uint> WeaponBulletByInstance { get; } = [];
+    internal Dictionary<int, uint> SkillByInstanceId { get; } = [];
     internal Dictionary<uint, uint> BackpackItemCounts { get; } = [];
+    internal Dictionary<uint, RpcTypes.Client4229938.Auto.PlayerPackItem> GmBackpackItems { get; } = [];
+    internal double WalletMoney { get; set; }
+    internal double WalletGold { get; set; }
+    internal double WalletBindingGold { get; set; }
+    internal PlayerProgress Progress { get; } = new();
+    internal bool ProgressRestored { get; set; }
+    internal bool HasSessionEconomy4229938()
+        => WalletMoney != 0 || WalletGold != 0 || WalletBindingGold != 0 || GmBackpackItems.Count > 0;
+    internal HashSet<ulong> ArmoryWeaponsAnnounced { get; } = [];
     internal Dictionary<(uint SpiritId, uint FightStyleTypeId), uint> SpiritStyleOverrides { get; } = [];
     internal int CombatUseCount { get; set; }
     internal int CombatEndCount { get; set; }

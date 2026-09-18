@@ -488,4 +488,20 @@ internal static class RuntimePayloadFactory
 
     private static Auto.UXVector3 Vector(Vec3 value)
         => new() { X = value.X, Y = value.Y, Z = value.Z };
+
+    internal static Auto.PlayerPackItem GmPackItem4229938(uint templateId, uint count, bool isBind, ulong uniqueId)
+        => new()
+        {
+            UniqueId = uniqueId,
+            TemplateId = templateId,
+            Count = count,
+            IsNew = false,
+            ExpiryTime = 0,
+            RemindState = 0,
+            Quality = 0,
+            Tags = 0,
+            IsBind = isBind,
+            Components = null,
+            CDFinishTime = 0,
+        };
 }

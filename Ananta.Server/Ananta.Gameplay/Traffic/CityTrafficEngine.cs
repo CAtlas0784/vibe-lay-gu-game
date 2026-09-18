@@ -13,6 +13,7 @@ public sealed class CityTrafficEngine
 
     private readonly ConcurrentDictionary<ulong, SimulatedVehicle> _simulatedVehicles = new();
     private RoadNetworkFile? _roadNetwork;
+    private TrafficSignalFile? _signalData;
     private readonly Dictionary<int, RoadLaneData> _laneLookup = new();
 
     private CancellationTokenSource? _cts;
@@ -69,30 +70,46 @@ public sealed class CityTrafficEngine
         _sessionProvider = sessionProvider;
 
         var roadPath = Path.Combine(clientDataPath, "World", "RoadNetwork.json");
-        if (!File.Exists(roadPath))
+        if (File.Exists(roadPath))
         {
-            Console.WriteLine($"[TRAFFIC] RoadNetwork.json not found at: {roadPath}");
-            return;
-        }
-
-        try
-        {
-            Console.WriteLine($"[TRAFFIC] Loading road network from: {roadPath}...");
-            var json = File.ReadAllText(roadPath);
-            _roadNetwork = JsonSerializer.Deserialize<RoadNetworkFile>(json);
-            if (_roadNetwork is not null)
+            try
             {
-                foreach (var lane in _roadNetwork.Lanes)
+                Console.WriteLine($"[TRAFFIC] Loading road network from: {roadPath}...");
+                var json = File.ReadAllText(roadPath);
+                _roadNetwork = JsonSerializer.Deserialize<RoadNetworkFile>(json);
+                if (_roadNetwork is not null)
                 {
-                    lane.Precompute();
-                    _laneLookup[lane.Id] = lane;
+                    foreach (var lane in _roadNetwork.Lanes)
+                    {
+                        lane.Precompute();
+                        _laneLookup[lane.Id] = lane;
+                    }
+                    Console.WriteLine($"[TRAFFIC] Road network loaded: {_roadNetwork.Lanes.Count} lanes precomputed across {_roadNetwork.SpatialGrid.Count} spatial cells.");
                 }
-                Console.WriteLine($"[TRAFFIC] Road network loaded: {_roadNetwork.Lanes.Count} lanes precomputed across {_roadNetwork.SpatialGrid.Count} spatial cells.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[TRAFFIC] Failed to load road network: {ex.Message}");
             }
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"[TRAFFIC] Failed to load road network: {ex.Message}");
+            Console.WriteLine($"[TRAFFIC] RoadNetwork.json not found at: {roadPath}");
+        }
+
+        var signalPath = Path.Combine(clientDataPath, "World", "TrafficSignals.json");
+        if (File.Exists(signalPath))
+        {
+            try
+            {
+                var sJson = File.ReadAllText(signalPath);
+                _signalData = JsonSerializer.Deserialize<TrafficSignalFile>(sJson);
+                Console.WriteLine($"[TRAFFIC] Loaded {_signalData?.Lights.Count ?? 0} traffic signals from {signalPath}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[TRAFFIC] Error loading traffic signals: {ex.Message}");
+            }
         }
 
         Start();
@@ -194,7 +211,48 @@ public sealed class CityTrafficEngine
                 continue;
             }
 
-            v.DistanceOnLane += v.Speed * SpeedScale * dt;
+            // 1. Car-Following: Check if there is another vehicle ahead on the same lane
+            var effectiveSpeed = v.Speed;
+            SimulatedVehicle? leadingVehicle = null;
+            var minGap = float.MaxValue;
+
+            foreach (var other in vehicleEntries)
+            {
+                if (other.EntityId == v.EntityId || other.HijackedByPlayer)
+                    continue;
+
+                if (other.CurrentLaneId == v.CurrentLaneId && other.DistanceOnLane > v.DistanceOnLane)
+                {
+                    var gap = other.DistanceOnLane - v.DistanceOnLane;
+                    if (gap < minGap)
+                    {
+                        minGap = gap;
+                        leadingVehicle = other;
+                    }
+                }
+            }
+
+            if (leadingVehicle is not null)
+            {
+                if (minGap < 5f)
+                {
+                    // Emergency stop to prevent rear-end collision
+                    effectiveSpeed = 0f;
+                }
+                else if (minGap < 14f)
+                {
+                    // Smooth deceleration matching leader
+                    effectiveSpeed = MathF.Min(effectiveSpeed, leadingVehicle.Speed * ((minGap - 4f) / 10f));
+                }
+            }
+
+            // 2. Traffic Light check: if approaching a red signal, decelerate/stop
+            if (effectiveSpeed > 0f && IsTrafficLightRedForVehicle(v.X, v.Y, v.Z, v.Yaw))
+            {
+                effectiveSpeed = MathF.Max(0f, effectiveSpeed - 6f * dt);
+            }
+
+            v.DistanceOnLane += effectiveSpeed * SpeedScale * dt;
 
             // Check if vehicle reached the end of the lane
             if (v.DistanceOnLane >= currentLane.TotalLength)
@@ -228,7 +286,7 @@ public sealed class CityTrafficEngine
             }
 
             // Calculate new spline position & velocity
-            var (nx, ny, nz, nyaw, vx, vz) = currentLane.Evaluate(v.DistanceOnLane, v.Speed * SpeedScale);
+            var (nx, ny, nz, nyaw, vx, vz) = currentLane.Evaluate(v.DistanceOnLane, effectiveSpeed * SpeedScale);
             v.X = nx;
             v.Y = ny;
             v.Z = nz;
@@ -362,6 +420,34 @@ public sealed class CityTrafficEngine
         }
 
         Console.WriteLine($"[TRAFFIC] Cleared {ids.Count} traffic vehicles.");
+    }
+
+    private bool IsTrafficLightRedForVehicle(float vx, float vy, float vz, float vyaw)
+    {
+        if (_signalData is null || _signalData.Lights.Count == 0)
+            return false;
+
+        var cycleSecond = (DateTime.UtcNow.Ticks / TimeSpan.TicksPerSecond) % 30; // 30s cycle
+
+        foreach (var light in _signalData.Lights)
+        {
+            if (light.Pos.Count < 3) continue;
+            var ldx = light.Pos[0] - vx;
+            var ldz = light.Pos[2] - vz;
+            var distSq = ldx * ldx + ldz * ldz;
+
+            // Approaching intersection light within 6m to 24m
+            if (distSq >= 6f * 6f && distSq <= 24f * 24f)
+            {
+                var isPhaseA = (light.Zbr % 2) == 0;
+                var isRed = isPhaseA ? (cycleSecond >= 14) : (cycleSecond < 15 || cycleSecond == 29);
+
+                if (isRed)
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     public TrafficStatus GetStatus() => new()

@@ -4,6 +4,30 @@ using Ananta.Server.RpcTypes.Client4229938;
 
 namespace Ananta.Server.Gameplay.Traffic;
 
+public sealed class TrafficSignalFile
+{
+    [JsonPropertyName("lights")]
+    public List<TrafficLightEntry> Lights { get; set; } = [];
+}
+
+public sealed class TrafficLightEntry
+{
+    [JsonPropertyName("handle")]
+    public long Handle { get; set; }
+
+    [JsonPropertyName("inter")]
+    public int Inter { get; set; }
+
+    [JsonPropertyName("zbr")]
+    public int Zbr { get; set; }
+
+    [JsonPropertyName("pos")]
+    public List<float> Pos { get; set; } = [];
+
+    [JsonPropertyName("fwd")]
+    public List<float> Fwd { get; set; } = [];
+}
+
 public sealed class RoadNetworkFile
 {
     [JsonPropertyName("metadata")]

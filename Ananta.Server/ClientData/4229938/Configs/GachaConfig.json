@@ -1,0 +1,317 @@
+{
+  "_class": "GachaConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 4,
+  "records": [
+    {
+      "Id": 1,
+      "Name": "Ember Weave",
+      "GachaType": 1,
+      "PriorityDisplay": 1,
+      "RuleText": 73977008,
+      "PanelTexts": [
+        73977000,
+        73977001
+      ],
+      "ShopId": 0,
+      "BackgroundImage": 28002238,
+      "GrandPrizeCommodityId": 89020000,
+      "ButtonVideo": 0,
+      "DrawVideo": [
+        24104360
+      ],
+      "SingleTimeline": "",
+      "tenxTimeline": "",
+      "PreviewVideoTitle": [
+        "测试1"
+      ],
+      "PreviewVedio": [
+        24105003
+      ],
+      "GachaSoundid": 0,
+      "PanelSoundid": 0,
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 129131,
+      "__RAW__Name": "",
+      "__IDX__PreviewVideoTitle": [
+        4294967293
+      ],
+      "__RAW__PreviewVideoTitle": [
+        "测试1"
+      ],
+      "PrizePoolIds": [
+        {
+          "level": 1,
+          "id": 101
+        }
+      ],
+      "StartTime": {
+        "year": 2025,
+        "month": 10,
+        "day": 12,
+        "hour": 4,
+        "minute": 0,
+        "second": 0
+      },
+      "EndTime": {
+        "year": 2026,
+        "month": 10,
+        "day": 28,
+        "hour": 3,
+        "minute": 59,
+        "second": 59
+      },
+      "Milestone": []
+    },
+    {
+      "Id": 3,
+      "Name": "Moonlit Serenade",
+      "GachaType": 2,
+      "PriorityDisplay": 1,
+      "RuleText": 73977009,
+      "PanelTexts": [
+        73977041
+      ],
+      "ShopId": 73970116,
+      "BackgroundImage": 28002226,
+      "GrandPrizeCommodityId": 89030000,
+      "ButtonVideo": 24104354,
+      "DrawVideo": [
+        24104353
+      ],
+      "SingleTimeline": "commercial_blindbox_common",
+      "tenxTimeline": "commercial_blindbox_common",
+      "PreviewVideoTitle": [
+        "测试1",
+        "测试2"
+      ],
+      "PreviewVedio": [
+        24105004,
+        24105005
+      ],
+      "GachaSoundid": 0,
+      "PanelSoundid": 0,
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 129132,
+      "__RAW__Name": "",
+      "__IDX__PreviewVideoTitle": [
+        4294967293,
+        4294967293
+      ],
+      "__RAW__PreviewVideoTitle": [
+        "测试1",
+        "测试2"
+      ],
+      "PrizePoolIds": [
+        {
+          "level": 1,
+          "id": 201
+        }
+      ],
+      "StartTime": {
+        "year": 2025,
+        "month": 10,
+        "day": 12,
+        "hour": 4,
+        "minute": 0,
+        "second": 0
+      },
+      "EndTime": {
+        "year": 2026,
+        "month": 10,
+        "day": 28,
+        "hour": 3,
+        "minute": 59,
+        "second": 59
+      },
+      "Milestone": []
+    },
+    {
+      "Id": 5,
+      "Name": "Center Stage",
+      "GachaType": 3,
+      "PriorityDisplay": 1,
+      "RuleText": 73977044,
+      "PanelTexts": [
+        73977042
+      ],
+      "ShopId": 73970116,
+      "BackgroundImage": 28201645,
+      "GrandPrizeCommodityId": 89030003,
+      "ButtonVideo": 24104355,
+      "DrawVideo": [
+        24104351
+      ],
+      "SingleTimeline": "commercial_fashion_common_one",
+      "tenxTimeline": "commercial_fashion_common",
+      "PreviewVideoTitle": [
+        "测试1",
+        "测试2"
+      ],
+      "PreviewVedio": [
+        24105004,
+        24105005
+      ],
+      "GachaSoundid": 0,
+      "PanelSoundid": 0,
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 150394,
+      "__RAW__Name": "",
+      "__IDX__PreviewVideoTitle": [
+        4294967293,
+        4294967293
+      ],
+      "__RAW__PreviewVideoTitle": [
+        "测试1",
+        "测试2"
+      ],
+      "PrizePoolIds": [
+        {
+          "level": 1,
+          "id": 203
+        }
+      ],
+      "StartTime": {
+        "year": 2025,
+        "month": 10,
+        "day": 12,
+        "hour": 4,
+        "minute": 0,
+        "second": 0
+      },
+      "EndTime": {
+        "year": 2026,
+        "month": 10,
+        "day": 28,
+        "hour": 3,
+        "minute": 59,
+        "second": 59
+      },
+      "Milestone": [
+        {
+          "count": 10,
+          "dropId": 14476335
+        },
+        {
+          "count": 20,
+          "dropId": 14476319
+        },
+        {
+          "count": 30,
+          "dropId": 14476321
+        },
+        {
+          "count": 50,
+          "dropId": 14476317
+        },
+        {
+          "count": 70,
+          "dropId": 14360000
+        }
+      ]
+    },
+    {
+      "Id": 6,
+      "Name": "逐日计划",
+      "GachaType": 3,
+      "PriorityDisplay": 2,
+      "RuleText": 73977044,
+      "PanelTexts": [
+        73977042
+      ],
+      "ShopId": 73970116,
+      "BackgroundImage": 28017694,
+      "GrandPrizeCommodityId": 89030004,
+      "ButtonVideo": 24104357,
+      "DrawVideo": [
+        24104352
+      ],
+      "SingleTimeline": "commercial_car_common",
+      "tenxTimeline": "commercial_car_common",
+      "PreviewVideoTitle": [
+        "测试1"
+      ],
+      "PreviewVedio": [
+        24105003
+      ],
+      "GachaSoundid": 0,
+      "PanelSoundid": 0,
+      "StartVersion": "V1.1.0",
+      "EndVersion": "",
+      "TagList": [
+        0,
+        1
+      ],
+      "__IDX__Name": 145595,
+      "__RAW__Name": "",
+      "__IDX__PreviewVideoTitle": [
+        4294967293
+      ],
+      "__RAW__PreviewVideoTitle": [
+        "测试1"
+      ],
+      "PrizePoolIds": [
+        {
+          "level": 1,
+          "id": 204
+        }
+      ],
+      "StartTime": {
+        "year": 2025,
+        "month": 10,
+        "day": 12,
+        "hour": 4,
+        "minute": 0,
+        "second": 0
+      },
+      "EndTime": {
+        "year": 2026,
+        "month": 10,
+        "day": 28,
+        "hour": 3,
+        "minute": 59,
+        "second": 59
+      },
+      "Milestone": [
+        {
+          "count": 10,
+          "dropId": 14476335
+        },
+        {
+          "count": 20,
+          "dropId": 14476319
+        },
+        {
+          "count": 30,
+          "dropId": 14476321
+        },
+        {
+          "count": 50,
+          "dropId": 14476317
+        },
+        {
+          "count": 70,
+          "dropId": 14360000
+        }
+      ]
+    }
+  ],
+  "_dumpedCount": 4,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

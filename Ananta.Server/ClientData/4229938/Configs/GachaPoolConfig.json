@@ -1,0 +1,302 @@
+{
+  "_class": "GachaPoolConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 13,
+  "records": [
+    {
+      "Id": 101,
+      "isDrop": false,
+      "SystemId": 334,
+      "MoneyId": 36789012,
+      "CommodityId": 89020001,
+      "LackMoneyTip": 65403513,
+      "SS_TierRuleId": 10001,
+      "SS_SamplingMethod": 2,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 1,
+      "CostCount": [
+        {
+          "drawCount": 1,
+          "cost": 100
+        },
+        {
+          "drawCount": 2,
+          "cost": 300
+        },
+        {
+          "drawCount": 3,
+          "cost": 1000
+        },
+        {
+          "drawCount": 4,
+          "cost": 2000
+        },
+        {
+          "drawCount": 5,
+          "cost": 3500
+        },
+        {
+          "drawCount": 6,
+          "cost": 4500
+        }
+      ]
+    },
+    {
+      "Id": 201,
+      "isDrop": false,
+      "SystemId": 333,
+      "MoneyId": 36789003,
+      "CommodityId": 89030001,
+      "LackMoneyTip": 65403514,
+      "SS_TierRuleId": 20001,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 3,
+      "CostCount": [
+        {
+          "drawCount": 1,
+          "cost": 1
+        }
+      ]
+    },
+    {
+      "Id": 202,
+      "isDrop": false,
+      "SystemId": 333,
+      "MoneyId": 36789003,
+      "CommodityId": 89030001,
+      "LackMoneyTip": 65403514,
+      "SS_TierRuleId": 20002,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 3,
+      "CostCount": [
+        {
+          "drawCount": 1,
+          "cost": 1
+        }
+      ]
+    },
+    {
+      "Id": 203,
+      "isDrop": false,
+      "SystemId": 333,
+      "MoneyId": 36789017,
+      "CommodityId": 89030002,
+      "LackMoneyTip": 65403518,
+      "SS_TierRuleId": 20002,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 3,
+      "CostCount": [
+        {
+          "drawCount": 1,
+          "cost": 1
+        }
+      ]
+    },
+    {
+      "Id": 204,
+      "isDrop": false,
+      "SystemId": 333,
+      "MoneyId": 36789017,
+      "CommodityId": 89030002,
+      "LackMoneyTip": 65403518,
+      "SS_TierRuleId": 20003,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 3,
+      "CostCount": [
+        {
+          "drawCount": 1,
+          "cost": 1
+        }
+      ]
+    },
+    {
+      "Id": 13500000,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500001,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500002,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500003,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500004,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500005,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500006,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    },
+    {
+      "Id": 13500007,
+      "isDrop": true,
+      "SystemId": 0,
+      "MoneyId": 0,
+      "CommodityId": 0,
+      "LackMoneyTip": 0,
+      "SS_TierRuleId": 0,
+      "SS_SamplingMethod": 0,
+      "S_TierRuleId": 0,
+      "S_SamplingMethod": 0,
+      "A_TierRuleId": 0,
+      "A_SamplingMethod": 0,
+      "B_TierRuleId": 0,
+      "B_SamplingMethod": 0,
+      "C_TierRuleId": 0,
+      "C_SamplingMethod": 0,
+      "CostCount": []
+    }
+  ],
+  "_dumpedCount": 13,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}

@@ -73,4 +73,19 @@ internal sealed class TrafficAndCrowdDriver : ITrafficVehicleDriver, IUrbanCrowd
         var result = await GameRouter.SpawnStaticNpcAtAsync(session, npcFormworkId, poiActionId, x, y, z, facing);
         return (result.Ok, result.Ids);
     }
+
+    public async Task DespawnCrowdPedestrianAsync(TcpSession session, ulong entityId)
+    {
+        await session.NotifyAsync(MethodId.SyncLogicAgentLeave,
+            UxSerializer.Serialize(WorldCodec.LogicAgentLeave(entityId)), CancellationToken.None);
+        session.Log.Info($"[CROWD] despawn pedestrian entity={entityId}");
+    }
+
+    public async Task SendPedestrianMoveAsync(
+        TcpSession session, ulong entityId, float x, float y, float z, float facing, byte moveId)
+    {
+        var packet = WorldCodec.PositionAndFacing(
+            entityId, new Vec3(x, y, z), facing, WorldCodec.SetPositionType.Gm, continueMove: true, moveId: moveId);
+        await session.NotifyAsync(MethodId.SyncUnitPositionAndFacing, UxSerializer.Serialize(packet), CancellationToken.None);
+    }
 }

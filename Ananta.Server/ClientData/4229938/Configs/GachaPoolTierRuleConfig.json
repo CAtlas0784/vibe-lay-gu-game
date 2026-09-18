@@ -1,0 +1,83 @@
+{
+  "_class": "GachaPoolTierRuleConfig",
+  "_namespace": "LT.ConfigGen",
+  "_expectedCount": 6,
+  "records": [
+    {
+      "Id": 10001,
+      "RuleType": 0,
+      "PityThreshold": 0,
+      "RampStartDraw": 1,
+      "BaseProbability": 0,
+      "ProbabilityIncrement": 0,
+      "GrandPrizeProbability": [
+        800,
+        1120,
+        1410,
+        4820,
+        16300,
+        100000
+      ]
+    },
+    {
+      "Id": 10002,
+      "RuleType": 0,
+      "PityThreshold": 0,
+      "RampStartDraw": 1,
+      "BaseProbability": 0,
+      "ProbabilityIncrement": 0,
+      "GrandPrizeProbability": [
+        80,
+        320,
+        1410,
+        1610,
+        100000
+      ]
+    },
+    {
+      "Id": 10003,
+      "RuleType": 0,
+      "PityThreshold": 0,
+      "RampStartDraw": 1,
+      "BaseProbability": 0,
+      "ProbabilityIncrement": 0,
+      "GrandPrizeProbability": [
+        80,
+        320,
+        1410,
+        1610,
+        100000
+      ]
+    },
+    {
+      "Id": 20001,
+      "RuleType": 1,
+      "PityThreshold": 85,
+      "RampStartDraw": 66,
+      "BaseProbability": 300,
+      "ProbabilityIncrement": 2200,
+      "GrandPrizeProbability": []
+    },
+    {
+      "Id": 20002,
+      "RuleType": 1,
+      "PityThreshold": 85,
+      "RampStartDraw": 66,
+      "BaseProbability": 300,
+      "ProbabilityIncrement": 2200,
+      "GrandPrizeProbability": []
+    },
+    {
+      "Id": 20003,
+      "RuleType": 1,
+      "PityThreshold": 85,
+      "RampStartDraw": 66,
+      "BaseProbability": 300,
+      "ProbabilityIncrement": 2200,
+      "GrandPrizeProbability": []
+    }
+  ],
+  "_dumpedCount": 6,
+  "_loadFailures": 0,
+  "_serializationErrors": 0
+}
