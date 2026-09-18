@@ -139,6 +139,10 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
                 await WriteJsonAsync(ctx, await PlayTimelineAsync(await ReadBodyAsync(ctx.Request, token), token), token);
             else if (method == "POST" && path == "/api/minigame/launch")
                 await WriteJsonAsync(ctx, await LaunchMinigameAsync(await ReadBodyAsync(ctx.Request, token), token), token);
+            else if (method == "POST" && path == "/api/minigame/close")
+                await WriteJsonAsync(ctx, await CloseMinigameAsync(token), token);
+            else if (method == "GET" && path == "/api/minigame/catalog")
+                await WriteJsonAsync(ctx, MinigameCatalog(), token);
             else if (method == "GET" && path == "/api/cutscene/catalog")
                 await WriteJsonAsync(ctx, CutsceneCatalog(), token);
             else if (method == "POST" && path == "/api/npc/spawn")
@@ -1349,11 +1353,52 @@ internal sealed class DebugApiServer(PrivateServerConfig config, GameSessionHub 
         if (session is null)
             return new { ok = false, error = "no live game session (is the client in the world?)" };
 
-        var cmd = "CMD:LAUNCH_MINIGAME:FIGHTER";
+        string game = "KOF97";
+        try
+        {
+            using var doc = JsonDocument.Parse(string.IsNullOrWhiteSpace(json) ? "{}" : json);
+            var root = doc.RootElement;
+            if (root.TryGetProperty("game", out var pg)) game = pg.GetString() ?? "KOF97";
+            else if (root.TryGetProperty("id", out var pi)) game = pi.GetString() ?? "KOF97";
+        }
+        catch { }
+
+        var cmd = $"CMD:LAUNCH_MINIGAME:{game.ToUpperInvariant()}";
         await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
 
-        session.Log.Info("[DEBUG-API] launch arcade minigame fighter dispatched");
-        return new { ok = true, game = "FIGHTER" };
+        session.Log.Info($"[DEBUG-API] launch minigame game={game}");
+        return new { ok = true, game };
+    }
+
+    private async Task<object> CloseMinigameAsync(CancellationToken token)
+    {
+        var session = hub.Current;
+        if (session is null)
+            return new { ok = false, error = "no live game session (is the client in the world?)" };
+
+        var cmd = "CMD:CLOSE_MINIGAME";
+        await session.NotifyAsync(MethodId.SyncNotice, UxSerializer.Serialize(cmd), token);
+
+        session.Log.Info("[DEBUG-API] close minigame dispatched");
+        return new { ok = true };
+    }
+
+    private static object MinigameCatalog()
+    {
+        return new
+        {
+            ok = true,
+            items = new[]
+            {
+                new { id = "KOF97", name = "🕹️ Arcade: The King of Fighters '97 (ตู้เกม KOF '97)", category = "arcade" },
+                new { id = "METALSLUG", name = "🕹️ Arcade: Metal Slug (ตู้เกม Metal Slug ลุยด่าน)", category = "arcade" },
+                new { id = "FIGHTER", name = "🥊 3D Arcade Fighter (มินิเกมต่อสู้ 3D)", category = "arcade" },
+                new { id = "PIANO", name = "🎹 Grand Piano Interactive (เล่นเปียโนสด)", category = "music" },
+                new { id = "DRUMKIT", name = "🥁 Drumkit Interactive (ตีกลองชุดสด)", category = "music" },
+                new { id = "BOWLING", name = "🎳 Bowling Alley (โยนโบว์ลิ่ง)", category = "sports" },
+                new { id = "BASKETBALL", name = "🏀 Street Basketball (ชูตบาสเกตบอล)", category = "sports" },
+            }
+        };
     }
 
     private static async Task<string> ReadBodyAsync(HttpListenerRequest request, CancellationToken token)

@@ -264,12 +264,35 @@
 </div>
 
 <div class="card" style="border-color:#ff9800">
-  <h2 style="color:#ffb74d">🕹️ Arcade Minigame (ตู้เกมต่อสู้อาร์เคด)</h2>
-  <div style="display:flex;gap:8px;align-items:center">
-    <button style="background:#e65100;color:white" onclick="launchArcadeMinigame()">Launch Arcade Fighter / เปิดตู้เกมต่อสู้</button>
-    <span class="badge" style="background:#bf360c;color:#ffccbc">L18 Street Fighter</span>
+  <h2 style="color:#ffb74d">🕹️ Arcade & Interactive Minigames (ตู้เกมอาร์เคด & มินิเกมในโลก)</h2>
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <select id="minigameSelect" style="flex:1;min-width:240px;background:#2d3748;color:#e2e8f0;border:1px solid #4a5568;padding:8px 12px;border-radius:6px;font-size:14px">
+      <optgroup label="🕹️ ตู้เกมอาร์เคด (Arcade Cabinets)">
+        <option value="KOF97" selected>🕹️ Arcade: The King of Fighters '97 (ตู้เกม KOF '97)</option>
+        <option value="METALSLUG">🕹️ Arcade: Metal Slug (ตู้เกม Metal Slug ลุยด่าน)</option>
+        <option value="FIGHTER">🥊 3D Arcade Fighter (มินิเกมต่อสู้ 3D)</option>
+      </optgroup>
+      <optgroup label="🎵 ดนตรีสด (Live Musical Instruments)">
+        <option value="PIANO">🎹 Grand Piano (เล่นเปียโนสด)</option>
+        <option value="DRUMKIT">🥁 Drumkit Set (ตีกลองชุดสด)</option>
+      </optgroup>
+      <optgroup label="🏆 กิจกรรมกีฬา (Sports & Leisure)">
+        <option value="BOWLING">🎳 Bowling Alley (โยนโบว์ลิ่ง)</option>
+        <option value="BASKETBALL">🏀 Street Basketball (ชูตบาสเกตบอล)</option>
+      </optgroup>
+    </select>
+    <button style="background:#e65100;color:white;font-weight:600;padding:8px 16px" onclick="launchSelectedMinigame()">Launch / เปิดมินิเกม</button>
+    <button style="background:#4a5568;color:#cbd5e0;padding:8px 14px" onclick="closeActiveMinigame()">Close / ปิดมินิเกม</button>
   </div>
-  <div class="muted" style="margin-top:6px">เปิดระบบมินิเกมตู้เกม Arcade Fighter ในฉาก</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+    <button style="background:#d97706;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('KOF97')">🕹️ KOF '97</button>
+    <button style="background:#d97706;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('METALSLUG')">🕹️ Metal Slug</button>
+    <button style="background:#2563eb;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('PIANO')">🎹 Piano</button>
+    <button style="background:#2563eb;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('DRUMKIT')">🥁 Drumkit</button>
+    <button style="background:#059669;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('BOWLING')">🎳 Bowling</button>
+    <button style="background:#059669;color:white;font-size:12px;padding:4px 8px" onclick="launchMinigameQuick('BASKETBALL')">🏀 Basketball</button>
+  </div>
+  <div class="muted" style="margin-top:6px">เปิดตู้เกมอาร์เคด (KOF '97, Metal Slug) หรือมินิเกมดนตรี/กีฬาในโลกได้ทันที พร้อมปุ่มควบคุมแบบเต็มหน้าจอ</div>
 </div>
 
 <div class="card" style="border-color:#e53935">
@@ -739,9 +762,33 @@ async function playSelectedCutscene() {
   log('play cutscene: ' + JSON.stringify(r));
 }
 
+async function launchSelectedMinigame() {
+  const sel = document.getElementById('minigameSelect');
+  const game = sel ? sel.value : 'KOF97';
+  const r = await api('/api/minigame/launch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ game })
+  });
+  log('launch minigame (' + game + '): ' + JSON.stringify(r));
+}
+
+async function launchMinigameQuick(game) {
+  const r = await api('/api/minigame/launch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ game })
+  });
+  log('quick launch minigame (' + game + '): ' + JSON.stringify(r));
+}
+
+async function closeActiveMinigame() {
+  const r = await api('/api/minigame/close', { method: 'POST' });
+  log('close minigame: ' + JSON.stringify(r));
+}
+
 async function launchArcadeMinigame() {
-  const r = await api('/api/minigame/launch', { method: 'POST' });
-  log('launch arcade minigame: ' + JSON.stringify(r));
+  await launchSelectedMinigame();
 }
 
 async function setTimePreset(hour, minute) {

@@ -825,25 +825,115 @@ gameSwitchDefaults.map((name) => `M.${name} = true\n`).join("") +
 `                end\n` +
 `            end)\n` +
 `        end)\n` +
-`    elseif cmd == "LAUNCH_MINIGAME:FIGHTER" then\n` +
+`    elseif string.sub(cmd, 1, 16) == "LAUNCH_MINIGAME:" or string.sub(cmd, 1, 20) == "CMD:LAUNCH_MINIGAME:" or string.sub(cmd, 1, 9) == "MINIGAME:" or string.sub(cmd, 1, 13) == "CMD:MINIGAME:" then\n` +
+`        local rawGame = string.match(cmd, "MINIGAME:([^:]+)") or "KOF97"\n` +
+`        local gameType = string.upper(rawGame)\n` +
 `        pcall(function()\n` +
-`            if gPanelManager and gPanelId and gPanelId.S_FIGHTER_MINIGAME_PANEL then\n` +
-`                gPanelManager:OpenWindow(gPanelId.S_FIGHTER_MINIGAME_PANEL)\n` +
-`            elseif CS and CS.L18 and CS.L18.MiniGame and CS.L18.MiniGame.Fighter and CS.L18.MiniGame.Fighter.FighterMinigame then\n` +
-`                local mg = CS.L18.MiniGame.Fighter.FighterMinigame.Instance\n` +
-`                if mg then\n` +
-`                    mg.GameStarted = true\n` +
-`                    pcall(function() mg:CreatePlayer() end)\n` +
-`                    pcall(function() mg:CreateEnemy() end)\n` +
+`            local function forceShow(panelId, data)\n` +
+`                if not panelId or not gPanelManager then return false end\n` +
+`                local ok = false\n` +
+`                pcall(function()\n` +
+`                    if gPanelManager.panelData then\n` +
+`                        gPanelManager.panelData[panelId] = data\n` +
+`                    end\n` +
+`                    if LX6 and LX6.Manager and LX6.Manager.PanelManager and LX6.Manager.PanelManager.Instance then\n` +
+`                        LX6.Manager.PanelManager.Instance:CheckShowFromLua(panelId, nil, nil, -1, -1)\n` +
+`                        ok = true\n` +
+`                    elseif gPanelManager.CheckShow then\n` +
+`                        ok = gPanelManager:CheckShow(panelId, data)\n` +
+`                    end\n` +
+`                end)\n` +
+`                return ok\n` +
+`            end\n` +
+`            local myUnit = gCS and gCS.MyPlayerManager and gCS.MyPlayerManager.PlayerUnit\n` +
+`            local pObj = myUnit and myUnit.PlayerObj\n` +
+`            local pPos = (pObj and pObj.transform and pObj.transform.position) or (UnityEngine and UnityEngine.Vector3 and UnityEngine.Vector3.zero) or Vector3.zero\n` +
+`            local pRot = (pObj and pObj.transform and pObj.transform.rotation) or (UnityEngine and UnityEngine.Quaternion and UnityEngine.Quaternion.identity) or Quaternion.identity\n` +
+`            local pScale = (UnityEngine and UnityEngine.Vector3 and UnityEngine.Vector3.one) or Vector3.one\n` +
+`            local fArgs = {\n` +
+`                position = pPos,\n` +
+`                rotation = pRot,\n` +
+`                localScale = pScale,\n` +
+`                forbidClickExit = false,\n` +
+`                autoCloseAfterWin = -1,\n` +
+`                ignoreCountdown = false\n` +
+`            }\n` +
+`            local tip = "Launched Minigame: " .. tostring(gameType)\n` +
+`            if gameType == "KOF97" then\n` +
+`                if gPanelId and gPanelId.LIBRETRO_PANEL then\n` +
+`                    forceShow(gPanelId.LIBRETRO_PANEL, { gameType = 1 })\n` +
+`                    tip = "Opened Arcade: The King of Fighters 97 (ตู้เกม KOF '97)"\n` +
+`                end\n` +
+`            elseif gameType == "METALSLUG" then\n` +
+`                if gPanelId and gPanelId.LIBRETRO_PANEL then\n` +
+`                    forceShow(gPanelId.LIBRETRO_PANEL, { gameType = 0 })\n` +
+`                    tip = "Opened Arcade: Metal Slug (ตู้เกม Metal Slug)"\n` +
+`                end\n` +
+`            elseif gameType == "FIGHTER" then\n` +
+`                local shown = false\n` +
+`                if gPanelId and gPanelId.FIGHTER_MAIN_PANEL then\n` +
+`                    shown = forceShow(gPanelId.FIGHTER_MAIN_PANEL, fArgs)\n` +
+`                end\n` +
+`                if gPanelId and gPanelId.FIGHTER_HUD_PANEL then\n` +
+`                    forceShow(gPanelId.FIGHTER_HUD_PANEL, fArgs)\n` +
+`                end\n` +
+`                if not shown and gPanelId and gPanelId.LIBRETRO_PANEL then\n` +
+`                    forceShow(gPanelId.LIBRETRO_PANEL, { gameType = 1 })\n` +
+`                    tip = "Opened Arcade: The King of Fighters 97 (KOF)"\n` +
+`                else\n` +
+`                    tip = "Opened 3D Arcade Fighter Minigame"\n` +
+`                end\n` +
+`            elseif gameType == "PIANO" then\n` +
+`                if gPanelId and gPanelId.UI_PANEL__INSTRUMENT__PIANO then\n` +
+`                    forceShow(gPanelId.UI_PANEL__INSTRUMENT__PIANO)\n` +
+`                    tip = "Opened Grand Piano Minigame"\n` +
+`                end\n` +
+`            elseif gameType == "DRUMKIT" then\n` +
+`                if gPanelId and gPanelId.UI_PANEL__INSTRUMENT__DRUMKIT then\n` +
+`                    forceShow(gPanelId.UI_PANEL__INSTRUMENT__DRUMKIT)\n` +
+`                    tip = "Opened Drumkit Minigame"\n` +
+`                end\n` +
+`            elseif gameType == "BOWLING" then\n` +
+`                if gPanelId and gPanelId.MINI_GAMES_BOWLING_MAIN_PANEL then\n` +
+`                    forceShow(gPanelId.MINI_GAMES_BOWLING_MAIN_PANEL)\n` +
+`                    tip = "Opened Bowling Minigame"\n` +
+`                end\n` +
+`            elseif gameType == "BASKETBALL" then\n` +
+`                if gPanelId and gPanelId.BASKETBALL_SHOOT_PANEL then\n` +
+`                    forceShow(gPanelId.BASKETBALL_SHOOT_PANEL)\n` +
+`                    tip = "Opened Basketball Shoot Minigame"\n` +
 `                end\n` +
 `            end\n` +
-`            local tip = "Launched Arcade Fighter Minigame"\n` +
-`            if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
-`                gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`            pcall(function()\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent(tip)\n` +
+`                end\n` +
+`                if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
+`                    gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
+`                end\n` +
+`            end)\n` +
+`        end)\n` +
+`    elseif cmd == "CLOSE_MINIGAME" or cmd == "CMD:CLOSE_MINIGAME" then\n` +
+`        pcall(function()\n` +
+`            local toClose = {\n` +
+`                gPanelId and gPanelId.LIBRETRO_PANEL,\n` +
+`                gPanelId and gPanelId.FIGHTER_MAIN_PANEL,\n` +
+`                gPanelId and gPanelId.FIGHTER_HUD_PANEL,\n` +
+`                gPanelId and gPanelId.UI_PANEL__INSTRUMENT__PIANO,\n` +
+`                gPanelId and gPanelId.UI_PANEL__INSTRUMENT__DRUMKIT,\n` +
+`                gPanelId and gPanelId.MINI_GAMES_BOWLING_MAIN_PANEL,\n` +
+`                gPanelId and gPanelId.BASKETBALL_SHOOT_PANEL\n` +
+`            }\n` +
+`            for _, pid in ipairs(toClose) do\n` +
+`                if pid and gPanelManager then\n` +
+`                    pcall(function() gPanelManager:Close(pid) end)\n` +
+`                end\n` +
 `            end\n` +
-`            if gCS and gCS.MessageTipsMgr and gCS.MessageTipsMgr.ShowMessageTips then\n` +
-`                gCS.MessageTipsMgr:ShowMessageTips(tip)\n` +
-`            end\n` +
+`            pcall(function()\n` +
+`                if gDisplayMessageMgr and gDisplayMessageMgr.ShowMessageContent then\n` +
+`                    gDisplayMessageMgr:ShowMessageContent("Closed Minigame")\n` +
+`                end\n` +
+`            end)\n` +
 `        end)\n` +
 `    elseif cmd == "TOGGLE_CLOTHES" then\n` +
 `        pcall(function()\n` +
